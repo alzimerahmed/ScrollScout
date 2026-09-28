@@ -6,6 +6,7 @@ data class MessageModel(
     val timestamp: Int,
     val text: String,
     val mediaList: List<MediaModel>?,
+    val attachment: MessageAttachment? = null,
 )
 
 data class ChannelData(
