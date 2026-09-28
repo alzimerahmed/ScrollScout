@@ -68,7 +68,7 @@ fun NewsScreen(
         NewsPostHandlers(
             onEvent = viewModel::onEvent,
             loadMedia = viewModel::loadMessageMedia,
-            votePoll = viewModel::votePoll,
+            votePoll = viewModel.votePoll,
         )
     }
 
