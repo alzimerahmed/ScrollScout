@@ -15,6 +15,7 @@ import com.therxmv.dirolreader.domain.usecase.message.GetUnreadChannelsFlowUseCa
 import com.therxmv.dirolreader.domain.usecase.message.MarkAllAsReadUseCase
 import com.therxmv.dirolreader.domain.usecase.message.MarkMessageAsReadUseCase
 import com.therxmv.dirolreader.domain.usecase.message.SaveMessageUseCase
+import com.therxmv.dirolreader.domain.usecase.message.SearchMessagesUseCase
 import com.therxmv.dirolreader.domain.usecase.message.TranslateTextUseCase
 import com.therxmv.dirolreader.domain.usecase.user.GetCurrentUserUseCase
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.NewsUiEvent
@@ -50,6 +51,7 @@ class FeedViewModelTest {
     private val getSavedMessages: GetSavedMessagesUseCase = mockk()
     private val markAllAsRead: MarkAllAsReadUseCase = mockk(relaxed = true)
     private val translateText: TranslateTextUseCase = mockk()
+    private val searchMessages: SearchMessagesUseCase = mockk(relaxed = true)
 
     private lateinit var viewModel: FeedViewModel
 
@@ -80,6 +82,7 @@ class FeedViewModelTest {
                 getSavedMessages = getSavedMessages,
                 markAllAsRead = markAllAsRead,
                 translateText = translateText,
+                searchMessages = searchMessages,
             ),
             ioDispatcher = UnconfinedTestDispatcher(),
         )
@@ -255,6 +258,7 @@ class FeedViewModelTest {
             getSavedMessages = getSavedMessages,
             markAllAsRead = markAllAsRead,
             translateText = translateText,
+            searchMessages = searchMessages,
         ),
         ioDispatcher = UnconfinedTestDispatcher(),
     )

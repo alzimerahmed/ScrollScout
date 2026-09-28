@@ -22,7 +22,11 @@ class LocalDataSourceModule {
             DirolDatabase::class.java,
             "Dirol.db"
         )
-            .addMigrations(DirolDatabase.MIGRATION_1_2, DirolDatabase.MIGRATION_2_3)
+            .addMigrations(
+                DirolDatabase.MIGRATION_1_2,
+                DirolDatabase.MIGRATION_2_3,
+                DirolDatabase.MIGRATION_3_4,
+            )
             .build()
 
     @Provides

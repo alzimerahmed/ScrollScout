@@ -22,6 +22,7 @@ import com.therxmv.dirolreader.ui.navigation.NavArguments
 import com.therxmv.dirolreader.ui.news.view.NewsScreen
 import com.therxmv.dirolreader.ui.profile.view.ProfileScreen
 import com.therxmv.dirolreader.ui.relevance.view.RelevanceScreen
+import com.therxmv.dirolreader.ui.search.view.SearchScreen
 import com.therxmv.dirolreader.ui.settings.view.SettingsScreen
 import com.therxmv.dirolreader.ui.settings.viewmodel.SettingsViewModel
 import com.therxmv.dirolreader.ui.theme.AppTheme
@@ -90,6 +91,11 @@ class MainNavigationActivity : ComponentActivity() {
                                     popUpTo(Destination.NewsScreen.route) { inclusive = false }
                                 }
                             },
+                            onNavigateToSearch = {
+                                navController.navigate(Destination.SearchScreen.route) {
+                                    popUpTo(Destination.NewsScreen.route) { inclusive = false }
+                                }
+                            },
                         )
                         BackHandler {
                             finishAffinity()
@@ -132,6 +138,9 @@ class MainNavigationActivity : ComponentActivity() {
                     }
                     composable(route = Destination.RelevanceScreen.route) {
                         RelevanceScreen(navController = navController)
+                    }
+                    composable(route = Destination.SearchScreen.route) {
+                        SearchScreen(navController = navController)
                     }
                 }
             }

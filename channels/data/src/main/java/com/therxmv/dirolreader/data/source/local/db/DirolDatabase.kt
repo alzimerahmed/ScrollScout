@@ -4,14 +4,23 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.therxmv.common.Room.CACHED_MESSAGE_FTS_TABLE
+import com.therxmv.common.Room.CACHED_MESSAGE_TABLE
 import com.therxmv.common.Room.CHANNEL_TABLE
 import com.therxmv.common.Room.SAVED_MESSAGE_TABLE
+import com.therxmv.dirolreader.data.entity.CachedMessageEntity
+import com.therxmv.dirolreader.data.entity.CachedMessageFtsEntity
 import com.therxmv.dirolreader.data.entity.ChannelEntity
 import com.therxmv.dirolreader.data.entity.SavedMessageEntity
 
 @Database(
-    entities = [ChannelEntity::class, SavedMessageEntity::class],
-    version = 3,
+    entities = [
+        ChannelEntity::class,
+        SavedMessageEntity::class,
+        CachedMessageEntity::class,
+        CachedMessageFtsEntity::class,
+    ],
+    version = 4,
     exportSchema = false,
 )
 abstract class DirolDatabase : RoomDatabase() {
@@ -20,6 +29,7 @@ abstract class DirolDatabase : RoomDatabase() {
     companion object {
         private const val SCHEMA_VERSION_2 = 2
         private const val SCHEMA_VERSION_3 = 3
+        private const val SCHEMA_VERSION_4 = 4
 
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
@@ -48,6 +58,24 @@ abstract class DirolDatabase : RoomDatabase() {
                 )
                 database.execSQL(
                     "ALTER TABLE `$CHANNEL_TABLE` ADD COLUMN `groupName` TEXT NOT NULL DEFAULT ''",
+                )
+            }
+        }
+        val MIGRATION_3_4 = object : Migration(SCHEMA_VERSION_3, SCHEMA_VERSION_4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `$CACHED_MESSAGE_TABLE` (" +
+                        "`messageId` INTEGER NOT NULL, " +
+                        "`channelId` INTEGER NOT NULL, " +
+                        "`channelName` TEXT NOT NULL, " +
+                        "`text` TEXT NOT NULL, " +
+                        "`timestamp` INTEGER NOT NULL, " +
+                        "`cachedAt` INTEGER NOT NULL, " +
+                        "PRIMARY KEY(`messageId`))",
+                )
+                database.execSQL(
+                    "CREATE VIRTUAL TABLE IF NOT EXISTS `$CACHED_MESSAGE_FTS_TABLE` " +
+                        "USING FTS4(`text` TEXT NOT NULL)",
                 )
             }
         }

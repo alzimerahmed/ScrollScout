@@ -12,4 +12,5 @@ sealed class Destination(val route: String) {
     }
     data object ChannelsScreen : Destination("channelsScreen")
     data object RelevanceScreen : Destination("relevanceScreen")
+    data object SearchScreen : Destination("searchScreen")
 }

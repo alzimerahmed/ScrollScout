@@ -52,6 +52,7 @@ fun NewsScreen(
     viewModel: FeedViewModel = hiltViewModel(),
     navController: NavController,
     onNavigateToProfile: () -> Unit,
+    onNavigateToSearch: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
@@ -87,6 +88,7 @@ fun NewsScreen(
                                 ),
                             )
                         },
+                        onSearchClick = onNavigateToSearch,
                     ),
                 )
             }
@@ -160,6 +162,7 @@ data class NewsTopBarActions(
     val scrollToTop: () -> Unit,
     val onToggleSavedView: () -> Unit,
     val onMarkAllAsRead: () -> Unit,
+    val onSearchClick: () -> Unit,
 )
 
 @Composable
@@ -194,6 +197,13 @@ private fun NewsTopBar(
         navController = navController,
         actions = {
             if (!isSavedView) {
+                IconButton(onClick = actions.onSearchClick) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.search_icon),
+                        contentDescription = stringResource(id = R.string.news_search),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
                 IconButton(onClick = actions.onMarkAllAsRead) {
                     Icon(
                         painter = painterResource(id = R.drawable.mark_all_read_icon),
