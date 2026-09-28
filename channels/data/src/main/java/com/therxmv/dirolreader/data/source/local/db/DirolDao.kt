@@ -36,9 +36,11 @@ interface DirolDao {
             updateChannel(
                 channelEntity.id,
                 channelEntity.unreadCount,
-                channelEntity.lastReadMessageId
+                channelEntity.lastReadMessageId,
             )
-        } else id.toInt()
+        } else {
+            id.toInt()
+        }
     }
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

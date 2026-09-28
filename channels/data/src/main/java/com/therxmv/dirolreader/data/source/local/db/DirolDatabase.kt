@@ -4,7 +4,6 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.therxmv.common.Room.CHANNEL_TABLE
 import com.therxmv.common.Room.SAVED_MESSAGE_TABLE
 import com.therxmv.dirolreader.data.entity.ChannelEntity
 import com.therxmv.dirolreader.data.entity.SavedMessageEntity
@@ -12,7 +11,7 @@ import com.therxmv.dirolreader.data.entity.SavedMessageEntity
 @Database(
     entities = [ChannelEntity::class, SavedMessageEntity::class],
     version = 2,
-    exportSchema = false
+    exportSchema = false,
 )
 abstract class DirolDatabase : RoomDatabase() {
     abstract fun dirolDao(): DirolDao
@@ -28,7 +27,7 @@ abstract class DirolDatabase : RoomDatabase() {
                         "`text` TEXT NOT NULL, " +
                         "`timestamp` INTEGER NOT NULL, " +
                         "`savedAt` INTEGER NOT NULL, " +
-                        "PRIMARY KEY(`messageId`))"
+                        "PRIMARY KEY(`messageId`))",
                 )
             }
         }

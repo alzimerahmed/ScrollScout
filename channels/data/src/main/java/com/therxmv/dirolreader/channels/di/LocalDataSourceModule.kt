@@ -28,5 +28,4 @@ class LocalDataSourceModule {
     @Provides
     @Singleton
     fun provideDirolDao(database: DirolDatabase) = database.dirolDao()
-
 }
