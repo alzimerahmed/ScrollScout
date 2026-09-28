@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Dirol Reader</string>
+    <string name="app_name">ScrollScout</string>
 
     <!-- OTA -->
     <string name="ota_new_update">New version available!</string>

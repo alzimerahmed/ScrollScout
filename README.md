@@ -1,36 +1,80 @@
-# :newspaper: Dirol-Reader
-Introducing **Dirol Reader**, a cutting-edge Android app designed to revolutionize your news reading experience. Powered by advanced algorithms and built with user preferences in mind, **Dirol Reader** leverages the **TdLib (Telegram Database Library)** to curate a relevance-based news feed from your favorite channels' posts, keeping you informed and engaged.
+# ScrollScout — smart news feed from your Telegram channels
 
-# Demo
-https://github.com/user-attachments/assets/7685d562-500b-4b93-a325-3cda3e7586e6
+<div align="center">
 
+[![Platform](https://img.shields.io/badge/platform-Android-green?logo=android)](https://developer.android.com)
+[![Language](https://img.shields.io/badge/language-Kotlin-7F52FF?logo=kotlin)](https://kotlinlang.org)
+[![UI](https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4?logo=android)](https://developer.android.com/compose)
+[![Engine](https://img.shields.io/badge/engine-TdLib-2AABEE?logo=telegram)](https://github.com/tdlib/td)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![CI](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?logo=githubactions)](.github/workflows/ci.yml)
 
+*One relevance-ranked feed of unread posts from every channel you follow — you train it by liking, disliking, and starring.*
 
-# Basic features
-- One feed with all unread channels' posts
-- Ability to star channel and like/dislike post. This allow you to choose what do you want to read first.
+[Features](#features) • [Tech Stack](#tech-stack) • [Building](#building)
 
-# Supported message types
-- :white_check_mark: MessageText
-- :white_check_mark: MessageAnimation
-- :white_check_mark: MessageAudio
-- :white_check_mark: MessageDocument (only caption)
-- :white_check_mark: MessagePhoto
-- :white_check_mark: MessageSticker (animated is unsupported)
-- :white_check_mark: MessageVideo
-- :white_check_mark: MessageVideoNote
-- :white_check_mark: MessageVoiceNote
-- :x: MessageLocation
-- :x: MessageVenue
-- :x: MessageContact
-- :x: MessageAnimatedEmoji
-- :x: MessageDice
-- :x: MessageGame
-- :x: MessagePoll
+</div>
 
-I'm not sure that all of them really needed.
+---
 
-# Plans
-:white_check_mark: ~Right now I'm working on improving the overall quality of the code base.~
+## Features
 
-Next step is to add support for more message types and add new features.
+- Single feed aggregating unread posts from all your Telegram channels
+- Relevance ranking shaped by your signals: like/dislike a post, star a channel
+- Supports text, photo, video, animation, audio, voice note, video note, sticker, and document captions
+- Built on TdLib — a real Telegram session, not a bot API
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Language | Kotlin |
+| UI | Jetpack Compose, Material 3 |
+| Telegram | TdLib (JNI) |
+| DI | Hilt |
+| Persistence | Room, MMKV |
+| Media | Media3 / ExoPlayer |
+| Build | Gradle 8.3, AGP 7.4.2, multi-module |
+
+## Project Structure
+
+```
+app/                  application, DI, UI screens, TdLib client
+common/               shared theme + resources
+ota-updates/          in-app update checker (domain / data / presentation)
+shared-preferences/   MMKV-backed storage
+libtd/                TdLib Android wrapper (built separately)
+```
+
+## Building
+
+1. Get Telegram API credentials at my.telegram.org (`API_ID`, `API_HASH`).
+2. Put them in `local.properties` at the repo root:
+   ```properties
+   API_ID=123456
+   API_HASH=abcdef0123456789
+   ```
+3. Provide the `libtd` module (TdLib Android build) and run:
+   ```bash
+   ./gradlew assembleDebug
+   ```
+
+<details>
+<summary>Firebase (optional)</summary>
+The app applies the google-services plugin. Without `app/google-services.json` the build fails;
+a CI placeholder is generated automatically in GitHub Actions.
+</details>
+
+## Roadmap
+
+- [ ] Saved posts / read later
+- [ ] Full-text search across cached posts
+- [ ] Channel management (mute, reorder, group)
+- [ ] Relevance tuning screen
+- [ ] Material You dynamic color
+- [ ] Offline reading
+
+## License
+
+MIT — see [LICENSE](LICENSE). Based on Dirol-Reader by Roman Kuzmych.
+Maintained by Alzimer Ahmed.

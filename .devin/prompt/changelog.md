@@ -265,3 +265,7 @@ The other 35 rules load on-demand via the intent-map. When a task type row lists
 ## 2026-09-26 — Phase 7 retrospective lessons
 - rules.md §4: added permission-preserving queryset rule (custom prefetch querysets must chain onto get_queryset / re-run check_object_permissions — bare .get(pk) is a review blocker).
 - rules.md §4: added baseline-first debugging rule (stash-baseline failing suites before treating them as regressions).
+
+## 2026-09-28 — Stack sweep (Dirol-Reader import)
+- Swept prior-stack tokens: `.devin/config.json` permissions (uv/Django/docker → gradle/gh/Android secrets), `.gitignore` therxmv dictionary entry genericized.
+- No prior project names remain in `.devin/` or `docs/`.

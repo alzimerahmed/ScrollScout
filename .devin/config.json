@@ -2,16 +2,12 @@
   "permissions": {
     "allow": [
       "Read(**)",
-      "Exec(uv)",
-      "Exec(uv sync)",
-      "Exec(uv run)",
-      "Exec(uv run ruff)",
-      "Exec(uv run ruff check)",
-      "Exec(uv run ruff format)",
-      "Exec(uv run python manage.py)",
-      "Exec(python -V)",
-      "Exec(uv run pytest)",
-      "Exec(docker compose)",
+      "Exec(./gradlew)",
+      "Exec(./gradlew assembleDebug)",
+      "Exec(./gradlew testDebugUnitTest)",
+      "Exec(./gradlew lint)",
+      "Exec(./gradlew tasks)",
+      "Exec(./gradlew --version)",
       "Exec(git status)",
       "Exec(git diff)",
       "Exec(git log)",
@@ -21,7 +17,10 @@
       "Exec(git show)",
       "Exec(git stash)",
       "Exec(git checkout)",
-      "Exec(git merge)"
+      "Exec(git merge)",
+      "Exec(gh run list)",
+      "Exec(gh run view)",
+      "Exec(gh run watch)"
     ],
     "ask": [
       "Exec(git push)",
@@ -29,10 +28,12 @@
       "Exec(git reset --hard)",
       "Exec(git clean -fd)",
       "Exec(git tag)",
-      "Exec(docker build)",
-      "Write(pyproject.toml)",
-      "Write(uv.lock)",
-      "Write(settings/*.py)"
+      "Exec(gh pr create)",
+      "Exec(gh release create)",
+      "Write(app/build.gradle)",
+      "Write(global.gradle)",
+      "Write(settings.gradle)",
+      "Write(.github/workflows/*.yml)"
     ],
     "deny": [
       "Exec(sudo)",
@@ -40,7 +41,10 @@
       "Exec(mkfs)",
       "Exec(shutdown)",
       "Exec(halt)",
-      "Write(.env)"
+      "Write(.env)",
+      "Write(local.properties)",
+      "Write(keystore-info.txt)",
+      "Write(**/*.jks)"
     ]
   }
 }
