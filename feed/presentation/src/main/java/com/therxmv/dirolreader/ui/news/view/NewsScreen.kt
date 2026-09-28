@@ -46,7 +46,6 @@ import com.therxmv.dirolreader.ui.news.viewmodel.utils.ToolbarState
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.TranslationState
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsScreen(
@@ -82,7 +81,9 @@ fun NewsScreen(
                         onMarkAllAsRead = {
                             viewModel.onEvent(
                                 NewsUiEvent.MarkAllAsRead(
-                                    messageIds = news.itemSnapshotList.mapNotNull { item -> item?.id },
+                                    messageIds = news.itemSnapshotList
+                                        .filterNotNull()
+                                        .map { post -> post.id },
                                 ),
                             )
                         },

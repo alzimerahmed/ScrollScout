@@ -120,7 +120,7 @@ fun NewsScreenContent(
                         },
                     )
                     val dismissState = rememberDismissState(
-                        confirmValueChange = { value ->
+                        confirmStateChange = { value ->
                             when (value) {
                                 DismissValue.DismissedToEnd -> {
                                     onEvent(MarkAsRead(messageId = post.id, channelId = channelId))
