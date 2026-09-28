@@ -18,6 +18,9 @@ abstract class DirolDatabase : RoomDatabase() {
     abstract fun dirolDao(): DirolDao
 
     companion object {
+        private const val SCHEMA_VERSION_2 = 2
+        private const val SCHEMA_VERSION_3 = 3
+
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL(
@@ -32,7 +35,7 @@ abstract class DirolDatabase : RoomDatabase() {
                 )
             }
         }
-        val MIGRATION_2_3 = object : Migration(2, 3) {
+        val MIGRATION_2_3 = object : Migration(SCHEMA_VERSION_2, SCHEMA_VERSION_3) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL(
                     "ALTER TABLE `$CHANNEL_TABLE` ADD COLUMN `title` TEXT NOT NULL DEFAULT ''",
