@@ -134,7 +134,7 @@ class MessageRemoteDataSource @Inject constructor(
                     history.map { it.id }.toLongArray(), // messageIds
                     null, // source
                     true, // forceRead
-                )
+                ),
             ) {}
 
             val lastReadId = history.last().id
@@ -165,7 +165,7 @@ class MessageRemoteDataSource @Inject constructor(
                             0, // offset
                             0, // limit
                             true, // synchronous
-                        )
+                        ),
                     ) { file ->
                         file as TdApi.File
 
@@ -175,7 +175,7 @@ class MessageRemoteDataSource @Inject constructor(
                                 rating = channel.rating,
                                 name = chat.title,
                                 avatarPath = file.local.path,
-                            )
+                            ),
                         )
                     }
                 } else {
@@ -184,7 +184,7 @@ class MessageRemoteDataSource @Inject constructor(
                             id = channel.id,
                             rating = channel.rating,
                             name = chat.title,
-                        )
+                        ),
                     )
                 }
             }
