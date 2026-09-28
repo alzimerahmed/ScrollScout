@@ -28,14 +28,31 @@ class RelevanceViewModelTest {
     private val adjustWeight: AdjustChannelWeightUseCase = mockk(relaxed = true)
     private val resetWeights: ResetChannelWeightsUseCase = mockk(relaxed = true)
 
-    private fun createViewModel(channels: List<ChannelModel>): RelevanceViewModel {
+    private fun createViewModel(
+        channels: List<ChannelModel>,
+        refreshFails: Boolean = false,
+    ): RelevanceViewModel {
         every { getChannels.observe() } returns flowOf(channels)
-        coEvery { getChannels.refresh() } returns channels
+        if (refreshFails) {
+            coEvery { getChannels.refresh() } throws java.io.IOException("offline")
+        } else {
+            coEvery { getChannels.refresh() } returns channels
+        }
         return RelevanceViewModel(
             getChannels = getChannels,
             adjustWeight = adjustWeight,
             resetWeights = resetWeights,
         )
+    }
+
+    @Test
+    fun `error state when refresh fails with no cached channels`() = runTest {
+        val viewModel = createViewModel(channels = emptyList(), refreshFails = true)
+
+        viewModel.uiState.test {
+            assertTrue(awaitItem() is RelevanceUiState.Error)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test

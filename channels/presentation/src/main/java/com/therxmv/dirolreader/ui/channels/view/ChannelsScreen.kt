@@ -37,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.therxmv.common.R
 import com.therxmv.common.commonview.CenteredBoxLoader
@@ -53,8 +54,8 @@ fun ChannelsScreen(
     navController: NavController,
     viewModel: ChannelsViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val muteFailed by viewModel.muteFailed.collectAsState(initial = null)
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val muteFailed by viewModel.muteFailed.collectAsStateWithLifecycle(initialValue = null)
     val context = LocalContext.current
 
     LaunchedEffect(muteFailed) {
@@ -80,6 +81,7 @@ fun ChannelsScreen(
             when (state) {
                 is ChannelsUiState.Loading -> CenteredBoxLoader()
                 is ChannelsUiState.Empty -> EmptyChannels(modifier = Modifier.padding(padding))
+                is ChannelsUiState.Error -> ErrorState(modifier = Modifier.padding(padding))
                 is ChannelsUiState.Ready -> ChannelsList(
                     screenPadding = padding,
                     channels = state.channels,
@@ -89,6 +91,23 @@ fun ChannelsScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ErrorState(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(id = R.string.channels_load_error),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.error,
+        )
     }
 }
 

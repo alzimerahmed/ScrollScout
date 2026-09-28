@@ -39,6 +39,7 @@ class ChannelsViewModel @Inject constructor(
 
     private var channels: List<ChannelModel> = emptyList()
     private var hasRefreshed = false
+    private var hasError = false
 
     init {
         observeChannels()
@@ -56,10 +57,12 @@ class ChannelsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 getChannels.refresh()
-            } finally {
                 hasRefreshed = true
-                updateState(channels)
+                hasError = false
+            } catch (e: Exception) {
+                hasError = true
             }
+            updateState(channels)
         }
     }
 
@@ -67,6 +70,7 @@ class ChannelsViewModel @Inject constructor(
         channels = list
         _uiState.value = when {
             list.isNotEmpty() -> ChannelsUiState.Ready(list.map { it.toItem() }.toPersistentList())
+            hasError -> ChannelsUiState.Error
             hasRefreshed -> ChannelsUiState.Empty
             else -> ChannelsUiState.Loading
         }

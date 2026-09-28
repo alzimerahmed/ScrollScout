@@ -35,8 +35,11 @@ interface DirolDao {
     @Query("UPDATE $CHANNEL_TABLE SET rating = 0")
     fun resetChannelRatings()
 
-    @Query("UPDATE $CHANNEL_TABLE SET unreadCount = :unreadCount, lastReadMessageId = :lastId WHERE id = :id")
-    fun updateChannel(id: Long, unreadCount: Int, lastId: Long): Int
+    @Query(
+        "UPDATE $CHANNEL_TABLE SET unreadCount = :unreadCount, lastReadMessageId = :lastId, " +
+            "title = :title, isMuted = :isMuted WHERE id = :id",
+    )
+    fun updateChannel(id: Long, unreadCount: Int, lastId: Long, title: String, isMuted: Boolean): Int
 
     @Query("UPDATE $CHANNEL_TABLE SET unreadCount = 0, lastReadMessageId = :lastId WHERE id = :id")
     fun markChannelAsRead(id: Long, lastId: Long)
@@ -49,9 +52,11 @@ interface DirolDao {
         val id = addChannel(channelEntity)
         return if (id == -1L) {
             updateChannel(
-                channelEntity.id,
-                channelEntity.unreadCount,
-                channelEntity.lastReadMessageId,
+                id = channelEntity.id,
+                unreadCount = channelEntity.unreadCount,
+                lastId = channelEntity.lastReadMessageId,
+                title = channelEntity.title,
+                isMuted = channelEntity.isMuted,
             )
         } else {
             id.toInt()

@@ -6,6 +6,7 @@ import kotlinx.collections.immutable.PersistentList
 sealed interface RelevanceUiState {
     data object Loading : RelevanceUiState
     data object Empty : RelevanceUiState
+    data object Error : RelevanceUiState
     data class Ready(
         val items: PersistentList<WeightItem>,
         val canReset: Boolean,

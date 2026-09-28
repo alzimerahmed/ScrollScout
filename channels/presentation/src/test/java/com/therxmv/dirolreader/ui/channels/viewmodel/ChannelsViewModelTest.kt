@@ -31,9 +31,14 @@ class ChannelsViewModelTest {
     private fun createViewModel(
         channels: List<ChannelModel> = emptyList(),
         muteResult: Boolean = true,
+        refreshFails: Boolean = false,
     ): ChannelsViewModel {
         every { getChannels.observe() } returns flowOf(channels)
-        coEvery { getChannels.refresh() } returns channels
+        if (refreshFails) {
+            coEvery { getChannels.refresh() } throws java.io.IOException("offline")
+        } else {
+            coEvery { getChannels.refresh() } returns channels
+        }
         coEvery { setChannelMuted(any(), any()) } returns muteResult
         return ChannelsViewModel(
             getChannels = getChannels,
@@ -41,6 +46,16 @@ class ChannelsViewModelTest {
             reorderChannel = reorderChannel,
             setChannelGroup = setChannelGroup,
         )
+    }
+
+    @Test
+    fun `error state when refresh fails with no cached channels`() = runTest {
+        val viewModel = createViewModel(refreshFails = true)
+
+        viewModel.uiState.test {
+            assertTrue(awaitItem() is ChannelsUiState.Error)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test

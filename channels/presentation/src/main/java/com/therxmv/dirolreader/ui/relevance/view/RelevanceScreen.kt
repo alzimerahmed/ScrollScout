@@ -29,6 +29,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.therxmv.common.R
 import com.therxmv.common.commonview.CenteredBoxLoader
@@ -45,7 +46,7 @@ fun RelevanceScreen(
     navController: NavController,
     viewModel: RelevanceViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -67,6 +68,7 @@ fun RelevanceScreen(
             when (state) {
                 is RelevanceUiState.Loading -> CenteredBoxLoader()
                 is RelevanceUiState.Empty -> EmptyRelevance(modifier = Modifier.padding(padding))
+                is RelevanceUiState.Error -> ErrorState(modifier = Modifier.padding(padding))
                 is RelevanceUiState.Ready -> WeightList(
                     screenPadding = padding,
                     items = state.items,
@@ -74,6 +76,23 @@ fun RelevanceScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ErrorState(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(id = R.string.channels_load_error),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.error,
+        )
     }
 }
 

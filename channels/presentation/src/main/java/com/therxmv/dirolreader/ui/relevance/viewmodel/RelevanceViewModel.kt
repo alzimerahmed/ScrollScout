@@ -31,6 +31,7 @@ class RelevanceViewModel @Inject constructor(
 
     private var channels: List<ChannelModel> = emptyList()
     private var hasRefreshed = false
+    private var hasError = false
 
     init {
         getChannels.observe()
@@ -44,10 +45,12 @@ class RelevanceViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 getChannels.refresh()
-            } finally {
                 hasRefreshed = true
-                updateState(channels)
+                hasError = false
+            } catch (e: Exception) {
+                hasError = true
             }
+            updateState(channels)
         }
     }
 
@@ -63,6 +66,7 @@ class RelevanceViewModel @Inject constructor(
                     canReset = list.any { it.rating != 0 },
                 )
             }
+            hasError -> RelevanceUiState.Error
             hasRefreshed -> RelevanceUiState.Empty
             else -> RelevanceUiState.Loading
         }

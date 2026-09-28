@@ -64,6 +64,7 @@
     <string name="channels_group_label">Group</string>
     <string name="channels_group_hint">Group name</string>
     <string name="channels_mute_failed">Could not update notifications</string>
+    <string name="channels_load_error">Could not load channels. Check your connection.</string>
     <string name="relevance_title">Relevance</string>
     <string name="relevance_empty">Like or dislike posts to tune channel weights.</string>
     <string name="relevance_reset">Reset</string>

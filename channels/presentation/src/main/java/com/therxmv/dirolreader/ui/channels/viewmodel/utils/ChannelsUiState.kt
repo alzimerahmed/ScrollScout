@@ -7,6 +7,7 @@ import kotlinx.collections.immutable.PersistentList
 sealed interface ChannelsUiState {
     data object Loading : ChannelsUiState
     data object Empty : ChannelsUiState
+    data object Error : ChannelsUiState
     data class Ready(val channels: PersistentList<ChannelItem>) : ChannelsUiState
 }
 
