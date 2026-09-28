@@ -77,4 +77,7 @@ class MessageRepositoryImpl @Inject constructor(
 
     override suspend fun searchMessages(query: String): List<MessageModel> =
         cachedMessageLocalDataSource.searchMessages(query)
+
+    override suspend fun setPollAnswer(chatId: Long, messageId: Long, optionIds: IntArray) =
+        messageRemoteDataSource.setPollAnswer(chatId, messageId, optionIds)
 }

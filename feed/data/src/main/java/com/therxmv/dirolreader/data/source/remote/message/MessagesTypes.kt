@@ -155,7 +155,13 @@ fun handleMessageType(
 
         else -> {
             Log.d("rozmi", message.content.toString())
-            defaultModel
+
+            message.attachmentModel()?.let { attachment ->
+                defaultModel.copy(
+                    text = attachment.summaryText(),
+                    attachment = attachment,
+                )
+            } ?: defaultModel
         }
     }
 }
