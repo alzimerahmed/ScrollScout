@@ -41,9 +41,9 @@ class LatestReleaseRepositoryImplTest {
         val expectedModel = LatestReleaseModel(
             version = releaseJson.tagName.orEmpty(),
             changeLog = releaseJson.changeLog.orEmpty(),
-            fileName = releaseJson.assets.first().fileName,
-            contentType = releaseJson.assets.first().contentType,
-            downloadUrl = releaseJson.assets.first().downloadUrl,
+            fileName = "app-universal-release.apk",
+            contentType = "type",
+            downloadUrl = "url",
         )
 
         val result = systemUnderTest.getLatestRelease()
