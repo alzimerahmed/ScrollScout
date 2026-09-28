@@ -22,6 +22,7 @@ object SharedPrefs {
     const val SHARED_PREFS_IS_AUTO_DELETE_ENABLED = "sharedPrefsIsAutoDeleteEnabled"
     const val SHARED_PREFS_IS_UPDATE_DOWNLOADED = "sharedPrefsIsUpdateDownloaded"
     const val SHARED_PREFS_UPDATE_DOWNLOAD_ID = "sharedPrefsUpdateDownloadId"
+    const val SHARED_PREFS_UPDATE_FILE = "sharedPrefsUpdateFile"
 }
 
 object GithubRepo {

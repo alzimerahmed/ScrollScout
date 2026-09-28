@@ -2,10 +2,13 @@ package com.therxmv.otaupdates.domain.utils
 
 /**
  * Semver-ish comparison for GitHub release tags ("v2.0.1") against
- * BuildConfig.VERSION_NAME ("2.0.1"). Non-digit segments are dropped, so
- * suffixes like "-rc1" are ignored by design.
+ * BuildConfig.VERSION_NAME ("2.0.1"). The parse is anchored at the string
+ * start (optional leading v, then dotted digits) so leading junk like
+ * "beta2-v1.0" yields no version instead of silently parsing the "2".
  */
 object VersionComparator {
+
+    private val VERSION_REGEX = Regex("^v?(\\d+(\\.\\d+)*)", RegexOption.IGNORE_CASE)
 
     fun isNewer(remoteVersion: String, localVersion: String): Boolean =
         compareVersions(remoteVersion, localVersion) > 0
@@ -28,9 +31,9 @@ object VersionComparator {
     }
 
     private fun String.toVersionParts(): List<Int> =
-        Regex("\\d+(\\.\\d+)*")
-            .find(this)
-            ?.value
+        VERSION_REGEX.find(this)
+            ?.groupValues
+            ?.getOrNull(1)
             ?.split(".")
             ?.mapNotNull { it.toIntOrNull() }
             .orEmpty()

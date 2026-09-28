@@ -53,22 +53,15 @@ class OtaViewModel @Inject constructor(
         }
     }
 
-    private fun isUpdateFileExists(updateModel: LatestReleaseModel): Boolean {
-        val downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        val file = File(downloads, updateModel.fileName)
-
-        return file.exists()
-    }
-
-    private fun isUpdateDownloaded(isDownloaded: Boolean, updateModel: LatestReleaseModel) {
+    private fun refreshDownloadState(updateModel: LatestReleaseModel) {
         _uiState.update {
-            (isDownloaded && isUpdateFileExists(updateModel)).toDownloadState(updateModel)
+            downloadUpdateUseCase.isDownloaded(updateModel).toDownloadState(updateModel)
         }
     }
 
     private fun setIsUpdateDownloadedListener(updateModel: LatestReleaseModel) {
-        updatePrefsListener = appSharedPrefsRepository.isUpdateDownloadedChangeListener { isDownloaded ->
-            isUpdateDownloaded(isDownloaded = isDownloaded, updateModel = updateModel)
+        updatePrefsListener = appSharedPrefsRepository.isUpdateDownloadedChangeListener {
+            refreshDownloadState(updateModel)
             appSharedPrefsRepository.unregisterChangeListener(updatePrefsListener)
         }
 
@@ -84,10 +77,7 @@ class OtaViewModel @Inject constructor(
             if (release == null) {
                 _uiState.update { OtaUiState.Error() }
             } else {
-                isUpdateDownloaded(
-                    isDownloaded = appSharedPrefsRepository.isUpdateDownloaded,
-                    updateModel = release,
-                )
+                refreshDownloadState(release)
             }
         }
     }

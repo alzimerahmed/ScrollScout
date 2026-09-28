@@ -39,7 +39,7 @@ class LatestReleaseRepositoryImplTest {
     @Test
     fun `returns converted release model`() = runTest {
         val expectedModel = LatestReleaseModel(
-            version = releaseJson.tagName,
+            version = releaseJson.tagName.orEmpty(),
             changeLog = releaseJson.changeLog.orEmpty(),
             fileName = releaseJson.assets.first().fileName,
             contentType = releaseJson.assets.first().contentType,

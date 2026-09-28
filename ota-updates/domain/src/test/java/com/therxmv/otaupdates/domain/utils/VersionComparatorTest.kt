@@ -32,6 +32,12 @@ class VersionComparatorTest {
     @Test
     fun `ignores non-digit suffixes`() {
         VersionComparator.isNewer("v2.0.1-rc1", "2.0.1") shouldBe false
-        VersionComparator.isNewer("release-2.0.2", "2.0.1") shouldBe true
+        VersionComparator.isNewer("release-2.0.2", "2.0.1") shouldBe false
+    }
+
+    @Test
+    fun `leading junk does not silently parse as a version`() {
+        VersionComparator.isNewer("beta2-v1.0", "0.9.9") shouldBe false
+        VersionComparator.isNewer("beta2-v1.0", "2.0.1") shouldBe false
     }
 }

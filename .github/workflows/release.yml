@@ -57,15 +57,20 @@ jobs:
           SCROLLSCOUT_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
         run: ./gradlew assembleRelease --stacktrace
 
+      # Version-stamp asset names (scrollscout-<tag>-<abi>.apk) so the in-app
+      # updater can tell a downloaded apk of one release from another.
       - name: Collect APKs
         run: |
           mkdir release-out
           for apk in app/build/outputs/apk/release/*.apk; do
             name=$(basename "$apk")
-            if [ ! -f "$RUNNER_TEMP/scrollscout-release.jks" ] && [[ "$name" != *unsigned* ]]; then
-              name="${name%.apk}-unsigned.apk"
+            # app-<abi>-release[-unsigned].apk -> scrollscout-<tag>-<abi>[-unsigned].apk
+            abi=$(echo "$name" | sed -E 's/^app-(.*)-release(-unsigned)?\.apk/\1/')
+            new_name="scrollscout-${GITHUB_REF_NAME}-${abi}.apk"
+            if [ ! -f "$RUNNER_TEMP/scrollscout-release.jks" ] && [[ "$new_name" != *unsigned* ]]; then
+              new_name="${new_name%.apk}-unsigned.apk"
             fi
-            cp "$apk" "release-out/$name"
+            cp "$apk" "release-out/$new_name"
           done
           ls -la release-out/
 
@@ -77,7 +82,11 @@ jobs:
           if [ ! -f "$RUNNER_TEMP/scrollscout-release.jks" ]; then
             notes="$notes"$'\n\n'"Unsigned build (no signing secrets configured)."
           fi
-          gh release create "$GITHUB_REF_NAME" \
-            --title "ScrollScout $GITHUB_REF_NAME" \
-            --notes "$notes" \
-            release-out/*.apk
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" --clobber release-out/*.apk
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              --title "ScrollScout $GITHUB_REF_NAME" \
+              --notes "$notes" \
+              release-out/*.apk
+          fi

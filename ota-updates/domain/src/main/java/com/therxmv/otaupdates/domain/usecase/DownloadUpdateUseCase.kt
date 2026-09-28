@@ -12,4 +12,7 @@ class DownloadUpdateUseCase @Inject constructor(
      */
     operator fun invoke(latestReleaseModel: LatestReleaseModel): Long =
         downloaderApi.downloadFile(latestReleaseModel)
+
+    fun isDownloaded(latestReleaseModel: LatestReleaseModel): Boolean =
+        downloaderApi.isDownloaded(latestReleaseModel)
 }
