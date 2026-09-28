@@ -1,5 +1,6 @@
 package com.therxmv.dirolreader.ui.channels.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.therxmv.dirolreader.domain.models.ChannelModel
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,6 +32,10 @@ class ChannelsViewModel @Inject constructor(
     private val reorderChannel: ReorderChannelUseCase,
     private val setChannelGroup: SetChannelGroupUseCase,
 ) : ViewModel() {
+
+    private companion object {
+        const val TAG = "ChannelsViewModel"
+    }
 
     private val _uiState = MutableStateFlow<ChannelsUiState>(ChannelsUiState.Loading)
     val uiState: StateFlow<ChannelsUiState> = _uiState.asStateFlow()
@@ -59,7 +65,8 @@ class ChannelsViewModel @Inject constructor(
                 getChannels.refresh()
                 hasRefreshed = true
                 hasError = false
-            } catch (e: Exception) {
+            } catch (e: IOException) {
+                Log.w(TAG, "Channel refresh failed", e)
                 hasError = true
             }
             updateState(channels)
