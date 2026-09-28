@@ -60,7 +60,7 @@ private fun PostWithoutTextAndOnePhotoPreview() {
             id = 0,
             text = "",
             mediaList = persistentListOf(
-                getMediaModel()
+                getMediaModel(),
             ),
             channelData = getChannelData(),
         ),
