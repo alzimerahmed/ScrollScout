@@ -3,6 +3,7 @@ package com.therxmv.dirolreader.data.source.remote.message
 import com.therxmv.dirolreader.domain.models.ContactModel
 import com.therxmv.dirolreader.domain.models.LocationModel
 import com.therxmv.dirolreader.domain.models.MessageAttachment
+import com.therxmv.dirolreader.domain.models.MessageModel
 import com.therxmv.dirolreader.domain.models.PollModel
 import com.therxmv.dirolreader.domain.models.PollOptionModel
 import org.drinkless.tdlib.TdApi
@@ -21,6 +22,14 @@ fun Message.attachmentModel(): MessageAttachment? = when (val content = content)
     is TdApi.MessageContact -> content.toContactModel()
     else -> null
 }
+
+/** Replaces the fallback text with the attachment summary when supported. */
+fun MessageModel.withAttachment(attachment: MessageAttachment?) = attachment?.let {
+    copy(
+        text = it.summaryText(),
+        attachment = it,
+    )
+} ?: this
 
 internal const val UNKNOWN_CORRECT_OPTION = -1
 
