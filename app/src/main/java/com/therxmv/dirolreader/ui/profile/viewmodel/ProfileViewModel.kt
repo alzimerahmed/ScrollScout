@@ -93,6 +93,20 @@ class ProfileViewModel @Inject constructor(
                     Destination.SettingsScreen.createRoute(SettingsScreens.STORAGE.name)
                 )
             ),
+            ProfileUiSection.Item(
+                icon = R.drawable.channels_icon,
+                name = R.string.profile_channels,
+                onClick = ProfileUiSection.ItemClick.Navigate(
+                    Destination.ChannelsScreen.route
+                )
+            ),
+            ProfileUiSection.Item(
+                icon = R.drawable.tune_icon,
+                name = R.string.profile_relevance,
+                onClick = ProfileUiSection.ItemClick.Navigate(
+                    Destination.RelevanceScreen.route
+                )
+            ),
         ),
     )
 

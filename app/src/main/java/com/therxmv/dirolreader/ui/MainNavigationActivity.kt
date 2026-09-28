@@ -16,10 +16,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.therxmv.dirolreader.ui.auth.view.AuthScreen
+import com.therxmv.dirolreader.ui.channels.view.ChannelsScreen
 import com.therxmv.dirolreader.ui.navigation.Destination
 import com.therxmv.dirolreader.ui.navigation.NavArguments
 import com.therxmv.dirolreader.ui.news.view.NewsScreen
 import com.therxmv.dirolreader.ui.profile.view.ProfileScreen
+import com.therxmv.dirolreader.ui.relevance.view.RelevanceScreen
 import com.therxmv.dirolreader.ui.settings.view.SettingsScreen
 import com.therxmv.dirolreader.ui.settings.viewmodel.SettingsViewModel
 import com.therxmv.dirolreader.ui.theme.AppTheme
@@ -124,6 +126,12 @@ class MainNavigationActivity : ComponentActivity() {
                             navController = navController,
                             viewModel = viewModel,
                         )
+                    }
+                    composable(route = Destination.ChannelsScreen.route) {
+                        ChannelsScreen(navController = navController)
+                    }
+                    composable(route = Destination.RelevanceScreen.route) {
+                        RelevanceScreen(navController = navController)
                     }
                 }
             }

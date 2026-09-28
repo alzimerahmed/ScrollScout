@@ -80,6 +80,7 @@ dependencies {
     implementation project(':ota-updates:domain')
     implementation project(':ota-updates:data')
     implementation project(':channels:data')
+    implementation project(':channels:presentation')
     implementation project(':feed:domain')
     implementation project(':feed:data')
     implementation project(':feed:presentation')

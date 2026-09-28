@@ -12,6 +12,10 @@ data class ChannelEntity(
     @ColumnInfo(name = "unreadCount") val unreadCount: Int,
     @ColumnInfo(name = "lastReadMessageId") val lastReadMessageId: Long,
     @ColumnInfo(name = "rating", defaultValue = "0") val rating: Int,
+    @ColumnInfo(name = "title", defaultValue = "") val title: String = "",
+    @ColumnInfo(name = "isMuted", defaultValue = "0") val isMuted: Boolean = false,
+    @ColumnInfo(name = "sortOrder", defaultValue = "0") val sortOrder: Int = 0,
+    @ColumnInfo(name = "groupName", defaultValue = "") val groupName: String = "",
 )
 
 fun ChannelEntity.toDomain() = ChannelModel(
@@ -19,6 +23,10 @@ fun ChannelEntity.toDomain() = ChannelModel(
     this.unreadCount,
     this.lastReadMessageId,
     this.rating,
+    this.title,
+    this.isMuted,
+    this.sortOrder,
+    this.groupName,
 )
 
 fun ChannelModel.toEntity() = ChannelEntity(
@@ -26,4 +34,8 @@ fun ChannelModel.toEntity() = ChannelEntity(
     this.unreadCount,
     this.lastReadMessageId,
     this.rating,
+    this.title,
+    this.isMuted,
+    this.order,
+    this.group,
 )

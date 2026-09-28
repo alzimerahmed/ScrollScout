@@ -52,4 +52,22 @@
     <!-- Settings -->
     <string name="settings_dynamic_theme">Dynamic Theme</string>
     <string name="settings_clear_cache">Auto-Clear Cache</string>
+
+    <string name="profile_channels">Channels</string>
+    <string name="profile_relevance">Relevance Tuning</string>
+    <string name="channels_title">Channels</string>
+    <string name="channels_empty">No channels found.\nJoin Telegram channels to build your feed.</string>
+    <string name="channels_mute">Mute channel</string>
+    <string name="channels_move_up">Move channel up</string>
+    <string name="channels_move_down">Move channel down</string>
+    <string name="channels_set_group">Set group</string>
+    <string name="channels_group_label">Group</string>
+    <string name="channels_group_hint">Group name</string>
+    <string name="channels_mute_failed">Could not update notifications</string>
+    <string name="relevance_title">Relevance</string>
+    <string name="relevance_empty">Like or dislike posts to tune channel weights.</string>
+    <string name="relevance_reset">Reset</string>
+    <string name="relevance_increase">Increase weight</string>
+    <string name="relevance_decrease">Decrease weight</string>
+    <string name="relevance_weight">Weight: %1$d</string>
 </resources>

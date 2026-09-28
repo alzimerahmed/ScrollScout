@@ -274,3 +274,10 @@ The other 35 rules load on-demand via the intent-map. When a task type row lists
 - libtd -> JitPack com.github.tdlibx:td:1.8.56; Firebase plugins/deps removed (ADR-004).
 - CI green after 4 fixes: SDK licenses-only setup, gradlew exec bit, R8 8.3.37 classpath, branch rename master->main.
 - Lesson: android-actions/setup-android@v3 unreliable on ubuntu-latest (obsolete tools package) — use preinstalled SDK + license accept.
+
+## 2026-09-28 — Phase 4 (Codebase Refactor)
+- Module split: :channels (domain+data), :feed (domain+data+presentation), :settings; packages kept (ADR-005).
+- Version catalog gradle/libs.versions.toml; global.gradle reduced to appConfig.
+- ktlint+detekt with baselines; CI gate. Turbine pinned 0.12.1 (coroutines 1.6.4).
+- Lesson: ktlint plugin resolves baseline paths per-module — generate per-module baselines, never one root file.
+- Lesson: cross-module smart casts fail when same-package classes split across modules — bind to local val.

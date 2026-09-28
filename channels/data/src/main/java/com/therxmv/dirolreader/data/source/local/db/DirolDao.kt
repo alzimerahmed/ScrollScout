@@ -17,8 +17,23 @@ interface DirolDao {
     @Query("SELECT * FROM $CHANNEL_TABLE")
     fun getAllChannels(): List<ChannelEntity>
 
+    @Query("SELECT * FROM $CHANNEL_TABLE")
+    fun getAllChannelsFlow(): Flow<List<ChannelEntity>>
+
     @Query("UPDATE $CHANNEL_TABLE SET rating = rating + :num WHERE id = :id")
     fun updateChannelRating(id: Long, num: Int)
+
+    @Query("UPDATE $CHANNEL_TABLE SET isMuted = :isMuted WHERE id = :id")
+    fun updateChannelMuted(id: Long, isMuted: Boolean)
+
+    @Query("UPDATE $CHANNEL_TABLE SET sortOrder = :order WHERE id = :id")
+    fun updateChannelOrder(id: Long, order: Int)
+
+    @Query("UPDATE $CHANNEL_TABLE SET groupName = :group WHERE id = :id")
+    fun updateChannelGroup(id: Long, group: String)
+
+    @Query("UPDATE $CHANNEL_TABLE SET rating = 0")
+    fun resetChannelRatings()
 
     @Query("UPDATE $CHANNEL_TABLE SET unreadCount = :unreadCount, lastReadMessageId = :lastId WHERE id = :id")
     fun updateChannel(id: Long, unreadCount: Int, lastId: Long): Int
