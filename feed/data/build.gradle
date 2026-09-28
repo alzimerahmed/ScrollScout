@@ -3,6 +3,13 @@ apply plugin: 'kotlin-kapt'
 
 android {
     namespace 'com.therxmv.dirolreader.feed.data'
+
+    testOptions {
+        unitTests {
+            // android.util.Log etc. become no-ops in local unit tests
+            returnDefaultValues = true
+        }
+    }
 }
 
 dependencies {

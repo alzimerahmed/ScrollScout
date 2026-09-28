@@ -33,6 +33,13 @@
     <string name="news_translate">Translate post</string>
     <string name="news_translation_title">Translation</string>
     <string name="news_translation_error">Translation failed. Check your connection.</string>
+    <string name="news_search">Search posts</string>
+
+    <!-- Search -->
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search cached posts</string>
+    <string name="search_no_results">No results found.</string>
+    <string name="search_error">Search failed. Try again.</string>
 
     <!-- Profile -->
     <string name="profile_settings">Settings</string>

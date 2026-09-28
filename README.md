@@ -20,8 +20,14 @@
 ## Features
 
 - Single feed aggregating unread posts from all your Telegram channels
-- Relevance ranking shaped by your signals: like/dislike a post, star a channel
-- Supports text, photo, video, animation, audio, voice note, video note, sticker, and document captions
+- Relevance ranking shaped by your signals: like/dislike a post, star a channel, tune weights per channel
+- Supports text, photo, video, animation, audio, voice note, video note, sticker, document captions — plus polls (with voting), locations/venues, and contacts
+- Swipe triage: right to mark read, left to save for later; mark-all-read per refresh
+- Long-press translation into your device language
+- Channel management: mute, reorder, group, per-channel notifications
+- Full-text search over cached posts; offline reading from the local cache
+- Material You dynamic color (Android 12+), dark/light themes
+- In-app updates from GitHub Releases
 - Built on TdLib — a real Telegram session, not a bot API
 
 ## Tech Stack
@@ -30,7 +36,7 @@
 |---|---|
 | Language | Kotlin |
 | UI | Jetpack Compose, Material 3 |
-| Telegram | TdLib (JNI) |
+| Telegram | TdLib (via `com.github.tdlibx:td`) |
 | DI | Hilt |
 | Persistence | Room, MMKV |
 | Media | Media3 / ExoPlayer |
@@ -39,11 +45,13 @@
 ## Project Structure
 
 ```
-app/                  application, DI, UI screens, TdLib client
+app/                  application, DI, splash/auth/profile, navigation
 common/               shared theme + resources
+feed/                 ranked feed, search, message renderers (domain/data/presentation)
+channels/             channel management, post cache + FTS (domain/data/presentation)
+settings/             settings screens (theme, dynamic color)
 ota-updates/          in-app update checker (domain / data / presentation)
 shared-preferences/   MMKV-backed storage
-libtd/                TdLib Android wrapper (built separately)
 ```
 
 ## Building
@@ -54,25 +62,31 @@ libtd/                TdLib Android wrapper (built separately)
    API_ID=123456
    API_HASH=abcdef0123456789
    ```
-3. Provide the `libtd` module (TdLib Android build) and run:
+3. Build:
    ```bash
    ./gradlew assembleDebug
    ```
 
 <details>
-<summary>Firebase (optional)</summary>
-The app applies the google-services plugin. Without `app/google-services.json` the build fails;
-a CI placeholder is generated automatically in GitHub Actions.
+<summary>Release builds</summary>
+Release signing is optional and env-driven (`SCROLLSCOUT_KEYSTORE_PATH`,
+`SCROLLSCOUT_KEYSTORE_PASSWORD`, `SCROLLSCOUT_KEY_ALIAS`, `SCROLLSCOUT_KEY_PASSWORD`).
+Without them, `assembleRelease` produces unsigned APKs. GitHub Releases are cut by
+pushing a `v*` tag — see `.github/workflows/release.yml`.
 </details>
 
 ## Roadmap
 
-- [ ] Saved posts / read later
-- [ ] Full-text search across cached posts
-- [ ] Channel management (mute, reorder, group)
-- [ ] Relevance tuning screen
-- [ ] Material You dynamic color
-- [ ] Offline reading
+- [x] Saved posts / read later
+- [x] Full-text search across cached posts
+- [x] Channel management (mute, reorder, group)
+- [x] Relevance tuning screen
+- [x] Material You dynamic color
+- [x] Offline reading
+- [x] Poll, location & contact message types
+- [ ] Post summarization
+- [ ] Game messages
+- [ ] Live poll updates (needs a TdLib update-handler layer)
 
 ## License
 

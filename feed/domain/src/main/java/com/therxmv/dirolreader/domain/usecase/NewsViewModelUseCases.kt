@@ -9,6 +9,7 @@ import com.therxmv.dirolreader.domain.usecase.message.GetUnreadChannelsFlowUseCa
 import com.therxmv.dirolreader.domain.usecase.message.MarkAllAsReadUseCase
 import com.therxmv.dirolreader.domain.usecase.message.MarkMessageAsReadUseCase
 import com.therxmv.dirolreader.domain.usecase.message.SaveMessageUseCase
+import com.therxmv.dirolreader.domain.usecase.message.SearchMessagesUseCase
 import com.therxmv.dirolreader.domain.usecase.message.TranslateTextUseCase
 import com.therxmv.dirolreader.domain.usecase.user.GetCurrentUserUseCase
 import javax.inject.Inject
@@ -25,4 +26,5 @@ data class NewsViewModelUseCases @Inject constructor(
     val getSavedMessages: GetSavedMessagesUseCase,
     val markAllAsRead: MarkAllAsReadUseCase,
     val translateText: TranslateTextUseCase,
+    val searchMessages: SearchMessagesUseCase,
 )

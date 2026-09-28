@@ -3,6 +3,8 @@ package com.therxmv.common
 object Room {
     const val CHANNEL_TABLE = "ChannelTable"
     const val SAVED_MESSAGE_TABLE = "SavedMessageTable"
+    const val CACHED_MESSAGE_TABLE = "CachedMessageTable"
+    const val CACHED_MESSAGE_FTS_TABLE = "CachedMessageFtsTable"
 }
 
 object Paging {
