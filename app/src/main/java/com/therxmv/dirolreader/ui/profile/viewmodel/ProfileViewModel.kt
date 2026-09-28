@@ -98,14 +98,14 @@ class ProfileViewModel @Inject constructor(
                 name = R.string.profile_channels,
                 onClick = ProfileUiSection.ItemClick.Navigate(
                     Destination.ChannelsScreen.route,
-                )
+                ),
             ),
             ProfileUiSection.Item(
                 icon = R.drawable.tune_icon,
                 name = R.string.profile_relevance,
                 onClick = ProfileUiSection.ItemClick.Navigate(
                     Destination.RelevanceScreen.route,
-                )
+                ),
             ),
         ),
     )
