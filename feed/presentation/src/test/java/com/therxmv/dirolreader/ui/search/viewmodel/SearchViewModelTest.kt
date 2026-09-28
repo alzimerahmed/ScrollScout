@@ -30,6 +30,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SearchViewModelTest {
@@ -110,7 +111,7 @@ class SearchViewModelTest {
 
     @Test
     fun `search failure emits Error`() = runTest(testDispatcher) {
-        coEvery { searchMessages("boom") } throws RuntimeException("db closed")
+        coEvery { searchMessages("boom") } throws IOException("db closed")
         val viewModel = buildViewModel()
 
         viewModel.onQueryChange("boom")
