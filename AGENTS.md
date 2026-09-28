@@ -17,11 +17,11 @@ ScrollScout = fork of therxmv/Dirol-Reader (upstream: https://github.com/therxmv
 - **Persistence**: Room 2.5.2 (feed cache), MMKV via `shared-preferences` module.
 - **Telegram**: TdLib through the `:libtd` module — **not in the repo** (upstream gitignored it); it must be built from tdlib source or vendored. Never assume it exists.
 - **Media**: Media3/ExoPlayer. **Background**: WorkManager. **Telemetry**: Firebase Analytics/Crashlytics (plugins applied; `google-services.json` absent — CI generates a placeholder).
-- **Build**: Gradle 8.3, AGP 7.4.2, Groovy DSL. Version catalog = `global.gradle` `ext` maps (migrate to `libs.versions.toml` in Phase 4 — don't add new deps by editing ext maps casually; follow the existing pattern).
+- **Build**: Gradle 8.3, AGP 7.4.2, Groovy DSL. Version catalog = `gradle/libs.versions.toml` (Phase 4 migration); `global.gradle` holds only `appConfig`. Add new deps via catalog aliases. Lint: ktlint + detekt with per-module baselines — new code must not add violations.
 - **Tests**: JUnit 4, MockK, Kotest (existing); Turbine/Robolectric when added.
 
 ### Architecture & Conventions
-- **Modules**: `app` (screens, DI, TdLib client), `common` (theme/resources), `ota-updates` (presentation/data/domain — the model for clean module splits), `shared-preferences`, `libtd` (external).
+- **Modules**: `app` (auth/profile/splash/nav/DI), `common` (theme/resources/shared composables), `ota-updates` (presentation/data/domain), `channels` (domain+data), `feed` (domain+data+presentation), `settings` (presentation), `shared-preferences`, `libtd` (external, via JitPack).
 - **App package layout**: `data/`, `domain/`, `di/`, `ui/`, `utils/` under `com.therxmv.dirolreader`. Package namespace is KEPT as-is (ADR-001 in `docs/research.md`) — do not rename without a dedicated phase.
 - **TdLib discipline**: all TdLib calls go through the client wrapper; handle updates on the event stream, never block main thread; TdLib objects are not stable across TDLib versions — pin and match `libtd`.
 - **Compose**: state down / events up; StateFlow + `collectAsStateWithLifecycle`; Paging 3 for feed lists. Design tokens per `docs/design/design-system.md` — no hardcoded colors/dp where a token exists.

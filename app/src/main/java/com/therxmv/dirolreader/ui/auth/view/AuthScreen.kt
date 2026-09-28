@@ -11,7 +11,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.therxmv.dirolreader.ui.auth.viewmodel.AuthViewModel
 import com.therxmv.dirolreader.ui.auth.viewmodel.utils.AuthState
 import com.therxmv.dirolreader.ui.auth.viewmodel.utils.AuthUiEvent
-import com.therxmv.dirolreader.ui.commonview.CenteredBoxLoader
+import com.therxmv.common.commonview.CenteredBoxLoader
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

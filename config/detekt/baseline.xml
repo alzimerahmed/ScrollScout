@@ -1,0 +1,265 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>FunctionNaming:AuthScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun AuthScreen( onNavigateToNews: () -&gt; Unit, viewModel: AuthViewModel = hiltViewModel(), )</ID>
+    <ID>FunctionNaming:AuthScreenContent.kt$@Composable fun AuthScreenContent( authState: AuthState, inputState: AuthInputState, screenPadding: PaddingValues, confirmInput: () -&gt; Unit, onValueChange: (String) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:AuthScreenContent.kt$@Composable private fun ConfirmButton( modifier: Modifier = Modifier, onClick: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:AuthScreenContent.kt$@Composable private fun Title( text: String, )</ID>
+    <ID>FunctionNaming:AuthScreenContent.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun InputField( authState: AuthState, value: String, isValidInput: Boolean, onValueChange: (String) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:AuthScreenContent.kt$@Preview(showBackground = true) @Composable private fun ConfirmButtonPreview()</ID>
+    <ID>FunctionNaming:AuthScreenContent.kt$@Preview(showBackground = true) @Composable private fun ErrorInputFieldPreview()</ID>
+    <ID>FunctionNaming:AuthScreenContent.kt$@Preview(showBackground = true) @Composable private fun InputFieldPreview()</ID>
+    <ID>FunctionNaming:AuthScreenContent.kt$@Preview(showBackground = true) @Composable private fun PasswordInputFieldPreview()</ID>
+    <ID>FunctionNaming:AuthScreenContent.kt$@Preview(showBackground = true) @Composable private fun TitlePreview()</ID>
+    <ID>FunctionNaming:CenteredBoxLoader.kt$@Composable fun CenteredBoxLoader( modifier: Modifier = Modifier, option: FillOptions = FillOptions.BOTH, )</ID>
+    <ID>FunctionNaming:CenteredTopBar.kt$@Composable fun DefaultTitle(title: String)</ID>
+    <ID>FunctionNaming:CenteredTopBar.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun CenteredTopBar( title: @Composable () -&gt; Unit, navController: NavController, actions: @Composable (RowScope.() -&gt; Unit) = {}, )</ID>
+    <ID>FunctionNaming:CenteredTopBar.kt$@Preview @Composable private fun CenteredTopBarPreview()</ID>
+    <ID>FunctionNaming:ChannelPostInfo.kt$@Composable fun ChannelPostInfo( data: ChannelUiData, isStarred: Boolean, onStarChannel: (Boolean) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:ChannelPostInfo.kt$@Composable fun EmptyAvatar( modifier: Modifier = Modifier, name: String, )</ID>
+    <ID>FunctionNaming:ChannelPostInfo.kt$@Composable private fun Avatar( avatarPath: String, )</ID>
+    <ID>FunctionNaming:ChannelPostInfo.kt$@Composable private fun PostInfo( modifier: Modifier = Modifier, channelName: String, postTime: String, )</ID>
+    <ID>FunctionNaming:ChannelPostInfo.kt$@Composable private fun StarChannel( isStarred: Boolean, onClick: (Boolean) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:ChannelPostInfo.kt$@Preview(showBackground = true) @Composable private fun ChannelPostInfoPreview()</ID>
+    <ID>FunctionNaming:ConfirmPhoneDialog.kt$@Composable fun ConfirmPhoneDialog( phoneNumber: String, onDismiss: () -&gt; Unit, onConfirm: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:ConfirmPhoneDialog.kt$@Preview(showBackground = true) @Composable private fun ConfirmPhoneDialogPreview()</ID>
+    <ID>FunctionNaming:MediaPlaceholder.kt$@Composable fun MediaPlaceholder( aspectRatio: Float, content: @Composable (BoxScope.() -&gt; Unit) = {}, )</ID>
+    <ID>FunctionNaming:NewsPost.kt$@Composable fun NewsPost( data: NewsPostUiData, loadMedia: MediaLoaderType, isStarred: Boolean, onStarChannel: (Boolean) -&gt; Unit, onLike: (Boolean?) -&gt; Unit, onDislike: (Boolean?) -&gt; Unit, markAsRead: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:NewsPost.kt$@Composable private fun PostLikes( onLike: (Boolean?) -&gt; Unit, onDislike: (Boolean?) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:NewsPost.kt$@Composable private fun PostText( text: String, )</ID>
+    <ID>FunctionNaming:NewsPostPreviews.kt$@Preview @Composable private fun PostWithTextAndOnePhotoPreview()</ID>
+    <ID>FunctionNaming:NewsPostPreviews.kt$@Preview @Composable private fun PostWithTextAndThreeMediaPreview()</ID>
+    <ID>FunctionNaming:NewsPostPreviews.kt$@Preview @Composable private fun PostWithTextPreview()</ID>
+    <ID>FunctionNaming:NewsPostPreviews.kt$@Preview @Composable private fun PostWithoutTextAndOnePhotoPreview()</ID>
+    <ID>FunctionNaming:NewsScreen.kt$@Composable private fun Avatar( state: ToolbarState, onAvatarClick: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:NewsScreen.kt$@Composable private fun NewsTopBar( state: ToolbarState, navController: NavController, onAvatarClick: () -&gt; Unit, scrollToTop: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:NewsScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun NewsScreen( viewModel: FeedViewModel = hiltViewModel(), navController: NavController, onNavigateToProfile: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:NewsScreenContent.kt$@OptIn(ExperimentalMaterialApi::class) @Composable fun NewsScreenContent( modifier: Modifier = Modifier, listState: LazyListState, news: LazyPagingItems&lt;NewsPostUiData&gt;, starredChannels: PersistentList&lt;Long&gt;, onEvent: (NewsUiEvent) -&gt; Unit, loadMedia: MediaLoaderType, )</ID>
+    <ID>FunctionNaming:OtaScreen.kt$@OptIn(ExperimentalPermissionsApi::class) @Composable fun OtaScreen( onNavigateToNextScreen: () -&gt; Unit, viewModel: OtaViewModel = hiltViewModel(), )</ID>
+    <ID>FunctionNaming:OtaUpdateContent.kt$@Composable fun NewVersionSubtitle( updateVersion: String, )</ID>
+    <ID>FunctionNaming:OtaUpdateContent.kt$@Composable fun NewVersionTitle()</ID>
+    <ID>FunctionNaming:OtaUpdateContent.kt$@Composable private fun ChangeLogText( changeLog: String, )</ID>
+    <ID>FunctionNaming:OtaUpdateContent.kt$@Composable private fun DownloadButton( @StringRes text: Int, isEnabled: Boolean, onClick: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:OtaUpdateContent.kt$@Composable private fun UpdateLaterButton( modifier: Modifier = Modifier, onClick: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:OtaUpdateContent.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun OtaUpdateContent( onNavigateToAuth: () -&gt; Unit, updateVersion: String, changeLog: String, updateButtonTitle: Int, isButtonEnabled: Boolean, onUpdateClick: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:OtaUpdateContent.kt$@Preview(showBackground = true) @Composable private fun ChangeLogTextPreview()</ID>
+    <ID>FunctionNaming:OtaUpdateContent.kt$@Preview(showBackground = true) @Composable private fun DisabledDownloadButtonPreview()</ID>
+    <ID>FunctionNaming:OtaUpdateContent.kt$@Preview(showBackground = true) @Composable private fun DownloadButtonPreview()</ID>
+    <ID>FunctionNaming:OtaUpdateContent.kt$@Preview(showBackground = true) @Composable private fun NewVersionSubtitlePreview()</ID>
+    <ID>FunctionNaming:OtaUpdateContent.kt$@Preview(showBackground = true) @Composable private fun NewVersionTitlePreview()</ID>
+    <ID>FunctionNaming:OtaUpdateContent.kt$@Preview(showBackground = true) @Composable private fun UpdateLaterButtonPreview()</ID>
+    <ID>FunctionNaming:PostMediaContent.kt$@Composable fun PostMediaContent( mediaList: PersistentList&lt;MediaModel&gt;, loadMedia: MediaLoaderType, )</ID>
+    <ID>FunctionNaming:PostMediaContent.kt$@Composable private fun MediaByType( media: MediaModel, loadMedia: MediaLoaderType, )</ID>
+    <ID>FunctionNaming:PostMediaContent.kt$@Composable private fun MediaPagerCounter( modifier: Modifier = Modifier, currentPage: Int, allPages: Int, )</ID>
+    <ID>FunctionNaming:PostMediaContent.kt$@OptIn(ExperimentalFoundationApi::class) @Composable private fun MediaPager( mediaList: PersistentList&lt;MediaModel&gt;, loadMedia: MediaLoaderType, )</ID>
+    <ID>FunctionNaming:PostMediaContent.kt$@Preview @Composable private fun MediaPagerCounterPreview()</ID>
+    <ID>FunctionNaming:PostPhoto.kt$@Composable fun PostPhoto( photoPath: String?, photo: MediaModel, )</ID>
+    <ID>FunctionNaming:PostVideo.kt$@Composable fun PostVideo( videoPath: String?, video: MediaModel, downloadMedia: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:PostVideo.kt$@Composable private fun Placeholder( video: MediaModel, aspectRatio: Float, onDownloadClick: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:PostVideo.kt$@Composable private fun Player( modifier: Modifier = Modifier, videoPath: String, )</ID>
+    <ID>FunctionNaming:ProfileScreen.kt$@Composable private fun AppBarAvatar( state: AppBarState, )</ID>
+    <ID>FunctionNaming:ProfileScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ProfileScreen( navController: NavController, onNavigateToRoute: (String) -&gt; Unit, eraseApplication: () -&gt; Unit, viewModel: ProfileViewModel = hiltViewModel(), )</ID>
+    <ID>FunctionNaming:ProfileScreenContent.kt$@Composable fun ProfileScreenContent( screenPadding: PaddingValues, sections: PersistentList&lt;ProfileUiSection&gt;, onNavigateToRoute: (String) -&gt; Unit, doSignOut: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:ProfileScreenContent.kt$@Composable private fun ClickableText( text: String, onClick: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:ProfileScreenContent.kt$@Composable private fun Footer( openSignOutDialog: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:ProfileScreenContent.kt$@Composable private fun Item( text: String, icon: Painter, onClick: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:ProfileScreenContent.kt$@Composable private fun ItemsTitle( text: String, )</ID>
+    <ID>FunctionNaming:ProfileScreenContent.kt$@Composable private fun ProfileSection( @StringRes title: Int, items: PersistentList&lt;ProfileUiSection.Item&gt;, onNavigateToRoute: (String) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:ProfileScreenContent.kt$@Preview(showBackground = true) @Composable private fun ClickableTextPreview()</ID>
+    <ID>FunctionNaming:ProfileScreenContent.kt$@Preview(showBackground = true) @Composable private fun ItemPreview()</ID>
+    <ID>FunctionNaming:ProfileScreenContent.kt$@Preview(showBackground = true) @Composable private fun ItemsTitlePreview()</ID>
+    <ID>FunctionNaming:SettingsScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun SettingsScreen( navController: NavController, viewModel: SettingsViewModel, )</ID>
+    <ID>FunctionNaming:SettingsScreenContent.kt$@Composable fun SettingsScreenContent( screenPadding: PaddingValues, items: PersistentList&lt;ItemData&gt;, )</ID>
+    <ID>FunctionNaming:SignOutDialog.kt$@Composable fun SignOutDialog( onClick: () -&gt; Unit, onDismiss: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:SignOutDialog.kt$@Composable private fun SignOutInProgressDialog()</ID>
+    <ID>FunctionNaming:SignOutDialog.kt$@Composable private fun SignOutMainDialog( onClick: () -&gt; Unit, onDismiss: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:SignOutDialog.kt$@Preview @Composable private fun SignOutDialogPreview()</ID>
+    <ID>FunctionNaming:SignOutDialog.kt$@Preview @Composable private fun SignOutInProgressPreview()</ID>
+    <ID>FunctionNaming:SwitchItem.kt$@Composable fun SwitchItem( text: String, isChecked: Boolean, onCheckedChange: (Boolean) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:SwitchItem.kt$@Preview(showBackground = true) @Composable private fun CheckedSwitchItemPreview()</ID>
+    <ID>FunctionNaming:SwitchItem.kt$@Preview(showBackground = true) @Composable private fun UncheckedSwitchItemPreview()</ID>
+    <ID>FunctionNaming:Theme.kt$@Composable fun AppTheme( darkTheme: Boolean = isSystemInDarkTheme(), dynamicColor: Boolean = false, content: @Composable () -&gt; Unit, )</ID>
+    <ID>FunctionOnlyReturningConstant:NewsPostPreviews.kt$private suspend fun loadMessageMedia(mediaId: Int)</ID>
+    <ID>InvalidPackageDeclaration:MediaRemoteDataSource.kt$package com.therxmv.dirolreader.data.source.remote.media</ID>
+    <ID>InvalidPackageDeclaration:MediaSource.kt$package com.therxmv.dirolreader.data.source.remote.media</ID>
+    <ID>LongMethod:MessagesTypes.kt$fun handleMessageType( channel: ChannelData, message: TdApi.Message, ): MessageModel</ID>
+    <ID>LongParameterList:NewsPost.kt$( data: NewsPostUiData, loadMedia: MediaLoaderType, isStarred: Boolean, onStarChannel: (Boolean) -&gt; Unit, onLike: (Boolean?) -&gt; Unit, onDislike: (Boolean?) -&gt; Unit, markAsRead: () -&gt; Unit, )</ID>
+    <ID>LongParameterList:NewsScreenContent.kt$( modifier: Modifier = Modifier, listState: LazyListState, news: LazyPagingItems&lt;NewsPostUiData&gt;, starredChannels: PersistentList&lt;Long&gt;, onEvent: (NewsUiEvent) -&gt; Unit, loadMedia: MediaLoaderType, )</ID>
+    <ID>LongParameterList:OtaUpdateContent.kt$( onNavigateToAuth: () -&gt; Unit, updateVersion: String, changeLog: String, updateButtonTitle: Int, isButtonEnabled: Boolean, onUpdateClick: () -&gt; Unit, )</ID>
+    <ID>MagicNumber:Color.kt$0xFF000000</ID>
+    <ID>MagicNumber:Color.kt$0xFF001D33</ID>
+    <ID>MagicNumber:Color.kt$0xFF00201D</ID>
+    <ID>MagicNumber:Color.kt$0xFF003733</ID>
+    <ID>MagicNumber:Color.kt$0xFF00504A</ID>
+    <ID>MagicNumber:Color.kt$0xFF006A63</ID>
+    <ID>MagicNumber:Color.kt$0xFF051F1D</ID>
+    <ID>MagicNumber:Color.kt$0xFF17324A</ID>
+    <ID>MagicNumber:Color.kt$0xFF17DDD0</ID>
+    <ID>MagicNumber:Color.kt$0xFF191C1C</ID>
+    <ID>MagicNumber:Color.kt$0xFF1C3532</ID>
+    <ID>MagicNumber:Color.kt$0xFF2D3130</ID>
+    <ID>MagicNumber:Color.kt$0xFF2F4961</ID>
+    <ID>MagicNumber:Color.kt$0xFF324B48</ID>
+    <ID>MagicNumber:Color.kt$0xFF3F4947</ID>
+    <ID>MagicNumber:Color.kt$0xFF410002</ID>
+    <ID>MagicNumber:Color.kt$0xFF47617A</ID>
+    <ID>MagicNumber:Color.kt$0xFF4A6360</ID>
+    <ID>MagicNumber:Color.kt$0xFF4FFAEC</ID>
+    <ID>MagicNumber:Color.kt$0xFF690005</ID>
+    <ID>MagicNumber:Color.kt$0xFF6F7977</ID>
+    <ID>MagicNumber:Color.kt$0xFF899391</ID>
+    <ID>MagicNumber:Color.kt$0xFF93000A</ID>
+    <ID>MagicNumber:Color.kt$0xFFAFC9E7</ID>
+    <ID>MagicNumber:Color.kt$0xFFB1CCC8</ID>
+    <ID>MagicNumber:Color.kt$0xFFBA1A1A</ID>
+    <ID>MagicNumber:Color.kt$0xFFBEC9C6</ID>
+    <ID>MagicNumber:Color.kt$0xFFCCE8E4</ID>
+    <ID>MagicNumber:Color.kt$0xFFCEE5FF</ID>
+    <ID>MagicNumber:Color.kt$0xFFDAE5E2</ID>
+    <ID>MagicNumber:Color.kt$0xFFE0E3E1</ID>
+    <ID>MagicNumber:Color.kt$0xFFEFF1F0</ID>
+    <ID>MagicNumber:Color.kt$0xFFFAFDFB</ID>
+    <ID>MagicNumber:Color.kt$0xFFFFB4AB</ID>
+    <ID>MagicNumber:Color.kt$0xFFFFDAD6</ID>
+    <ID>MagicNumber:Color.kt$0xFFFFFFFF</ID>
+    <ID>MagicNumber:FeedViewModel.kt$FeedViewModel$100</ID>
+    <ID>MagicNumber:FeedViewModel.kt$FeedViewModel$2</ID>
+    <ID>MagicNumber:GetReadablePostTimeUseCase.kt$GetReadablePostTimeUseCase$1000L</ID>
+    <ID>MagicNumber:GetReadablePostTimeUseCase.kt$GetReadablePostTimeUseCase$24</ID>
+    <ID>MagicNumber:MediaRemoteDataSource.kt$MediaRemoteDataSource$32</ID>
+    <ID>MagicNumber:MessageRemoteDataSource.kt$MessageRemoteDataSource$32</ID>
+    <ID>MagicNumber:MessageRemoteDataSource.kt$MessageRemoteDataSource$500</ID>
+    <ID>MagicNumber:MessagesTypes.kt$100</ID>
+    <ID>MagicNumber:MessagesTypes.kt$1048576F</ID>
+    <ID>MagicNumber:MessagesUtils.kt$10</ID>
+    <ID>MagicNumber:NewsScreenContent.kt$200</ID>
+    <ID>MagicNumber:NewsScreenContent.kt$750</ID>
+    <ID>MagicNumber:PostMediaContent.kt$200</ID>
+    <ID>MagicNumber:ProfileViewModel.kt$ProfileViewModel$1500</ID>
+    <ID>MagicNumber:Shape.kt$100</ID>
+    <ID>MatchingDeclarationName:CenteredBoxLoader.kt$FillOptions</ID>
+    <ID>MatchingDeclarationName:ChannelPostInfo.kt$ChannelUiData</ID>
+    <ID>MatchingDeclarationName:Downloader.kt$DownloaderApi</ID>
+    <ID>MatchingDeclarationName:NewsPost.kt$NewsPostUiData</ID>
+    <ID>MaxLineLength:AuthScreenContent.kt$visualTransformation = if (authState == AuthState.PASSWORD) PasswordVisualTransformation() else VisualTransformation.None</ID>
+    <ID>MaxLineLength:GroupMediaMessagesInOneTest.kt$GroupMediaMessagesInOneTest.Companion$private</ID>
+    <ID>MaxLineLength:MessagesUtils.kt$currentItem.timestamp - prevItem.timestamp &lt;= 10 &amp;&amp; currentItem.channelData.id == prevItem.channelData.id</ID>
+    <ID>MaxLineLength:NewsPostPreviews.kt$text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."</ID>
+    <ID>MaxLineLength:OtaScreen.kt$if</ID>
+    <ID>MaxLineLength:OtaViewModelTest.kt$OtaViewModelTest$coEvery { mockGetLatestReleaseUseCase.invoke() } returns releaseModel.copy(version = "v5.0.0", fileName = "Dirol-Reader-5.0.0.apk")</ID>
+    <ID>NestedBlockDepth:SplashViewModel.kt$SplashViewModel$private fun clearCache()</ID>
+    <ID>NewLineAtEndOfFile:AppModule.kt$com.therxmv.dirolreader.di.AppModule.kt</ID>
+    <ID>NewLineAtEndOfFile:AppSharedPrefsDataSource.kt$com.therxmv.sharedpreferences.source.AppSharedPrefsDataSource.kt</ID>
+    <ID>NewLineAtEndOfFile:AppSharedPrefsRepository.kt$com.therxmv.sharedpreferences.repository.AppSharedPrefsRepository.kt</ID>
+    <ID>NewLineAtEndOfFile:AuthScreen.kt$com.therxmv.dirolreader.ui.auth.view.AuthScreen.kt</ID>
+    <ID>NewLineAtEndOfFile:AuthScreenContent.kt$com.therxmv.dirolreader.ui.auth.view.AuthScreenContent.kt</ID>
+    <ID>NewLineAtEndOfFile:AuthState.kt$com.therxmv.dirolreader.ui.auth.viewmodel.utils.AuthState.kt</ID>
+    <ID>NewLineAtEndOfFile:AuthStateUtils.kt$com.therxmv.dirolreader.ui.auth.viewmodel.utils.AuthStateUtils.kt</ID>
+    <ID>NewLineAtEndOfFile:AuthViewModel.kt$com.therxmv.dirolreader.ui.auth.viewmodel.AuthViewModel.kt</ID>
+    <ID>NewLineAtEndOfFile:AuthViewModelUseCases.kt$com.therxmv.dirolreader.domain.usecase.AuthViewModelUseCases.kt</ID>
+    <ID>NewLineAtEndOfFile:CenteredBoxLoader.kt$com.therxmv.common.commonview.CenteredBoxLoader.kt</ID>
+    <ID>NewLineAtEndOfFile:CenteredTopBar.kt$com.therxmv.common.commonview.CenteredTopBar.kt</ID>
+    <ID>NewLineAtEndOfFile:ChannelEntity.kt$com.therxmv.dirolreader.data.entity.ChannelEntity.kt</ID>
+    <ID>NewLineAtEndOfFile:ChannelLocalDataSource.kt$com.therxmv.dirolreader.data.source.local.db.ChannelLocalDataSource.kt</ID>
+    <ID>NewLineAtEndOfFile:ChannelModel.kt$com.therxmv.dirolreader.domain.models.ChannelModel.kt</ID>
+    <ID>NewLineAtEndOfFile:ChannelPostInfo.kt$com.therxmv.dirolreader.ui.news.view.post.ChannelPostInfo.kt</ID>
+    <ID>NewLineAtEndOfFile:ChannelRemoteDataSource.kt$com.therxmv.dirolreader.data.source.remote.channel.ChannelRemoteDataSource.kt</ID>
+    <ID>NewLineAtEndOfFile:ChannelRemoteSource.kt$com.therxmv.dirolreader.data.source.remote.channel.ChannelRemoteSource.kt</ID>
+    <ID>NewLineAtEndOfFile:ChannelRepository.kt$com.therxmv.dirolreader.domain.repository.ChannelRepository.kt</ID>
+    <ID>NewLineAtEndOfFile:ChannelRepositoryImpl.kt$com.therxmv.dirolreader.data.repository.ChannelRepositoryImpl.kt</ID>
+    <ID>NewLineAtEndOfFile:ClientModule.kt$com.therxmv.dirolreader.feed.di.ClientModule.kt</ID>
+    <ID>NewLineAtEndOfFile:Color.kt$com.therxmv.dirolreader.ui.theme.Color.kt</ID>
+    <ID>NewLineAtEndOfFile:ConfirmPhoneDialog.kt$com.therxmv.dirolreader.ui.auth.view.ConfirmPhoneDialog.kt</ID>
+    <ID>NewLineAtEndOfFile:Constants.kt$com.therxmv.common.Constants.kt</ID>
+    <ID>NewLineAtEndOfFile:DirolApp.kt$com.therxmv.dirolreader.DirolApp.kt</ID>
+    <ID>NewLineAtEndOfFile:DirolDao.kt$com.therxmv.dirolreader.data.source.local.db.DirolDao.kt</ID>
+    <ID>NewLineAtEndOfFile:DirolDatabase.kt$com.therxmv.dirolreader.data.source.local.db.DirolDatabase.kt</ID>
+    <ID>NewLineAtEndOfFile:DispatchersModule.kt$com.therxmv.dirolreader.feed.di.DispatchersModule.kt</ID>
+    <ID>NewLineAtEndOfFile:DownloadCompletedReceiver.kt$com.therxmv.otaupdates.presentation.receiver.DownloadCompletedReceiver.kt</ID>
+    <ID>NewLineAtEndOfFile:DownloadMediaAndGetPathUseCase.kt$com.therxmv.dirolreader.domain.usecase.message.DownloadMediaAndGetPathUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:DownloadUpdateUseCase.kt$com.therxmv.otaupdates.domain.usecase.DownloadUpdateUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:Downloader.kt$com.therxmv.otaupdates.domain.repository.Downloader.kt</ID>
+    <ID>NewLineAtEndOfFile:DownloaderModule.kt$com.therxmv.otaupdates.data.di.DownloaderModule.kt</ID>
+    <ID>NewLineAtEndOfFile:FeedUiState.kt$com.therxmv.dirolreader.ui.news.viewmodel.utils.FeedUiState.kt</ID>
+    <ID>NewLineAtEndOfFile:FeedViewModel.kt$com.therxmv.dirolreader.ui.news.viewmodel.FeedViewModel.kt</ID>
+    <ID>NewLineAtEndOfFile:GetCurrentUserUseCase.kt$com.therxmv.dirolreader.domain.usecase.user.GetCurrentUserUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:GetLatestReleaseUseCase.kt$com.therxmv.otaupdates.domain.usecase.GetLatestReleaseUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:GetMessagePagingUseCase.kt$com.therxmv.dirolreader.domain.usecase.message.GetMessagePagingUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:GetReadablePostTimeUseCase.kt$com.therxmv.dirolreader.domain.usecase.message.GetReadablePostTimeUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:GetTdLibParametersUseCase.kt$com.therxmv.dirolreader.domain.usecase.GetTdLibParametersUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:GetUnreadChannelsFlowUseCase.kt$com.therxmv.dirolreader.domain.usecase.message.GetUnreadChannelsFlowUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:GithubApiService.kt$com.therxmv.otaupdates.data.source.remote.GithubApiService.kt</ID>
+    <ID>NewLineAtEndOfFile:GroupMediaMessagesInOneTest.kt$com.therxmv.dirolreader.data.source.remote.message.GroupMediaMessagesInOneTest.kt</ID>
+    <ID>NewLineAtEndOfFile:LatestReleaseDownloader.kt$com.therxmv.otaupdates.data.source.remote.LatestReleaseDownloader.kt</ID>
+    <ID>NewLineAtEndOfFile:LatestReleaseJson.kt$com.therxmv.otaupdates.data.models.LatestReleaseJson.kt</ID>
+    <ID>NewLineAtEndOfFile:LatestReleaseModel.kt$com.therxmv.otaupdates.domain.models.LatestReleaseModel.kt</ID>
+    <ID>NewLineAtEndOfFile:LatestReleaseRemoteDataSource.kt$com.therxmv.otaupdates.data.source.remote.LatestReleaseRemoteDataSource.kt</ID>
+    <ID>NewLineAtEndOfFile:LatestReleaseRemoteDataSourceTest.kt$com.therxmv.otaupdates.data.source.remote.LatestReleaseRemoteDataSourceTest.kt</ID>
+    <ID>NewLineAtEndOfFile:LatestReleaseRepository.kt$com.therxmv.otaupdates.domain.repository.LatestReleaseRepository.kt</ID>
+    <ID>NewLineAtEndOfFile:LatestReleaseRepositoryImpl.kt$com.therxmv.otaupdates.data.repository.LatestReleaseRepositoryImpl.kt</ID>
+    <ID>NewLineAtEndOfFile:LatestReleaseRepositoryImplTest.kt$com.therxmv.otaupdates.data.source.repository.LatestReleaseRepositoryImplTest.kt</ID>
+    <ID>NewLineAtEndOfFile:LocalDataSourceModule.kt$com.therxmv.dirolreader.channels.di.LocalDataSourceModule.kt</ID>
+    <ID>NewLineAtEndOfFile:MainActivity.kt$com.therxmv.dirolreader.ui.splash.MainActivity.kt</ID>
+    <ID>NewLineAtEndOfFile:MainNavigationActivity.kt$com.therxmv.dirolreader.ui.MainNavigationActivity.kt</ID>
+    <ID>NewLineAtEndOfFile:MarkMessageAsReadUseCase.kt$com.therxmv.dirolreader.domain.usecase.message.MarkMessageAsReadUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:MediaPlaceholder.kt$com.therxmv.dirolreader.ui.news.view.post.media.MediaPlaceholder.kt</ID>
+    <ID>NewLineAtEndOfFile:MediaRemoteDataSource.kt$com.therxmv.dirolreader.data.source.remote.media.MediaRemoteDataSource.kt</ID>
+    <ID>NewLineAtEndOfFile:MediaSource.kt$com.therxmv.dirolreader.data.source.remote.media.MediaSource.kt</ID>
+    <ID>NewLineAtEndOfFile:MessageModel.kt$com.therxmv.dirolreader.domain.models.MessageModel.kt</ID>
+    <ID>NewLineAtEndOfFile:MessageRemoteDataSource.kt$com.therxmv.dirolreader.data.source.remote.message.MessageRemoteDataSource.kt</ID>
+    <ID>NewLineAtEndOfFile:MessageRepository.kt$com.therxmv.dirolreader.domain.repository.MessageRepository.kt</ID>
+    <ID>NewLineAtEndOfFile:MessageRepositoryImpl.kt$com.therxmv.dirolreader.data.repository.MessageRepositoryImpl.kt</ID>
+    <ID>NewLineAtEndOfFile:MessageSource.kt$com.therxmv.dirolreader.data.source.remote.message.MessageSource.kt</ID>
+    <ID>NewLineAtEndOfFile:MessagesPagingSource.kt$com.therxmv.dirolreader.domain.paging.MessagesPagingSource.kt</ID>
+    <ID>NewLineAtEndOfFile:MessagesTypes.kt$com.therxmv.dirolreader.data.source.remote.message.MessagesTypes.kt</ID>
+    <ID>NewLineAtEndOfFile:MessagesUtils.kt$com.therxmv.dirolreader.data.source.remote.message.MessagesUtils.kt</ID>
+    <ID>NewLineAtEndOfFile:NavArguments.kt$com.therxmv.dirolreader.ui.navigation.NavArguments.kt</ID>
+    <ID>NewLineAtEndOfFile:NewsPost.kt$com.therxmv.dirolreader.ui.news.view.post.NewsPost.kt</ID>
+    <ID>NewLineAtEndOfFile:NewsPostPreviews.kt$com.therxmv.dirolreader.ui.news.view.post.NewsPostPreviews.kt</ID>
+    <ID>NewLineAtEndOfFile:NewsScreen.kt$com.therxmv.dirolreader.ui.news.view.NewsScreen.kt</ID>
+    <ID>NewLineAtEndOfFile:NewsScreenContent.kt$com.therxmv.dirolreader.ui.news.view.NewsScreenContent.kt</ID>
+    <ID>NewLineAtEndOfFile:OtaModule.kt$com.therxmv.otaupdates.data.di.OtaModule.kt</ID>
+    <ID>NewLineAtEndOfFile:OtaScreen.kt$com.therxmv.otaupdates.presentation.view.OtaScreen.kt</ID>
+    <ID>NewLineAtEndOfFile:OtaUiEvent.kt$com.therxmv.otaupdates.presentation.viewmodel.utils.OtaUiEvent.kt</ID>
+    <ID>NewLineAtEndOfFile:OtaUiState.kt$com.therxmv.otaupdates.presentation.viewmodel.utils.OtaUiState.kt</ID>
+    <ID>NewLineAtEndOfFile:OtaUpdateContent.kt$com.therxmv.otaupdates.presentation.view.OtaUpdateContent.kt</ID>
+    <ID>NewLineAtEndOfFile:OtaViewModel.kt$com.therxmv.otaupdates.presentation.viewmodel.OtaViewModel.kt</ID>
+    <ID>NewLineAtEndOfFile:OtaViewModelTest.kt$com.therxmv.otaupdates.presentation.viewmodel.OtaViewModelTest.kt</ID>
+    <ID>NewLineAtEndOfFile:PostMediaContent.kt$com.therxmv.dirolreader.ui.news.view.post.media.PostMediaContent.kt</ID>
+    <ID>NewLineAtEndOfFile:PostPhoto.kt$com.therxmv.dirolreader.ui.news.view.post.media.types.PostPhoto.kt</ID>
+    <ID>NewLineAtEndOfFile:PostVideo.kt$com.therxmv.dirolreader.ui.news.view.post.media.types.PostVideo.kt</ID>
+    <ID>NewLineAtEndOfFile:ProfileScreen.kt$com.therxmv.dirolreader.ui.profile.view.ProfileScreen.kt</ID>
+    <ID>NewLineAtEndOfFile:ProfileScreenContent.kt$com.therxmv.dirolreader.ui.profile.view.ProfileScreenContent.kt</ID>
+    <ID>NewLineAtEndOfFile:ProfileUiState.kt$com.therxmv.dirolreader.ui.profile.viewmodel.utils.ProfileUiState.kt</ID>
+    <ID>NewLineAtEndOfFile:ProfileViewModel.kt$com.therxmv.dirolreader.ui.profile.viewmodel.ProfileViewModel.kt</ID>
+    <ID>NewLineAtEndOfFile:RepositoryModule.kt$com.therxmv.otaupdates.data.di.RepositoryModule.kt</ID>
+    <ID>NewLineAtEndOfFile:SettingsContentData.kt$com.therxmv.dirolreader.ui.settings.viewmodel.utils.SettingsContentData.kt</ID>
+    <ID>NewLineAtEndOfFile:SettingsScreen.kt$com.therxmv.dirolreader.ui.settings.view.SettingsScreen.kt</ID>
+    <ID>NewLineAtEndOfFile:SettingsScreenContent.kt$com.therxmv.dirolreader.ui.settings.view.SettingsScreenContent.kt</ID>
+    <ID>NewLineAtEndOfFile:SettingsScreens.kt$com.therxmv.dirolreader.ui.settings.viewmodel.utils.SettingsScreens.kt</ID>
+    <ID>NewLineAtEndOfFile:SettingsUiState.kt$com.therxmv.dirolreader.ui.settings.viewmodel.utils.SettingsUiState.kt</ID>
+    <ID>NewLineAtEndOfFile:SettingsViewModel.kt$com.therxmv.dirolreader.ui.settings.viewmodel.SettingsViewModel.kt</ID>
+    <ID>NewLineAtEndOfFile:Shape.kt$com.therxmv.dirolreader.ui.theme.Shape.kt</ID>
+    <ID>NewLineAtEndOfFile:SignOutDialog.kt$com.therxmv.dirolreader.ui.profile.view.SignOutDialog.kt</ID>
+    <ID>NewLineAtEndOfFile:SortMessagesByPageTest.kt$com.therxmv.dirolreader.data.source.remote.message.SortMessagesByPageTest.kt</ID>
+    <ID>NewLineAtEndOfFile:SplashViewModel.kt$com.therxmv.dirolreader.ui.splash.SplashViewModel.kt</ID>
+    <ID>NewLineAtEndOfFile:StorageViewModel.kt$com.therxmv.dirolreader.ui.settings.viewmodel.StorageViewModel.kt</ID>
+    <ID>NewLineAtEndOfFile:SwitchItem.kt$com.therxmv.dirolreader.ui.settings.view.common.SwitchItem.kt</ID>
+    <ID>NewLineAtEndOfFile:Theme.kt$com.therxmv.dirolreader.ui.theme.Theme.kt</ID>
+    <ID>NewLineAtEndOfFile:ThemingViewModel.kt$com.therxmv.dirolreader.ui.settings.viewmodel.ThemingViewModel.kt</ID>
+    <ID>NewLineAtEndOfFile:UpdateChannelRatingUseCase.kt$com.therxmv.dirolreader.domain.usecase.channel.UpdateChannelRatingUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:UserEntity.kt$com.therxmv.dirolreader.data.entity.UserEntity.kt</ID>
+    <ID>NewLineAtEndOfFile:UserModel.kt$com.therxmv.dirolreader.domain.models.UserModel.kt</ID>
+    <ID>NewLineAtEndOfFile:UserRemoteDataSource.kt$com.therxmv.dirolreader.data.source.remote.user.UserRemoteDataSource.kt</ID>
+    <ID>NewLineAtEndOfFile:UserRepository.kt$com.therxmv.dirolreader.domain.repository.UserRepository.kt</ID>
+    <ID>NewLineAtEndOfFile:UserRepositoryImpl.kt$com.therxmv.dirolreader.data.repository.UserRepositoryImpl.kt</ID>
+    <ID>NewLineAtEndOfFile:UserSource.kt$com.therxmv.dirolreader.data.source.remote.user.UserSource.kt</ID>
+    <ID>PrintStackTrace:OtaViewModel.kt$OtaViewModel$e</ID>
+    <ID>TooGenericExceptionCaught:LatestReleaseRemoteDataSource.kt$LatestReleaseRemoteDataSource$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:MessagesPagingSource.kt$MessagesPagingSource$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:OtaViewModel.kt$OtaViewModel$e: Exception</ID>
+    <ID>UnusedParameter:NewsPostPreviews.kt$mediaId: Int</ID>
+    <ID>UnusedPrivateProperty:OtaViewModel.kt$OtaViewModel$@Named("VersionCode") private val versionCode: Int</ID>
+  </CurrentIssues>
+</SmellBaseline>

@@ -18,9 +18,9 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.therxmv.dirolreader.ui.commonview.CenteredBoxLoader
-import com.therxmv.dirolreader.ui.commonview.CenteredTopBar
-import com.therxmv.dirolreader.ui.commonview.DefaultTitle
+import com.therxmv.common.commonview.CenteredBoxLoader
+import com.therxmv.common.commonview.CenteredTopBar
+import com.therxmv.common.commonview.DefaultTitle
 import com.therxmv.dirolreader.ui.news.view.post.EmptyAvatar
 import com.therxmv.dirolreader.ui.profile.viewmodel.ProfileViewModel
 import com.therxmv.dirolreader.ui.profile.viewmodel.utils.AppBarState

@@ -2,8 +2,18 @@ apply from: "$rootDir/gradle/snippets/module-config.gradle"
 
 android {
     namespace 'com.therxmv.common'
+
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
+    }
 }
 
 dependencies {
-    implementation appDependencies.coreKtx
+    implementation libs.core.ktx
+
+    implementation platform(libs.compose.bom)
+    implementation libs.bundles.compose.ui
 }

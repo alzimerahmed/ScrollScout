@@ -1,0 +1,23 @@
+apply from: "$rootDir/gradle/snippets/module-config.gradle"
+apply plugin: 'kotlin-kapt'
+
+android {
+    namespace 'com.therxmv.dirolreader.feed.data'
+}
+
+dependencies {
+    implementation project(":feed:domain")
+    implementation project(":channels:data")
+    implementation project(":channels:domain")
+    implementation project(":common")
+
+    implementation 'com.github.tdlibx:td:1.8.56'
+
+    implementation libs.core.ktx
+    implementation libs.kotlinx.coroutines.core
+
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
+
+    testImplementation libs.bundles.testing.unit
+}

@@ -31,6 +31,9 @@ jobs:
             echo "API_HASH=${API_HASH}"
           } > local.properties
 
+      - name: Static analysis (ktlint + detekt)
+        run: ./gradlew ktlintCheck detekt --stacktrace
+
       - name: Build + unit tests
         run: ./gradlew assembleDebug testDebugUnitTest --stacktrace
 

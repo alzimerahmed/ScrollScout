@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<baseline version="1.0">
+    <file name="src/main/java/com/therxmv/otaupdates/data/di/DownloaderModule.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/otaupdates/data/di/OtaModule.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+        <error line="17" column="6" source="standard:trailing-comma-on-call-site" />
+    </file>
+    <file name="src/main/java/com/therxmv/otaupdates/data/di/RepositoryModule.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/otaupdates/data/models/LatestReleaseJson.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/otaupdates/data/repository/LatestReleaseRepositoryImpl.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/otaupdates/data/source/remote/GithubApiService.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/otaupdates/data/source/remote/LatestReleaseDownloader.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/otaupdates/data/source/remote/LatestReleaseRemoteDataSource.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/test/java/com/therxmv/otaupdates/data/source/remote/LatestReleaseRemoteDataSourceTest.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/test/java/com/therxmv/otaupdates/data/source/repository/LatestReleaseRepositoryImplTest.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+</baseline>

@@ -269,3 +269,8 @@ The other 35 rules load on-demand via the intent-map. When a task type row lists
 ## 2026-09-28 — Stack sweep (Dirol-Reader import)
 - Swept prior-stack tokens: `.devin/config.json` permissions (uv/Django/docker → gradle/gh/Android secrets), `.gitignore` therxmv dictionary entry genericized.
 - No prior project names remain in `.devin/` or `docs/`.
+
+## 2026-09-28 — Phase 3 (Build Reliability)
+- libtd -> JitPack com.github.tdlibx:td:1.8.56; Firebase plugins/deps removed (ADR-004).
+- CI green after 4 fixes: SDK licenses-only setup, gradlew exec bit, R8 8.3.37 classpath, branch rename master->main.
+- Lesson: android-actions/setup-android@v3 unreliable on ubuntu-latest (obsolete tools package) — use preinstalled SDK + license accept.
