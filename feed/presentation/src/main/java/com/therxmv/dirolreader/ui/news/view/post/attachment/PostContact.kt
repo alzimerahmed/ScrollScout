@@ -85,7 +85,9 @@ fun PostContact(contact: ContactModel) {
 
 private fun dialPhoneNumber(context: Context, phoneNumber: String, noAppMessage: String) {
     try {
-        context.startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber")))
+        // fromParts over parse/encode: keeps "+" intact and strips spaces.
+        val uri = Uri.fromParts("tel", phoneNumber.trim(), null)
+        context.startActivity(Intent(Intent.ACTION_DIAL, uri))
     } catch (ignored: ActivityNotFoundException) {
         Toast.makeText(context, noAppMessage, Toast.LENGTH_SHORT).show()
     }

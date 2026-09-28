@@ -1,6 +1,7 @@
 package com.therxmv.dirolreader.ui.news.view.post.attachment
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -26,9 +27,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,6 +46,7 @@ import kotlinx.coroutines.launch
 private const val PERCENT_DIVISOR = 100f
 private const val CHOSEN_FILL_ALPHA = 0.35f
 private const val OPTION_FILL_ALPHA = 0.15f
+private const val VOTING_ALPHA = 0.6f
 
 /**
  * Poll card: question, meta line and answer options with vote
@@ -51,17 +58,24 @@ fun PostPoll(
     poll: PollModel,
     onVote: suspend (IntArray) -> PollModel?,
 ) {
-    var currentPoll by remember(poll.id) { mutableStateOf(poll) }
+    // Keyed on the whole model: a refresh with the same poll id but new data
+    // (other votes, closed flag) must replace the rendered state.
+    var currentPoll by remember(poll) { mutableStateOf(poll) }
     var selectedOptions by remember(poll.id) { mutableStateOf(emptySet<Int>()) }
     var isVoting by remember(poll.id) { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val voteFailedMessage = stringResource(id = R.string.feed_poll_vote_failed)
 
     val submitVote: (IntArray) -> Unit = { optionIds ->
         coroutineScope.launch {
             isVoting = true
-            onVote(optionIds)?.let { updated ->
-                currentPoll = updated
+            val updatedPoll = onVote(optionIds)
+            if (updatedPoll != null) {
+                currentPoll = updatedPoll
                 selectedOptions = emptySet()
+            } else {
+                Toast.makeText(context, voteFailedMessage, Toast.LENGTH_SHORT).show()
             }
             isVoting = false
         }
@@ -76,15 +90,10 @@ fun PostPoll(
     )
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = currentPoll.question,
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-        PollMeta(poll = currentPoll)
+        PollHeader(poll = currentPoll)
         Spacer(modifier = Modifier.height(8.dp))
         PollOptionsSection(
+            modifier = Modifier.alpha(if (isVoting) VOTING_ALPHA else 1f),
             uiState = uiState,
             onOptionClick = { index ->
                 if (currentPoll.allowMultipleAnswers) {
@@ -114,33 +123,47 @@ private fun PollOptionsSection(
     uiState: PollUiState,
     onOptionClick: (Int) -> Unit,
     onSubmit: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val options = uiState.poll.options
 
-    options.forEachIndexed { index, option ->
-        PollOptionRow(
-            option = option,
-            optionState = PollOptionState(
-                isSelected = index in uiState.selectedOptions,
-                isCorrect = uiState.showResults && index == uiState.poll.correctOptionId,
-                showResults = uiState.showResults,
-            ),
-            enabled = uiState.canVote,
-            onClick = { onOptionClick(index) },
-        )
-        if (index != options.lastIndex) {
-            Spacer(modifier = Modifier.height(4.dp))
+    Column(modifier = modifier) {
+        options.forEachIndexed { index, option ->
+            PollOptionRow(
+                option = option,
+                optionState = PollOptionState(
+                    isSelected = index in uiState.selectedOptions,
+                    isCorrect = uiState.showResults && index == uiState.poll.correctOptionId,
+                    showResults = uiState.showResults,
+                ),
+                enabled = uiState.canVote,
+                onClick = { onOptionClick(index) },
+            )
+            if (index != options.lastIndex) {
+                Spacer(modifier = Modifier.height(4.dp))
+            }
         }
-    }
 
-    if (uiState.poll.allowMultipleAnswers && uiState.canVote && uiState.selectedOptions.isNotEmpty()) {
-        TextButton(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = onSubmit,
-        ) {
-            Text(text = stringResource(id = R.string.feed_poll_vote_button))
+        if (uiState.poll.allowMultipleAnswers && uiState.canVote && uiState.selectedOptions.isNotEmpty()) {
+            TextButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onSubmit,
+            ) {
+                Text(text = stringResource(id = R.string.feed_poll_vote_button))
+            }
         }
     }
+}
+
+@Composable
+private fun PollHeader(poll: PollModel) {
+    Text(
+        text = poll.question,
+        style = MaterialTheme.typography.titleSmall,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.onSurface,
+    )
+    PollMeta(poll = poll)
 }
 
 @Composable
@@ -148,7 +171,11 @@ private fun PollMeta(poll: PollModel) {
     val meta = listOfNotNull(
         stringResource(id = if (poll.isQuiz) R.string.feed_poll_quiz else R.string.feed_poll),
         stringResource(id = R.string.feed_poll_anonymous).takeIf { poll.isAnonymous },
-        stringResource(id = R.string.feed_poll_votes, poll.totalVoterCount),
+        LocalContext.current.resources.getQuantityString(
+            R.plurals.feed_poll_votes,
+            poll.totalVoterCount,
+            poll.totalVoterCount,
+        ),
         stringResource(id = R.string.feed_poll_closed).takeIf { poll.isClosed },
     ).joinToString(" · ")
 
@@ -173,13 +200,17 @@ private fun PollOptionRow(
     onClick: () -> Unit,
 ) {
     val isMarked = option.isChosen || optionState.isSelected || optionState.isCorrect
+    val stateDescription = stringResource(
+        id = if (isMarked) R.string.feed_poll_option_chosen else R.string.feed_poll_option_not_chosen,
+    )
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clip(MaterialTheme.shapes.small)
             .background(MaterialTheme.colorScheme.surfaceVariant)
-            .clickable(enabled = enabled, onClick = onClick),
+            .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
+            .semantics { this.stateDescription = stateDescription },
     ) {
         if (optionState.showResults && option.votePercentage > 0) {
             OptionResultFill(

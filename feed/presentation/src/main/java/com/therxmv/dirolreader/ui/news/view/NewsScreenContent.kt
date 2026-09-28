@@ -275,6 +275,7 @@ private fun MessageModel.toPresentation() = NewsPostUiData(
     text = text,
     timestamp = timestamp,
     mediaList = null,
+    attachment = attachment,
     channelData = ChannelUiData(
         id = channelData.id,
         name = channelData.name,

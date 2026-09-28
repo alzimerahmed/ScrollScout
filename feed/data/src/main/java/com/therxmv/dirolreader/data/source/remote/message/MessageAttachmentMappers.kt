@@ -57,7 +57,7 @@ fun TdApi.MessageLocation.toLocationModel() = LocationModel(
     longitude = location.longitude,
     title = null,
     address = null,
-    isLive = livePeriod > 0,
+    isLive = livePeriod > 0 && expiresIn > 0,
 )
 
 fun TdApi.MessageVenue.toLocationModel() = LocationModel(
