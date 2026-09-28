@@ -110,55 +110,49 @@ class FeedViewModel @Inject constructor(
 
     fun onEvent(event: NewsUiEvent) {
         when (event) {
-            is NewsUiEvent.Like -> {
-                val number = when (event.isLiked) {
-                    true -> -1 // remove like
-                    false -> 2 // remove dislike, add like
-                    else -> 1 // add like
-                }
-                updateChannelRating(event.channelId, number)
-            }
-
-            is NewsUiEvent.Dislike -> {
-                val number = when (event.isLiked) {
-                    true -> -2 // remove like, add dislike
-                    false -> 1 // remove dislike
-                    else -> -1 // add dislike
-                }
-                updateChannelRating(event.channelId, number)
-            }
-
-            is NewsUiEvent.StarChannel -> {
-                val number = when (event.isStarred) {
-                    true -> -100
-                    false -> 100
-                }
-                updateChannelRating(event.channelId, number)
-                _starredChannels.update {
-                    if (it.contains(event.channelId)) {
-                        it - event.channelId
-                    } else {
-                        it + event.channelId
-                    }
-                }
-            }
-
-            is NewsUiEvent.MarkAsRead -> {
-                if (readMessages.contains(event.messageId).not()) {
-                    readMessages.add(event.messageId)
-                    useCases.markMessageAsRead(event.messageId, event.channelId)
-                }
-            }
-
+            is NewsUiEvent.Like -> updateChannelRating(event.channelId, likeDelta(event.isLiked))
+            is NewsUiEvent.Dislike -> updateChannelRating(event.channelId, dislikeDelta(event.isLiked))
+            is NewsUiEvent.StarChannel -> toggleStar(event)
+            is NewsUiEvent.MarkAsRead -> markMessageAsRead(event)
             is NewsUiEvent.SaveMessage -> saveMessage(event)
-
             is NewsUiEvent.MarkAllAsRead -> markAllAsRead(event)
-
             is NewsUiEvent.Translate -> translate(event)
-
             is NewsUiEvent.ToggleSavedView -> _isSavedView.update { it.not() }
-
             is NewsUiEvent.DismissTranslation -> _translationState.update { TranslationState.Idle }
+        }
+    }
+
+    private fun likeDelta(isLiked: Boolean?) = when (isLiked) {
+        true -> -1 // remove like
+        false -> 2 // remove dislike, add like
+        else -> 1 // add like
+    }
+
+    private fun dislikeDelta(isLiked: Boolean?) = when (isLiked) {
+        true -> -2 // remove like, add dislike
+        false -> 1 // remove dislike
+        else -> -1 // add dislike
+    }
+
+    private fun toggleStar(event: NewsUiEvent.StarChannel) {
+        val number = when (event.isStarred) {
+            true -> -100
+            false -> 100
+        }
+        updateChannelRating(event.channelId, number)
+        _starredChannels.update {
+            if (it.contains(event.channelId)) {
+                it - event.channelId
+            } else {
+                it + event.channelId
+            }
+        }
+    }
+
+    private fun markMessageAsRead(event: NewsUiEvent.MarkAsRead) {
+        if (readMessages.contains(event.messageId).not()) {
+            readMessages.add(event.messageId)
+            useCases.markMessageAsRead(event.messageId, event.channelId)
         }
     }
 
@@ -193,11 +187,9 @@ class FeedViewModel @Inject constructor(
 
         _translationState.update { TranslationState.Loading }
         viewModelScope.launch(ioDispatcher) {
-            val state = try {
-                TranslationState.Ready(useCases.translateText(event.text))
-            } catch (e: Exception) {
-                TranslationState.Error
-            }
+            val state = runCatching { TranslationState.Ready(useCases.translateText(event.text)) }
+                .getOrElse { TranslationState.Error }
+
             _translationState.update { state }
         }
     }

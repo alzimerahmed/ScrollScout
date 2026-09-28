@@ -70,14 +70,14 @@ fun NewsScreen(
                 NewsTopBar(
                     state = uiState.toolbarState,
                     navController = navController,
-                    onAvatarClick = onNavigateToProfile,
-                    scrollToTop = {
-                        coroutineScope.launch {
-                            listState.scrollToItem(0)
-                        }
-                    },
                     isSavedView = isSavedView,
                     actions = NewsTopBarActions(
+                        onAvatarClick = onNavigateToProfile,
+                        scrollToTop = {
+                            coroutineScope.launch {
+                                listState.scrollToItem(0)
+                            }
+                        },
                         onToggleSavedView = { viewModel.onEvent(NewsUiEvent.ToggleSavedView) },
                         onMarkAllAsRead = {
                             viewModel.onEvent(
@@ -155,6 +155,8 @@ private fun TranslationDialog(
 }
 
 data class NewsTopBarActions(
+    val onAvatarClick: () -> Unit,
+    val scrollToTop: () -> Unit,
     val onToggleSavedView: () -> Unit,
     val onMarkAllAsRead: () -> Unit,
 )
@@ -163,8 +165,6 @@ data class NewsTopBarActions(
 private fun NewsTopBar(
     state: ToolbarState,
     navController: NavController,
-    onAvatarClick: () -> Unit,
-    scrollToTop: () -> Unit,
     isSavedView: Boolean,
     actions: NewsTopBarActions,
 ) {
@@ -176,7 +176,7 @@ private fun NewsTopBar(
                     .clickable(
                         interactionSource = interactionSource,
                         indication = null,
-                        onClick = scrollToTop,
+                        onClick = actions.scrollToTop,
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -231,12 +231,12 @@ private fun Avatar(
                 .clip(
                     MaterialTheme.shapes.small,
                 )
-                .clickable(onClick = onAvatarClick),
+                .clickable(onClick = actions.onAvatarClick)
         )
     } else {
         EmptyAvatar(
             modifier = Modifier
-                .clickable(onClick = onAvatarClick),
+                .clickable(onClick = actions.onAvatarClick),
             name = state.userName,
         )
     }
