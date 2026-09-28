@@ -39,6 +39,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.therxmv.common.R
 import com.therxmv.common.commonview.CenteredTopBar
 import com.therxmv.dirolreader.ui.news.view.post.EmptyAvatar
+import com.therxmv.dirolreader.ui.news.view.post.NewsPostHandlers
 import com.therxmv.dirolreader.ui.news.viewmodel.FeedViewModel
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.FeedUiState
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.NewsUiEvent
@@ -63,6 +64,13 @@ fun NewsScreen(
     val savedMessages by viewModel.savedMessages.collectAsState()
     val isSavedView by viewModel.isSavedView.collectAsState()
     val translationState by viewModel.translationState.collectAsState()
+    val postHandlers = remember {
+        NewsPostHandlers(
+            onEvent = viewModel::onEvent,
+            loadMedia = viewModel::loadMessageMedia,
+            votePoll = viewModel.votePoll,
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -104,8 +112,7 @@ fun NewsScreen(
                     modifier = Modifier.padding(padding),
                     savedMessages = savedMessages,
                     starredChannels = starredChannels.toPersistentList(),
-                    onEvent = viewModel::onEvent,
-                    loadMedia = viewModel::loadMessageMedia,
+                    handlers = postHandlers,
                 )
 
                 uiState is FeedUiState.Ready -> NewsScreenContent(
@@ -113,8 +120,7 @@ fun NewsScreen(
                     listState = listState,
                     news = news,
                     starredChannels = starredChannels.toPersistentList(),
-                    onEvent = viewModel::onEvent,
-                    loadMedia = viewModel::loadMessageMedia,
+                    handlers = postHandlers,
                 )
             }
         }

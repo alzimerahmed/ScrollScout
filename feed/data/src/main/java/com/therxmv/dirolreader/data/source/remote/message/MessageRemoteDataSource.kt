@@ -8,6 +8,7 @@ import com.therxmv.dirolreader.data.source.remote.channel.ChannelRemoteSource
 import com.therxmv.dirolreader.domain.models.ChannelData
 import com.therxmv.dirolreader.domain.models.ChannelModel
 import com.therxmv.dirolreader.domain.models.MessageModel
+import com.therxmv.dirolreader.domain.models.PollModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -119,6 +120,31 @@ class MessageRemoteDataSource @Inject constructor(
                 it.resume(list)
             }
         }
+
+    /**
+     * Votes in a poll. After TdLib accepts the answer the message is re-fetched
+     * so the UI can render the updated voter counts — the client has no update
+     * handler wired, so nothing else pushes the new state to the feed.
+     */
+    override suspend fun setPollAnswer(
+        chatId: Long,
+        messageId: Long,
+        optionIds: IntArray,
+    ): PollModel? = withContext(ioDispatcher) {
+        val answerResult = sendRequest(TdApi.SetPollAnswer(chatId, messageId, optionIds))
+        if (answerResult is TdApi.Error) {
+            return@withContext null
+        }
+
+        val updatedMessage = sendRequest(TdApi.GetMessage(chatId, messageId)) as? Message
+        (updatedMessage?.content as? TdApi.MessagePoll)?.poll?.toPollModel()
+    }
+
+    private suspend fun sendRequest(request: TdApi.Function<*>) = suspendCoroutine { continuation ->
+        client.send(request) { result ->
+            continuation.resume(result)
+        }
+    }
 
     override suspend fun markAllAsRead() = withContext(ioDispatcher) {
         val unreadChannels = allUnreadChannelsFlow.value.filter { it.unreadCount > 0 }

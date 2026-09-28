@@ -4,6 +4,8 @@ import androidx.paging.PagingData
 import com.therxmv.dirolreader.domain.models.ChannelData
 import com.therxmv.dirolreader.domain.models.ChannelModel
 import com.therxmv.dirolreader.domain.models.MessageModel
+import com.therxmv.dirolreader.domain.models.PollModel
+import com.therxmv.dirolreader.domain.models.PollOptionModel
 import com.therxmv.dirolreader.domain.models.UserModel
 import com.therxmv.dirolreader.domain.usecase.NewsViewModelUseCases
 import com.therxmv.dirolreader.domain.usecase.channel.UpdateChannelRatingUseCase
@@ -16,6 +18,7 @@ import com.therxmv.dirolreader.domain.usecase.message.MarkAllAsReadUseCase
 import com.therxmv.dirolreader.domain.usecase.message.MarkMessageAsReadUseCase
 import com.therxmv.dirolreader.domain.usecase.message.SaveMessageUseCase
 import com.therxmv.dirolreader.domain.usecase.message.SearchMessagesUseCase
+import com.therxmv.dirolreader.domain.usecase.message.SetPollAnswerUseCase
 import com.therxmv.dirolreader.domain.usecase.message.TranslateTextUseCase
 import com.therxmv.dirolreader.domain.usecase.user.GetCurrentUserUseCase
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.NewsUiEvent
@@ -29,7 +32,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -52,6 +57,7 @@ class FeedViewModelTest {
     private val markAllAsRead: MarkAllAsReadUseCase = mockk(relaxed = true)
     private val translateText: TranslateTextUseCase = mockk()
     private val searchMessages: SearchMessagesUseCase = mockk(relaxed = true)
+    private val setPollAnswer: SetPollAnswerUseCase = mockk()
 
     private lateinit var viewModel: FeedViewModel
 
@@ -83,6 +89,7 @@ class FeedViewModelTest {
                 markAllAsRead = markAllAsRead,
                 translateText = translateText,
                 searchMessages = searchMessages,
+                setPollAnswer = setPollAnswer,
             ),
             ioDispatcher = UnconfinedTestDispatcher(),
         )
@@ -233,6 +240,36 @@ class FeedViewModelTest {
         assertEquals(TranslationState.Idle, viewModel.translationState.value)
     }
 
+    @Test
+    fun `vote poll returns refreshed poll from use case`() = runTest {
+        val optionIds = intArrayOf(0)
+        coEvery { setPollAnswer(5L, 10L, optionIds) } returns poll(isChosen = true)
+
+        assertEquals(poll(isChosen = true), viewModel.votePoll(5L, 10L, optionIds))
+    }
+
+    @Test
+    fun `vote poll returns null when use case throws`() = runTest {
+        val optionIds = intArrayOf(0)
+        coEvery { setPollAnswer(5L, 10L, optionIds) } throws RuntimeException("tdlib error")
+
+        assertNull(viewModel.votePoll(5L, 10L, optionIds))
+    }
+
+    private fun poll(isChosen: Boolean) = PollModel(
+        id = 1L,
+        question = "Question",
+        options = listOf(
+            PollOptionModel(text = "A", voterCount = 1, votePercentage = 100, isChosen = isChosen),
+        ),
+        totalVoterCount = 1,
+        isAnonymous = true,
+        isClosed = false,
+        isQuiz = false,
+        allowMultipleAnswers = false,
+        correctOptionId = -1,
+    )
+
     private fun savedMessage(id: Long) = MessageModel(
         id = id,
         channelData = com.therxmv.dirolreader.domain.models.ChannelData(
@@ -259,6 +296,7 @@ class FeedViewModelTest {
             markAllAsRead = markAllAsRead,
             translateText = translateText,
             searchMessages = searchMessages,
+            setPollAnswer = setPollAnswer,
         ),
         ioDispatcher = UnconfinedTestDispatcher(),
     )

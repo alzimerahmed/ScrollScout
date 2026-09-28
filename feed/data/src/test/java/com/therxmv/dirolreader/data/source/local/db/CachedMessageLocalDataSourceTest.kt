@@ -2,9 +2,11 @@ package com.therxmv.dirolreader.data.source.local.db
 
 import com.therxmv.dirolreader.domain.models.ChannelData
 import com.therxmv.dirolreader.domain.models.MessageModel
+import com.therxmv.dirolreader.domain.models.PollModel
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -57,6 +59,28 @@ class CachedMessageLocalDataSourceTest {
         dataSource.saveMessages(listOf(message(id = 7L, channelId = 1L), message(id = 7L, channelId = 2L)))
 
         coVerify(exactly = 2) { dao.insertCachedMessage(any()) }
+    }
+
+    @Test
+    fun `attachment posts are snapshotted with their summary text`() = runTest {
+        val pollPost = message(id = 9L, channelId = 1L).copy(
+            text = "Poll: Best feature?",
+            attachment = PollModel(
+                id = 3L,
+                question = "Best feature?",
+                options = emptyList(),
+                totalVoterCount = 0,
+                isAnonymous = true,
+                isClosed = false,
+                isQuiz = false,
+                allowMultipleAnswers = false,
+                correctOptionId = -1,
+            ),
+        )
+
+        dataSource.saveMessages(listOf(pollPost))
+
+        verify { dao.insertCachedMessage(match { it.text == "Poll: Best feature?" }) }
     }
 
     private fun message(id: Long, channelId: Long) = MessageModel(

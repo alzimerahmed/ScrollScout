@@ -87,4 +87,14 @@ class MessageRepositoryImplTest {
 
         assertEquals(results, repository.searchMessages("query"))
     }
+
+    @Test
+    fun `poll vote delegates to remote data source`() = runTest {
+        val optionIds = intArrayOf(0)
+        coEvery { messageRemoteDataSource.setPollAnswer(1L, 5L, optionIds) } returns null
+
+        repository.setPollAnswer(1L, 5L, optionIds)
+
+        coVerify(exactly = 1) { messageRemoteDataSource.setPollAnswer(1L, 5L, optionIds) }
+    }
 }

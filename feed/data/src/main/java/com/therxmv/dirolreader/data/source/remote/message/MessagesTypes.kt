@@ -154,8 +154,10 @@ fun handleMessageType(
         }
 
         else -> {
-            Log.d("rozmi", message.content.toString())
-            defaultModel
+            // Class name, not toString(): generated TdApi toString() is native
+            // and crashes JVM unit tests.
+            Log.d("rozmi", message.content.javaClass.simpleName)
+            defaultModel.withAttachment(message.attachmentModel())
         }
     }
 }

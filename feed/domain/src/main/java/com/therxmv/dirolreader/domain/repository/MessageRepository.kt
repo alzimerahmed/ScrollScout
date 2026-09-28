@@ -2,6 +2,7 @@ package com.therxmv.dirolreader.domain.repository
 
 import com.therxmv.dirolreader.domain.models.ChannelModel
 import com.therxmv.dirolreader.domain.models.MessageModel
+import com.therxmv.dirolreader.domain.models.PollModel
 import kotlinx.coroutines.flow.Flow
 
 interface MessageRepository {
@@ -11,4 +12,5 @@ interface MessageRepository {
     fun getUnreadChannelsFlow(): Flow<List<ChannelModel>>
     suspend fun markAllAsRead()
     suspend fun searchMessages(query: String): List<MessageModel>
+    suspend fun setPollAnswer(chatId: Long, messageId: Long, optionIds: IntArray): PollModel?
 }

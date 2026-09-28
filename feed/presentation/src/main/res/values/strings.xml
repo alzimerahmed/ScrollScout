@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Poll -->
+    <string name="feed_poll">Poll</string>
+    <string name="feed_poll_quiz">Quiz</string>
+    <string name="feed_poll_anonymous">Anonymous</string>
+    <string name="feed_poll_closed">Closed</string>
+    <plurals name="feed_poll_votes">
+        <item quantity="one">%1$d vote</item>
+        <item quantity="other">%1$d votes</item>
+    </plurals>
+    <string name="feed_poll_vote_button">Vote</string>
+    <string name="feed_poll_vote_failed">Couldn\'t submit your vote</string>
+    <string name="feed_poll_option_chosen">Chosen option</string>
+    <string name="feed_poll_option_not_chosen">Option not chosen</string>
+    <string name="feed_poll_correct_answer">Correct answer</string>
+
+    <!-- Location & venue -->
+    <string name="feed_location_title">Location</string>
+    <string name="feed_location_live">Live location</string>
+    <string name="feed_location_open_map">Open in maps</string>
+
+    <!-- Contact -->
+    <string name="feed_contact_call">Call %1$s</string>
+
+    <!-- Attachments -->
+    <string name="feed_attachment_no_app">No app found to handle this action</string>
+</resources>

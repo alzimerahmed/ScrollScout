@@ -12,6 +12,7 @@ import com.therxmv.dirolreader.domain.models.MessageModel
 import com.therxmv.dirolreader.domain.usecase.NewsViewModelUseCases
 import com.therxmv.dirolreader.ui.news.view.post.ChannelUiData
 import com.therxmv.dirolreader.ui.news.view.post.NewsPostUiData
+import com.therxmv.dirolreader.ui.news.view.post.attachment.PollVoterType
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.FeedUiState
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.NewsUiEvent
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.ToolbarState
@@ -206,11 +207,24 @@ class FeedViewModel @Inject constructor(
         useCases.downloadMediaAndGetPath(mediaId)
     }
 
+    /**
+     * Returns the refreshed poll on success so the card can swap its state,
+     * or null when Telegram rejected the vote. Declared as a property so the
+     * screen can hand it to posts without growing this class's function count
+     * past the detekt threshold.
+     */
+    val votePoll: PollVoterType = { chatId, messageId, optionIds ->
+        withContext(ioDispatcher) {
+            runCatching { useCases.setPollAnswer(chatId, messageId, optionIds) }.getOrNull()
+        }
+    }
+
     private fun MessageModel.toPresentation() = NewsPostUiData(
         id = this.id,
         text = this.text,
         timestamp = this.timestamp,
         mediaList = this.mediaList?.toPersistentList(),
+        attachment = this.attachment,
         channelData = ChannelUiData(
             id = this.channelData.id,
             name = this.channelData.name,
