@@ -7,11 +7,9 @@ import com.therxmv.dirolreader.domain.usecase.channel.GetChannelsUseCase
 import com.therxmv.dirolreader.domain.usecase.channel.ReorderChannelUseCase
 import com.therxmv.dirolreader.domain.usecase.channel.SetChannelGroupUseCase
 import com.therxmv.dirolreader.domain.usecase.channel.SetChannelMutedUseCase
-import com.therxmv.dirolreader.ui.channels.viewmodel.utils.ChannelItem
 import com.therxmv.dirolreader.ui.channels.viewmodel.utils.ChannelsUiState
 import com.therxmv.dirolreader.ui.channels.viewmodel.utils.toItem
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
