@@ -281,3 +281,9 @@ The other 35 rules load on-demand via the intent-map. When a task type row lists
 - ktlint+detekt with baselines; CI gate. Turbine pinned 0.12.1 (coroutines 1.6.4).
 - Lesson: ktlint plugin resolves baseline paths per-module — generate per-module baselines, never one root file.
 - Lesson: cross-module smart casts fail when same-package classes split across modules — bind to local val.
+
+## 2026-09-28 — Phase 6 (Channel Control)
+- New :channels:presentation module (Channels + Relevance screens); Room migration 2->3.
+- Lesson: TdApi.ChatNotificationSettings constructor is version-fragile — construct no-arg + assign useDefaultMuteFor/muteFor only, clone the rest from current chat state.
+- Lesson: android.util.Log in unit-tested ViewModels requires testOptions.unitTests.returnDefaultValues = true (Groovy property name, not isReturnDefaultValues).
+- Lesson: Turbine's Flow.test{} returns Unit — assertions must live inside the block.
