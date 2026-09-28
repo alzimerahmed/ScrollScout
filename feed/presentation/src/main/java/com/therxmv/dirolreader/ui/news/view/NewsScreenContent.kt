@@ -49,6 +49,7 @@ import com.therxmv.common.commonview.CenteredBoxLoader
 import com.therxmv.dirolreader.domain.models.MessageModel
 import com.therxmv.dirolreader.ui.news.view.post.ChannelUiData
 import com.therxmv.dirolreader.ui.news.view.post.NewsPost
+import com.therxmv.dirolreader.ui.news.view.post.NewsPostActions
 import com.therxmv.dirolreader.ui.news.view.post.NewsPostUiData
 import com.therxmv.dirolreader.ui.news.view.post.media.MediaLoaderType
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.NewsUiEvent
@@ -69,7 +70,6 @@ fun NewsScreenContent(
     starredChannels: PersistentList<Long>,
     onEvent: (NewsUiEvent) -> Unit,
     loadMedia: MediaLoaderType,
-    onTranslate: (String) -> Unit,
 ) {
     var isRefreshing by rememberSaveable { mutableStateOf(false) }
     val pullRefreshState = rememberPullRefreshState(
@@ -103,6 +103,23 @@ fun NewsScreenContent(
             ) { index ->
                 news[index]?.let { post ->
                     val channelId = post.channelData.id
+                    val actions = NewsPostActions(
+                        onStarChannel = {
+                            onEvent(StarChannel(channelId = channelId, isStarred = it))
+                        },
+                        onLike = {
+                            onEvent(Like(channelId = channelId, isLiked = it))
+                        },
+                        onDislike = {
+                            onEvent(Dislike(channelId = channelId, isLiked = it))
+                        },
+                        markAsRead = {
+                            onEvent(MarkAsRead(messageId = post.id, channelId = channelId))
+                        },
+                        onTranslate = { text ->
+                            onEvent(NewsUiEvent.Translate(text = text))
+                        },
+                    )
                     val dismissState = rememberDismissState(
                         confirmValueChange = { value ->
                             when (value) {
@@ -135,19 +152,7 @@ fun NewsScreenContent(
                                 data = post,
                                 loadMedia = loadMedia,
                                 isStarred = starredChannels.contains(channelId),
-                                onStarChannel = {
-                                    onEvent(StarChannel(channelId = channelId, isStarred = it))
-                                },
-                                onLike = {
-                                    onEvent(Like(channelId = channelId, isLiked = it))
-                                },
-                                onDislike = {
-                                    onEvent(Dislike(channelId = channelId, isLiked = it))
-                                },
-                                markAsRead = {
-                                    onEvent(MarkAsRead(messageId = post.id, channelId = channelId))
-                                },
-                                onTranslate = onTranslate,
+                                actions = actions,
                             )
                         },
                     )
@@ -215,7 +220,6 @@ fun SavedNewsContent(
     starredChannels: PersistentList<Long>,
     onEvent: (NewsUiEvent) -> Unit,
     loadMedia: MediaLoaderType,
-    onTranslate: (String) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
@@ -248,17 +252,21 @@ fun SavedNewsContent(
                 data = post.toPresentation(),
                 loadMedia = loadMedia,
                 isStarred = starredChannels.contains(channelId),
-                onStarChannel = {
-                    onEvent(StarChannel(channelId = channelId, isStarred = it))
-                },
-                onLike = {
-                    onEvent(Like(channelId = channelId, isLiked = it))
-                },
-                onDislike = {
-                    onEvent(Dislike(channelId = channelId, isLiked = it))
-                },
-                markAsRead = {},
-                onTranslate = onTranslate,
+                actions = NewsPostActions(
+                    onStarChannel = {
+                        onEvent(StarChannel(channelId = channelId, isStarred = it))
+                    },
+                    onLike = {
+                        onEvent(Like(channelId = channelId, isLiked = it))
+                    },
+                    onDislike = {
+                        onEvent(Dislike(channelId = channelId, isLiked = it))
+                    },
+                    markAsRead = {},
+                    onTranslate = { text ->
+                        onEvent(NewsUiEvent.Translate(text = text))
+                    },
+                ),
             )
         }
     }

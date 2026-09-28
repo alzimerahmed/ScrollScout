@@ -77,14 +77,16 @@ fun NewsScreen(
                         }
                     },
                     isSavedView = isSavedView,
-                    onToggleSavedView = { viewModel.onEvent(NewsUiEvent.ToggleSavedView) },
-                    onMarkAllAsRead = {
-                        viewModel.onEvent(
-                            NewsUiEvent.MarkAllAsRead(
-                                messageIds = news.itemSnapshotList.mapNotNull { it?.id },
-                            ),
-                        )
-                    },
+                    actions = NewsTopBarActions(
+                        onToggleSavedView = { viewModel.onEvent(NewsUiEvent.ToggleSavedView) },
+                        onMarkAllAsRead = {
+                            viewModel.onEvent(
+                                NewsUiEvent.MarkAllAsRead(
+                                    messageIds = news.itemSnapshotList.mapNotNull { it?.id },
+                                )
+                            )
+                        },
+                    ),
                 )
             }
         },
@@ -101,7 +103,6 @@ fun NewsScreen(
                     starredChannels = starredChannels.toPersistentList(),
                     onEvent = viewModel::onEvent,
                     loadMedia = viewModel::loadMessageMedia,
-                    onTranslate = { viewModel.onEvent(NewsUiEvent.Translate(text = it)) },
                 )
 
                 uiState is FeedUiState.Ready -> NewsScreenContent(
@@ -111,7 +112,6 @@ fun NewsScreen(
                     starredChannels = starredChannels.toPersistentList(),
                     onEvent = viewModel::onEvent,
                     loadMedia = viewModel::loadMessageMedia,
-                    onTranslate = { viewModel.onEvent(NewsUiEvent.Translate(text = it)) },
                 )
             }
         }
@@ -154,6 +154,11 @@ private fun TranslationDialog(
     )
 }
 
+data class NewsTopBarActions(
+    val onToggleSavedView: () -> Unit,
+    val onMarkAllAsRead: () -> Unit,
+)
+
 @Composable
 private fun NewsTopBar(
     state: ToolbarState,
@@ -161,8 +166,7 @@ private fun NewsTopBar(
     onAvatarClick: () -> Unit,
     scrollToTop: () -> Unit,
     isSavedView: Boolean,
-    onToggleSavedView: () -> Unit,
-    onMarkAllAsRead: () -> Unit,
+    actions: NewsTopBarActions,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     CenteredTopBar(
@@ -188,14 +192,14 @@ private fun NewsTopBar(
         },
         navController = navController,
         actions = {
-            IconButton(onClick = onMarkAllAsRead) {
+            IconButton(onClick = actions.onMarkAllAsRead) {
                 Icon(
                     painter = painterResource(id = R.drawable.mark_all_read_icon),
                     contentDescription = stringResource(id = R.string.news_mark_all_read),
                     tint = MaterialTheme.colorScheme.onSurface,
                 )
             }
-            IconButton(onClick = onToggleSavedView) {
+            IconButton(onClick = actions.onToggleSavedView) {
                 Icon(
                     painter = painterResource(
                         id = if (isSavedView) R.drawable.bookmark_filled_icon else R.drawable.bookmark_outline_icon,

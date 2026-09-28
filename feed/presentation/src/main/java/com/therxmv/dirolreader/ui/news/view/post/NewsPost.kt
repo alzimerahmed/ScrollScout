@@ -49,11 +49,7 @@ fun NewsPost(
     data: NewsPostUiData,
     loadMedia: MediaLoaderType,
     isStarred: Boolean,
-    onStarChannel: (Boolean) -> Unit,
-    onLike: (Boolean?) -> Unit,
-    onDislike: (Boolean?) -> Unit,
-    markAsRead: () -> Unit,
-    onTranslate: (String) -> Unit = {},
+    actions: NewsPostActions,
 ) {
     Box(
         modifier = Modifier
@@ -65,7 +61,7 @@ fun NewsPost(
                 .fillMaxWidth()
                 .combinedClickable(
                     onClick = {},
-                    onLongClick = { onTranslate(data.text) },
+                    onLongClick = { actions.onTranslate(data.text) },
                 ),
         ) {
             data.mediaList?.let {
@@ -82,7 +78,7 @@ fun NewsPost(
                 ChannelPostInfo(
                     data = data.channelData,
                     isStarred = isStarred,
-                    onStarChannel = onStarChannel,
+                    onStarChannel = actions.onStarChannel,
                 )
 
                 if (data.text.isNotEmpty()) {
@@ -92,15 +88,15 @@ fun NewsPost(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 PostLikes(
-                    onLike = onLike,
-                    onDislike = onDislike,
+                    onLike = actions.onLike,
+                    onDislike = actions.onDislike,
                 )
             }
         }
     }
 
     SideEffect {
-        markAsRead()
+        actions.markAsRead()
     }
 }
 
