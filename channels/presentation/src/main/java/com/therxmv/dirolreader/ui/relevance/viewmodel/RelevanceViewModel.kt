@@ -29,6 +29,7 @@ class RelevanceViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<RelevanceUiState>(RelevanceUiState.Loading)
     val uiState: StateFlow<RelevanceUiState> = _uiState.asStateFlow()
 
+    private var channels: List<ChannelModel> = emptyList()
     private var hasRefreshed = false
 
     init {
@@ -45,6 +46,7 @@ class RelevanceViewModel @Inject constructor(
                 getChannels.refresh()
             } finally {
                 hasRefreshed = true
+                updateState(channels)
             }
         }
     }
