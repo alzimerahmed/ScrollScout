@@ -1,5 +1,9 @@
 buildscript {
     apply from: 'global.gradle'
+    dependencies {
+        // AGP 7.4.2's bundled D8 cannot dex kotlin-stdlib 1.9.x metadata; force newer R8
+        classpath 'com.android.tools:r8:8.3.37'
+    }
 }
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
