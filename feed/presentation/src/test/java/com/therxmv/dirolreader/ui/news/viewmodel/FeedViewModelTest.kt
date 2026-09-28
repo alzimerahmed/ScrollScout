@@ -1,6 +1,7 @@
 package com.therxmv.dirolreader.ui.news.viewmodel
 
 import androidx.paging.PagingData
+import com.therxmv.dirolreader.domain.models.ChannelData
 import com.therxmv.dirolreader.domain.models.ChannelModel
 import com.therxmv.dirolreader.domain.models.MessageModel
 import com.therxmv.dirolreader.domain.models.UserModel
@@ -149,7 +150,7 @@ class FeedViewModelTest {
             saveMessage(
                 MessageModel(
                     id = 10L,
-                    channelData = match { it.id == 5L && it.name == "Channel" },
+                    channelData = ChannelData(id = 5L, rating = 0, name = "Channel"),
                     timestamp = 0,
                     text = "Post text",
                     mediaList = null,
