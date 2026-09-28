@@ -287,3 +287,20 @@ The other 35 rules load on-demand via the intent-map. When a task type row lists
 - Lesson: TdApi.ChatNotificationSettings constructor is version-fragile — construct no-arg + assign useDefaultMuteFor/muteFor only, clone the rest from current chat state.
 - Lesson: android.util.Log in unit-tested ViewModels requires testOptions.unitTests.returnDefaultValues = true (Groovy property name, not isReturnDefaultValues).
 - Lesson: Turbine's Flow.test{} returns Unit — assertions must live inside the block.
+
+## 2026-09-28 — Phase 7 (Search & Offline)
+- Write-through post cache + standalone FTS4 index (ADR-009); SearchScreen; offline page-0 fallback.
+- Lesson: TdLib message ids are unique per chat — cache keys must be (channelId, messageId), never messageId alone.
+- Lesson: TdLib client.send errors surface as ClassCastException at the cast site — catch it next to IOException at repository boundaries.
+- Lesson: standalone FTS4 with manual delete+insert sidesteps Room content-sync trigger drift in hand-written migrations.
+- Lesson: gitignore only covered root /build — module build/ dirs got committed after a local Gradle run; now `build/` at any depth.
+
+## 2026-09-28 — Parallel phase execution pattern (Phases 8 + 9)
+
+**Trigger:** User asked to run Phases 8 and 9 in subagents concurrently. First multi-phase parallel run of the system.
+
+**Changes:**
+- **phase.md §9** — added "Parallel phases" rules: one subagent per phase in its own git worktree (two agents can't hold separate branches in one tree); stack branches on the latest unmerged feature branch and open stacked PRs when the base PR is still open; gitignored docs/ don't materialize in worktrees — read docs + write reports via the main checkout's absolute paths; declare per-agent file-ownership boundaries upfront; orchestrator merges shared docs afterward.
+- **changelog.md** — this entry.
+
+**Result:** Phase 8 (PR #5) and Phase 9 (PR #6) shipped in parallel with zero file conflicts; both CI green; code-reviewer pass applied per phase.
