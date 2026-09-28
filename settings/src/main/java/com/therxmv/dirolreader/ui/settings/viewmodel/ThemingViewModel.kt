@@ -20,7 +20,7 @@ class ThemingViewModel @Inject constructor(
     val data = _data.asStateFlow()
 
     fun loadData(
-        toggleDynamicTheme: (Boolean) -> Unit
+        toggleDynamicTheme: (Boolean) -> Unit,
     ) {
         // Dynamic color needs Android 12+; hide the toggle on older devices
         // instead of showing a no-op switch.
@@ -32,9 +32,9 @@ class ThemingViewModel @Inject constructor(
                     onChecked = {
                         toggleDynamicTheme(it)
                         appSharedPrefsRepository.isDynamic = it
-                    }
-                )
-            )
+                    },
+                ),
+            ),
         } else {
             persistentListOf()
         }

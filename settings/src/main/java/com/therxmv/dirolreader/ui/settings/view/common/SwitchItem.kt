@@ -39,7 +39,7 @@ fun SwitchItem(
             modifier = Modifier
                 .padding(vertical = 8.dp),
             text = text,
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
         )
         Switch(
             checked = state,
@@ -57,7 +57,7 @@ private fun UncheckedSwitchItemPreview() {
     SwitchItem(
         text = "Switch1",
         isChecked = false,
-        onCheckedChange = {}
+        onCheckedChange = {},
     )
 }
 
@@ -67,6 +67,6 @@ private fun CheckedSwitchItemPreview() {
     SwitchItem(
         text = "Switch2",
         isChecked = true,
-        onCheckedChange = {}
+        onCheckedChange = {},
     )
 }

@@ -58,7 +58,7 @@ fun ProfileScreenContent(
             },
             onDismiss = {
                 isDialogOpened = false
-            }
+            },
         )
     }
 
@@ -81,7 +81,7 @@ fun ProfileScreenContent(
         Footer(
             openSignOutDialog = {
                 isDialogOpened = true
-            }
+            },
         )
     }
 }
@@ -126,7 +126,7 @@ private fun ItemsTitle(
     Text(
         text = text,
         style = MaterialTheme.typography.titleLarge,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
     )
 }
 
@@ -208,7 +208,7 @@ private fun ClickableText(
 private fun ClickableTextPreview() {
     ClickableText(
         text = "Clickable text",
-        onClick = {}
+        onClick = {},
     )
 }
 
