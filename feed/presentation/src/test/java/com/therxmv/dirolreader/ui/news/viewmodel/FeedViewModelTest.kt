@@ -208,7 +208,7 @@ class FeedViewModelTest {
     fun `blank text is not translated`() {
         viewModel.onEvent(NewsUiEvent.Translate(text = "   "))
 
-        verify(exactly = 0) { translateText(any()) }
+        coVerify(exactly = 0) { translateText(any()) }
         assertEquals(TranslationState.Idle, viewModel.translationState.value)
     }
 
