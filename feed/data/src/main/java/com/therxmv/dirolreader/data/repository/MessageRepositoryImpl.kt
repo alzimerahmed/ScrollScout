@@ -25,4 +25,6 @@ class MessageRepositoryImpl @Inject constructor(
         messageRemoteDataSource.getUnreadChannelsFlow().map { list ->
             list.map { it.toDomain() }
         }
+
+    override suspend fun markAllAsRead() = messageRemoteDataSource.markAllAsRead()
 }

@@ -8,4 +8,5 @@ interface MessageSource {
 
     fun getUnreadChannelsFlow(): MutableStateFlow<List<ChannelEntity>>
     suspend fun getUnreadMessagesByPage(page: Int): List<MessageModel>
+    suspend fun markAllAsRead()
 }

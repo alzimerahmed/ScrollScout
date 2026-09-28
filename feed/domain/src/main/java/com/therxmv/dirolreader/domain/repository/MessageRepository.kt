@@ -9,4 +9,5 @@ interface MessageRepository {
     suspend fun getUnreadMessagesByPage(page: Int): List<MessageModel>
     suspend fun downloadMediaAndGetPath(mediaId: Int): String
     fun getUnreadChannelsFlow(): Flow<List<ChannelModel>>
+    suspend fun markAllAsRead()
 }

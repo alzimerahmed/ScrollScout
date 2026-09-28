@@ -3,6 +3,7 @@ package com.therxmv.dirolreader.data.source.remote.message
 import android.util.Log
 import com.therxmv.dirolreader.data.entity.ChannelEntity
 import com.therxmv.dirolreader.data.entity.toDomain
+import com.therxmv.dirolreader.data.source.local.db.DirolDao
 import com.therxmv.dirolreader.data.source.remote.channel.ChannelRemoteSource
 import com.therxmv.dirolreader.domain.models.ChannelData
 import com.therxmv.dirolreader.domain.models.ChannelModel
@@ -27,6 +28,7 @@ import kotlin.coroutines.suspendCoroutine
 class MessageRemoteDataSource @Inject constructor(
     private val client: Client,
     private val channelRemoteDataSource: ChannelRemoteSource,
+    private val dirolDao: DirolDao,
     @Named("IO") private val ioDispatcher: CoroutineDispatcher,
 ) : MessageSource {
 
@@ -84,11 +86,11 @@ class MessageRemoteDataSource @Inject constructor(
 
             val request = if (unreadCount == 1) { // Better to use 0 for one unread message
                 TdApi.GetChatHistory(
-                    /* chatId = */ channel.id,
-                    /* fromMessageId = */ 0,
-                    /* offset = */ 0,
-                    /* limit = */ 1,
-                    /* onlyLocal = */ false,
+                    channel.id, // chatId
+                    0, // fromMessageId
+                    0, // offset
+                    1, // limit
+                    false, // onlyLocal
                 )
             } else {
                 val limit = channel.unreadCount + 1 // Plus one, because we have last READ messageId
@@ -99,11 +101,11 @@ class MessageRemoteDataSource @Inject constructor(
                 val offset = limit * -1
 
                 TdApi.GetChatHistory(
-                    /* chatId = */ channel.id,
-                    /* fromMessageId = */ messageId,
-                    /* offset = */ offset,
-                    /* limit = */ limit,
-                    /* onlyLocal = */ false,
+                    channel.id, // chatId
+                    messageId, // fromMessageId
+                    offset, // offset
+                    limit, // limit
+                    false, // onlyLocal
                 )
             }
 
@@ -118,6 +120,42 @@ class MessageRemoteDataSource @Inject constructor(
             }
         }
 
+    override suspend fun markAllAsRead() = withContext(ioDispatcher) {
+        val unreadChannels = allUnreadChannelsFlow.value.filter { it.unreadCount > 0 }
+
+        unreadChannels.forEach { channelEntity ->
+            val channel = channelEntity.toDomain()
+            val history = getChannelHistory(channel)
+            if (history.isEmpty()) return@forEach
+
+            val viewResult = suspendCoroutine { continuation ->
+                client.send(
+                    TdApi.ViewMessages(
+                        channel.id, // chatId
+                        history.map { it.id }.toLongArray(), // messageIds
+                        null, // source
+                        true, // forceRead
+                    ),
+                ) { result ->
+                    continuation.resume(result)
+                }
+            }
+            if (viewResult is TdApi.Error) return@forEach
+
+            val lastReadId = history.last().id
+            dirolDao.markChannelAsRead(channel.id, lastReadId)
+            allUnreadChannelsFlow.update { current ->
+                current.map {
+                    if (it.id == channel.id) {
+                        it.copy(unreadCount = 0, lastReadMessageId = lastReadId)
+                    } else {
+                        it
+                    }
+                }
+            }
+        }
+    }
+
     private suspend fun getChannelData(channel: ChannelModel): ChannelData =
         suspendCoroutine { continuation ->
             client.send(TdApi.GetChat(channel.id)) { chat ->
@@ -127,12 +165,12 @@ class MessageRemoteDataSource @Inject constructor(
                 if (smallPhotoId != null) {
                     client.send(
                         TdApi.DownloadFile(
-                            /* fileId = */ smallPhotoId,
-                            /* priority = */ 32,
-                            /* offset = */ 0,
-                            /* limit = */ 0,
-                            /* synchronous = */ true,
-                        )
+                            smallPhotoId, // fileId
+                            32, // priority
+                            0, // offset
+                            0, // limit
+                            true, // synchronous
+                        ),
                     ) { file ->
                         file as TdApi.File
 
@@ -141,8 +179,8 @@ class MessageRemoteDataSource @Inject constructor(
                                 id = channel.id,
                                 rating = channel.rating,
                                 name = chat.title,
-                                avatarPath = file.local.path
-                            )
+                                avatarPath = file.local.path,
+                            ),
                         )
                     }
                 } else {
@@ -150,8 +188,8 @@ class MessageRemoteDataSource @Inject constructor(
                         ChannelData(
                             id = channel.id,
                             rating = channel.rating,
-                            name = chat.title
-                        )
+                            name = chat.title,
+                        ),
                     )
                 }
             }

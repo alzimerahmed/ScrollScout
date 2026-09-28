@@ -21,10 +21,11 @@ class LocalDataSourceModule {
             context,
             DirolDatabase::class.java,
             "Dirol.db"
-        ).build()
+        )
+            .addMigrations(DirolDatabase.MIGRATION_1_2, DirolDatabase.MIGRATION_2_3)
+            .build()
 
     @Provides
     @Singleton
     fun provideDirolDao(database: DirolDatabase) = database.dirolDao()
-
 }

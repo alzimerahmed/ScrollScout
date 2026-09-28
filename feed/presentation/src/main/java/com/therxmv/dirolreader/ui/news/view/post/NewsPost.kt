@@ -1,5 +1,7 @@
 package com.therxmv.dirolreader.ui.news.view.post
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,28 +39,31 @@ import kotlinx.collections.immutable.PersistentList
 data class NewsPostUiData(
     val id: Long,
     val text: String,
+    val timestamp: Int = 0,
     val mediaList: PersistentList<MediaModel>?,
     val channelData: ChannelUiData,
 )
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NewsPost(
     data: NewsPostUiData,
     loadMedia: MediaLoaderType,
     isStarred: Boolean,
-    onStarChannel: (Boolean) -> Unit,
-    onLike: (Boolean?) -> Unit,
-    onDislike: (Boolean?) -> Unit,
-    markAsRead: () -> Unit,
+    actions: NewsPostActions,
 ) {
     Box(
         modifier = Modifier
-            .padding(horizontal = 10.dp, vertical = 8.dp)
+            .padding(horizontal = 10.dp, vertical = 8.dp),
     ) {
         Card(
             modifier = Modifier
                 .wrapContentHeight()
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .combinedClickable(
+                    onClick = {},
+                    onLongClick = { actions.onTranslate(data.text) },
+                ),
         ) {
             data.mediaList?.let {
                 PostMediaContent(
@@ -69,12 +74,12 @@ fun NewsPost(
 
             Column(
                 modifier = Modifier
-                    .padding(12.dp)
+                    .padding(12.dp),
             ) {
                 ChannelPostInfo(
                     data = data.channelData,
                     isStarred = isStarred,
-                    onStarChannel = onStarChannel,
+                    onStarChannel = actions.onStarChannel,
                 )
 
                 if (data.text.isNotEmpty()) {
@@ -84,15 +89,15 @@ fun NewsPost(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 PostLikes(
-                    onLike = onLike,
-                    onDislike = onDislike,
+                    onLike = actions.onLike,
+                    onDislike = actions.onDislike,
                 )
             }
         }
     }
 
     SideEffect {
-        markAsRead()
+        actions.markAsRead()
     }
 }
 
@@ -161,6 +166,6 @@ private fun PostText(
         markdown = text,
         linkColor = MaterialTheme.colorScheme.primary,
         style = MaterialTheme.typography.bodyLarge,
-        isTextSelectable = true
+        isTextSelectable = true,
     )
 }

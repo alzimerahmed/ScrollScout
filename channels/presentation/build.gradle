@@ -1,0 +1,39 @@
+apply from: "$rootDir/gradle/snippets/module-config.gradle"
+apply plugin: 'kotlin-kapt'
+
+android {
+    namespace 'com.therxmv.dirolreader.channels.presentation'
+
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
+    }
+
+    testOptions {
+        unitTests {
+            // android.util.Log etc. become no-ops in local unit tests
+            returnDefaultValues = true
+        }
+    }
+}
+
+dependencies {
+    implementation project(":channels:domain")
+    implementation project(":common")
+
+    implementation libs.core.ktx
+    implementation libs.lifecycle.runtime.ktx
+    implementation libs.lifecycle.runtime.compose
+    implementation libs.kotlinx.collections.immutable
+
+    implementation platform(libs.compose.bom)
+    implementation libs.bundles.compose.ui
+
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
+    implementation libs.hilt.navigation.compose
+
+    testImplementation libs.bundles.testing.unit
+}

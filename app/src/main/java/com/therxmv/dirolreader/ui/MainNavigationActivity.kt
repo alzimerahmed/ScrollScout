@@ -16,10 +16,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.therxmv.dirolreader.ui.auth.view.AuthScreen
+import com.therxmv.dirolreader.ui.channels.view.ChannelsScreen
 import com.therxmv.dirolreader.ui.navigation.Destination
 import com.therxmv.dirolreader.ui.navigation.NavArguments
 import com.therxmv.dirolreader.ui.news.view.NewsScreen
 import com.therxmv.dirolreader.ui.profile.view.ProfileScreen
+import com.therxmv.dirolreader.ui.relevance.view.RelevanceScreen
 import com.therxmv.dirolreader.ui.settings.view.SettingsScreen
 import com.therxmv.dirolreader.ui.settings.viewmodel.SettingsViewModel
 import com.therxmv.dirolreader.ui.theme.AppTheme
@@ -49,7 +51,7 @@ class MainNavigationActivity : ComponentActivity() {
             var isDynamic by rememberSaveable { mutableStateOf(appSharedPrefsRepository.isDynamic) }
 
             AppTheme(
-                dynamicColor = isDynamic
+                dynamicColor = isDynamic,
             ) {
                 NavHost(navController = navController, startDestination = route) {
                     composable(route = Destination.OtaScreen.route) {
@@ -61,7 +63,7 @@ class MainNavigationActivity : ComponentActivity() {
                                     popUpTo(Destination.OtaScreen.route) { inclusive = true }
                                     launchSingleTop = true
                                 }
-                            }
+                            },
                         )
                         BackHandler {
                             finishAffinity()
@@ -74,7 +76,7 @@ class MainNavigationActivity : ComponentActivity() {
                                     popUpTo(Destination.AuthScreen.route) { inclusive = true }
                                     launchSingleTop = true
                                 }
-                            }
+                            },
                         )
                         BackHandler {
                             finishAffinity()
@@ -104,7 +106,7 @@ class MainNavigationActivity : ComponentActivity() {
                             eraseApplication = {
                                 val activityManager = getSystemService(ActivityManager::class.java)
                                 activityManager.clearApplicationUserData()
-                            }
+                            },
                         )
                     }
                     composable(route = Destination.SettingsScreen.route) {
@@ -115,15 +117,21 @@ class MainNavigationActivity : ComponentActivity() {
                                     destination = destination,
                                     toggleDynamicTheme = {
                                         isDynamic = it
-                                    }
+                                    },
                                 )
-                            }
+                            },
                         )
 
                         SettingsScreen(
                             navController = navController,
                             viewModel = viewModel,
                         )
+                    }
+                    composable(route = Destination.ChannelsScreen.route) {
+                        ChannelsScreen(navController = navController)
+                    }
+                    composable(route = Destination.RelevanceScreen.route) {
+                        RelevanceScreen(navController = navController)
                     }
                 }
             }

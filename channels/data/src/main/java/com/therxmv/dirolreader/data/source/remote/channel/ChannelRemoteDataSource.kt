@@ -34,7 +34,7 @@ class ChannelRemoteDataSource @Inject constructor(
                         chatId = id,
                         getRating = { id ->
                             localChannels.firstOrNull { it.id == id }?.rating ?: 0
-                        }
+                        },
                     )
                 }
             }.awaitAll()
@@ -43,7 +43,66 @@ class ChannelRemoteDataSource @Inject constructor(
                 .filterNotNull()
                 .also { channelLocalDataSource.addChannels(it) }
                 .filter { it.unreadCount > 0 }
-                .sortedByDescending { it.rating }
+                .sortedWith(
+                    compareByDescending<ChannelEntity> { it.rating }
+                        .thenBy { it.sortOrder },
+                )
+        }
+
+    override suspend fun getAllChannels(): List<ChannelEntity> =
+        withContext(ioDispatcher) {
+            val localChannels = channelLocalDataSource.getAllChannels()
+            val chats = getAllChats()
+
+            chats.chatIds.map { id ->
+                async {
+                    getChannelOrNull(
+                        chatId = id,
+                        getRating = { id ->
+                            localChannels.firstOrNull { it.id == id }?.rating ?: 0
+                        },
+                    )
+                }
+            }.awaitAll()
+                .filterNotNull()
+                .also { channelLocalDataSource.addChannels(it) }
+                .sortedWith(
+                    compareBy<ChannelEntity> { it.sortOrder }
+                        .thenBy { it.title },
+                )
+        }
+
+    override suspend fun setChannelMuted(chatId: Long, isMuted: Boolean): Boolean =
+        withContext(ioDispatcher) {
+            val chat = getChatOrNull(chatId) ?: return@withContext false
+            val current = chat.notificationSettings
+            val notificationSettings = TdApi.ChatNotificationSettings().apply {
+                useDefaultMuteFor = false
+                muteFor = if (isMuted) Int.MAX_VALUE else 0
+                useDefaultSound = current.useDefaultSound
+                soundId = current.soundId
+                useDefaultShowPreview = current.useDefaultShowPreview
+                showPreview = current.showPreview
+                useDefaultMuteStories = current.useDefaultMuteStories
+                muteStories = current.muteStories
+                useDefaultStorySound = current.useDefaultStorySound
+                storySoundId = current.storySoundId
+                useDefaultShowStoryPoster = current.useDefaultShowStoryPoster
+                showStoryPoster = current.showStoryPoster
+                useDefaultDisablePinnedMessageNotifications = current.useDefaultDisablePinnedMessageNotifications
+                disablePinnedMessageNotifications = current.disablePinnedMessageNotifications
+                useDefaultDisableMentionNotifications = current.useDefaultDisableMentionNotifications
+                disableMentionNotifications = current.disableMentionNotifications
+            }
+
+            suspendCoroutine { continuation ->
+                client.send(TdApi.SetChatNotificationSettings(chatId, notificationSettings)) { result ->
+                    when (result) {
+                        is TdApi.Error -> continuation.resume(false)
+                        else -> continuation.resume(true)
+                    }
+                }
+            }
         }
 
     private suspend fun getAllChats(): Chats =
@@ -54,25 +113,34 @@ class ChannelRemoteDataSource @Inject constructor(
             }
         }
 
-    private suspend fun getChannelOrNull(chatId: Long, getRating: (Long) -> Int): ChannelEntity? =
+    private suspend fun getChatOrNull(chatId: Long): TdApi.Chat? =
         suspendCoroutine { continuation ->
-            client.send(GetChat(chatId)) { chat ->
-                chat as TdApi.Chat
-                val type = chat.type
-
-                val channel = if (type is TdApi.ChatTypeSupergroup && type.isChannel) {
-                    ChannelEntity(
-                        id = chat.id,
-                        unreadCount = chat.unreadCount,
-                        lastReadMessageId = chat.lastReadInboxMessageId,
-                        rating = getRating(chat.id),
-                    )
-                } else {
-                    null
+            client.send(GetChat(chatId)) { result ->
+                when (result) {
+                    is TdApi.Error -> continuation.resume(null)
+                    else -> continuation.resume(result as TdApi.Chat)
                 }
-
-                continuation.resume(channel)
             }
         }
 
+    private suspend fun getChannelOrNull(chatId: Long, getRating: (Long) -> Int): ChannelEntity? {
+        val chat = getChatOrNull(chatId) ?: return null
+        val type = chat.type
+
+        return if (type is TdApi.ChatTypeSupergroup && type.isChannel) {
+            ChannelEntity(
+                id = chat.id,
+                unreadCount = chat.unreadCount,
+                lastReadMessageId = chat.lastReadInboxMessageId,
+                rating = getRating(chat.id),
+                title = chat.title,
+                isMuted = isMuted(chat.notificationSettings),
+            )
+        } else {
+            null
+        }
+    }
+
+    private fun isMuted(settings: TdApi.ChatNotificationSettings): Boolean =
+        !settings.useDefaultMuteFor && settings.muteFor > 0
 }

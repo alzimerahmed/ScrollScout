@@ -90,8 +90,22 @@ class ProfileViewModel @Inject constructor(
                 icon = R.drawable.storage_icon,
                 name = R.string.profile_storage,
                 onClick = ProfileUiSection.ItemClick.Navigate(
-                    Destination.SettingsScreen.createRoute(SettingsScreens.STORAGE.name)
+                    Destination.SettingsScreen.createRoute(SettingsScreens.STORAGE.name),
                 )
+            ),
+            ProfileUiSection.Item(
+                icon = R.drawable.channels_icon,
+                name = R.string.profile_channels,
+                onClick = ProfileUiSection.ItemClick.Navigate(
+                    Destination.ChannelsScreen.route,
+                ),
+            ),
+            ProfileUiSection.Item(
+                icon = R.drawable.tune_icon,
+                name = R.string.profile_relevance,
+                onClick = ProfileUiSection.ItemClick.Navigate(
+                    Destination.RelevanceScreen.route,
+                ),
             ),
         ),
     )
@@ -102,12 +116,12 @@ class ProfileViewModel @Inject constructor(
             ProfileUiSection.Item(
                 icon = R.drawable.telegram_icon,
                 name = R.string.profile_telegram,
-                onClick = ProfileUiSection.ItemClick.OpenBrowser(Links.TELEGRAM_CHANNEL)
+                onClick = ProfileUiSection.ItemClick.OpenBrowser(Links.TELEGRAM_CHANNEL),
             ),
             ProfileUiSection.Item(
                 icon = R.drawable.github_icon,
                 name = R.string.profile_github,
-                onClick = ProfileUiSection.ItemClick.OpenBrowser(Links.GITHUB_REPO)
+                onClick = ProfileUiSection.ItemClick.OpenBrowser(Links.GITHUB_REPO),
             ),
         ),
     )

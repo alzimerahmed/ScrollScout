@@ -7,17 +7,23 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SwipeToDismiss
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,6 +33,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -37,18 +45,22 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.therxmv.common.R
 import com.therxmv.common.commonview.CenteredBoxLoader
+import com.therxmv.dirolreader.domain.models.MessageModel
+import com.therxmv.dirolreader.ui.news.view.post.ChannelUiData
 import com.therxmv.dirolreader.ui.news.view.post.NewsPost
+import com.therxmv.dirolreader.ui.news.view.post.NewsPostActions
 import com.therxmv.dirolreader.ui.news.view.post.NewsPostUiData
 import com.therxmv.dirolreader.ui.news.view.post.media.MediaLoaderType
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.NewsUiEvent
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.NewsUiEvent.Dislike
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.NewsUiEvent.Like
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.NewsUiEvent.MarkAsRead
+import com.therxmv.dirolreader.ui.news.viewmodel.utils.NewsUiEvent.SaveMessage
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.NewsUiEvent.StarChannel
 import com.therxmv.common.thenIf
 import kotlinx.collections.immutable.PersistentList
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun NewsScreenContent(
     modifier: Modifier = Modifier,
@@ -70,7 +82,7 @@ fun NewsScreenContent(
         modifier = modifier
             .thenIf(isRefreshing.not()) {
                 pullRefresh(pullRefreshState)
-            }
+            },
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
@@ -80,7 +92,7 @@ fun NewsScreenContent(
             handlePagingState(state = news.loadState.prepend)
 
             emptyNewsMessage(
-                isVisible = news.itemCount == 0 && news.loadState.refresh !is LoadState.Loading
+                isVisible = news.itemCount == 0 && news.loadState.refresh !is LoadState.Loading,
             )
 
             items(
@@ -90,10 +102,7 @@ fun NewsScreenContent(
             ) { index ->
                 news[index]?.let { post ->
                     val channelId = post.channelData.id
-                    NewsPost(
-                        data = post,
-                        loadMedia = loadMedia,
-                        isStarred = starredChannels.contains(channelId),
+                    val actions = NewsPostActions(
                         onStarChannel = {
                             onEvent(StarChannel(channelId = channelId, isStarred = it))
                         },
@@ -106,6 +115,46 @@ fun NewsScreenContent(
                         markAsRead = {
                             onEvent(MarkAsRead(messageId = post.id, channelId = channelId))
                         },
+                        onTranslate = { text ->
+                            onEvent(NewsUiEvent.Translate(text = text))
+                        },
+                    )
+                    val dismissState = rememberDismissState(
+                        confirmStateChange = { value ->
+                            when (value) {
+                                DismissValue.DismissedToEnd -> {
+                                    onEvent(NewsUiEvent.Dismiss(messageId = post.id))
+                                    true
+                                }
+                                DismissValue.DismissedToStart -> {
+                                    onEvent(
+                                        SaveMessage(
+                                            messageId = post.id,
+                                            channelId = channelId,
+                                            channelName = post.channelData.name,
+                                            text = post.text,
+                                            timestamp = post.timestamp,
+                                        ),
+                                    )
+                                    true
+                                }
+                                else -> false
+                            }
+                        },
+                    )
+
+                    SwipeToDismiss(
+                        state = dismissState,
+                        modifier = Modifier.animateItemPlacement(),
+                        background = { SwipeBackground(targetValue = dismissState.targetValue) },
+                        dismissContent = {
+                            NewsPost(
+                                data = post,
+                                loadMedia = loadMedia,
+                                isStarred = starredChannels.contains(channelId),
+                                actions = actions,
+                            )
+                        },
                     )
                 }
             }
@@ -115,7 +164,7 @@ fun NewsScreenContent(
         PullRefreshIndicator(
             refreshing = false, // Handled by paging refresh state
             state = pullRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter)
+            modifier = Modifier.align(Alignment.TopCenter),
         )
     }
 
@@ -123,6 +172,118 @@ fun NewsScreenContent(
         isRefreshing = news.loadState.refresh is LoadState.Loading
     }
 }
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun SwipeBackground(targetValue: DismissValue) {
+    val (iconRes, alignment, containerColor) = when (targetValue) {
+        DismissValue.DismissedToStart -> Triple(
+            R.drawable.bookmark_filled_icon,
+            Alignment.CenterStart,
+            MaterialTheme.colorScheme.primary,
+        )
+        DismissValue.DismissedToEnd -> Triple(
+            R.drawable.mark_all_read_icon,
+            Alignment.CenterEnd,
+            MaterialTheme.colorScheme.primaryContainer,
+        )
+        else -> return
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 10.dp, vertical = 8.dp)
+            .clip(MaterialTheme.shapes.medium)
+            .background(containerColor),
+        contentAlignment = alignment,
+    ) {
+        Icon(
+            painter = painterResource(id = iconRes),
+            contentDescription = stringResource(
+                id = if (targetValue == DismissValue.DismissedToStart) {
+                    R.string.news_bookmark_add
+                } else {
+                    R.string.news_mark_read
+                },
+            ),
+            tint = MaterialTheme.colorScheme.onPrimary,
+        )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun SavedNewsContent(
+    modifier: Modifier = Modifier,
+    savedMessages: List<MessageModel>,
+    starredChannels: PersistentList<Long>,
+    onEvent: (NewsUiEvent) -> Unit,
+    loadMedia: MediaLoaderType,
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        if (savedMessages.isEmpty()) {
+            item {
+                AnimatedVisibility(visible = true) {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 150.dp),
+                        text = stringResource(id = R.string.news_saved_empty),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
+        }
+
+        items(
+            count = savedMessages.size,
+            key = { savedMessages[it].id },
+        ) { index ->
+            val post = savedMessages[index]
+            val channelId = post.channelData.id
+
+            NewsPost(
+                data = post.toPresentation(),
+                loadMedia = loadMedia,
+                isStarred = starredChannels.contains(channelId),
+                actions = NewsPostActions(
+                    onStarChannel = {
+                        onEvent(StarChannel(channelId = channelId, isStarred = it))
+                    },
+                    onLike = {
+                        onEvent(Like(channelId = channelId, isLiked = it))
+                    },
+                    onDislike = {
+                        onEvent(Dislike(channelId = channelId, isLiked = it))
+                    },
+                    markAsRead = {},
+                    onTranslate = { text ->
+                        onEvent(NewsUiEvent.Translate(text = text))
+                    },
+                ),
+            )
+        }
+    }
+}
+
+private fun MessageModel.toPresentation() = NewsPostUiData(
+    id = id,
+    text = text,
+    timestamp = timestamp,
+    mediaList = null,
+    channelData = ChannelUiData(
+        id = channelData.id,
+        name = channelData.name,
+        avatarPath = null,
+        postTime = "",
+    ),
+)
 
 private fun LazyListScope.emptyNewsMessage(isVisible: Boolean) {
     item {
