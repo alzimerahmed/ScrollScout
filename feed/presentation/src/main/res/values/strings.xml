@@ -10,7 +10,7 @@
         <item quantity="other">%1$d votes</item>
     </plurals>
     <string name="feed_poll_vote_button">Vote</string>
-    <string name="feed_poll_vote_failed">Couldn't submit your vote</string>
+    <string name="feed_poll_vote_failed">Couldn\'t submit your vote</string>
     <string name="feed_poll_option_chosen">Chosen option</string>
     <string name="feed_poll_option_not_chosen">Option not chosen</string>
     <string name="feed_poll_correct_answer">Correct answer</string>
