@@ -143,7 +143,7 @@ class FeedViewModelTest {
                 channelId = 5L,
                 channelName = "Channel",
                 text = "Post text",
-            )
+            ),
         )
 
         coVerify {
@@ -154,7 +154,7 @@ class FeedViewModelTest {
                     timestamp = 0,
                     text = "Post text",
                     mediaList = null,
-                )
+                ),
             )
         }
     }

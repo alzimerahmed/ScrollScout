@@ -57,7 +57,7 @@ fun NewsPost(
 ) {
     Box(
         modifier = Modifier
-            .padding(horizontal = 10.dp, vertical = 8.dp)
+            .padding(horizontal = 10.dp, vertical = 8.dp),
     ) {
         Card(
             modifier = Modifier
@@ -77,7 +77,7 @@ fun NewsPost(
 
             Column(
                 modifier = Modifier
-                    .padding(12.dp)
+                    .padding(12.dp),
             ) {
                 ChannelPostInfo(
                     data = data.channelData,
@@ -169,6 +169,6 @@ private fun PostText(
         markdown = text,
         linkColor = MaterialTheme.colorScheme.primary,
         style = MaterialTheme.typography.bodyLarge,
-        isTextSelectable = true
+        isTextSelectable = true,
     )
 }

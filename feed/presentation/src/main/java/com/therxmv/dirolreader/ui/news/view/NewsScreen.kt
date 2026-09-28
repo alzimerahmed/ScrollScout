@@ -82,13 +82,13 @@ fun NewsScreen(
                         viewModel.onEvent(
                             NewsUiEvent.MarkAllAsRead(
                                 messageIds = news.itemSnapshotList.mapNotNull { it?.id },
-                            )
+                            ),
                         )
                     },
                 )
             }
         },
-        contentWindowInsets = WindowInsets(bottom = 0)
+        contentWindowInsets = WindowInsets(bottom = 0),
     ) { padding ->
         Crossfade(
             targetState = isSavedView,
@@ -179,7 +179,7 @@ private fun NewsTopBar(
                 Text(
                     text = state.userName,
                     style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
                     text = "${state.unreadChannels} ${stringResource(id = R.string.news_unread_channels)}",
@@ -207,8 +207,8 @@ private fun NewsTopBar(
             Avatar(
                 state = state,
                 onAvatarClick = onAvatarClick,
-            )
-        }
+            ),
+        },
     )
 }
 
@@ -225,9 +225,9 @@ private fun Avatar(
                 .width(48.dp)
                 .height(48.dp)
                 .clip(
-                    MaterialTheme.shapes.small
+                    MaterialTheme.shapes.small,
                 )
-                .clickable(onClick = onAvatarClick)
+                .clickable(onClick = onAvatarClick),
         )
     } else {
         EmptyAvatar(

@@ -20,7 +20,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -84,7 +83,7 @@ fun NewsScreenContent(
         modifier = modifier
             .thenIf(isRefreshing.not()) {
                 pullRefresh(pullRefreshState)
-            }
+            },
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
@@ -94,7 +93,7 @@ fun NewsScreenContent(
             handlePagingState(state = news.loadState.prepend)
 
             emptyNewsMessage(
-                isVisible = news.itemCount == 0 && news.loadState.refresh !is LoadState.Loading
+                isVisible = news.itemCount == 0 && news.loadState.refresh !is LoadState.Loading,
             )
 
             items(
@@ -118,7 +117,7 @@ fun NewsScreenContent(
                                             channelId = channelId,
                                             channelName = post.channelData.name,
                                             text = post.text,
-                                        )
+                                        ),
                                     )
                                     true
                                 }
@@ -160,7 +159,7 @@ fun NewsScreenContent(
         PullRefreshIndicator(
             refreshing = false, // Handled by paging refresh state
             state = pullRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter)
+            modifier = Modifier.align(Alignment.TopCenter),
         )
     }
 
@@ -201,7 +200,7 @@ private fun SwipeBackground(targetValue: DismissValue) {
                     R.string.news_bookmark_add
                 } else {
                     R.string.news_mark_read
-                }
+                },
             ),
             tint = MaterialTheme.colorScheme.onPrimary,
         )

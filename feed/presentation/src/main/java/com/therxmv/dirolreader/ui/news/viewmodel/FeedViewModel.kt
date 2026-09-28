@@ -104,7 +104,7 @@ class FeedViewModel @Inject constructor(
         return ToolbarState(
             avatarPath = user.avatarPath,
             userName = "${user.firstName} ${user.lastName}",
-            unreadChannels = unreadCount
+            unreadChannels = unreadCount,
         )
     }
 
@@ -176,7 +176,7 @@ class FeedViewModel @Inject constructor(
                     timestamp = 0,
                     text = event.text,
                     mediaList = null,
-                )
+                ),
             )
         }
     }
@@ -221,6 +221,6 @@ class FeedViewModel @Inject constructor(
             name = this.channelData.name,
             avatarPath = this.channelData.avatarPath,
             postTime = useCases.getReadablePostTime(this.timestamp),
-        )
+        ),
     )
 }
