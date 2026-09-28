@@ -20,13 +20,6 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Check libtd module present
-        run: |
-          if [ ! -d "libtd" ]; then
-            echo "::error::libtd module missing. Provide TdLib android build (see docs/research.md open questions)."
-            exit 1
-          fi
-
       - name: Write local.properties from secrets
         env:
           API_ID: ${{ secrets.TELEGRAM_API_ID }}
@@ -37,16 +30,6 @@ jobs:
             echo "API_ID=${API_ID}"
             echo "API_HASH=${API_HASH}"
           } > local.properties
-
-      - name: Generate google-services.json (CI placeholder)
-        run: |
-          cat > app/google-services.json <<'EOF'
-          {
-            "project_info": {"project_number": "0", "project_id": "scrollscout-ci", "storage_bucket": "scrollscout-ci.appspot.com"},
-            "client": [{"client_info": {"mobilesdk_app_id": "1:0:android:0000000000000000", "android_client_info": {"package_name": "com.therxmv.dirolreader"}},"oauth_client": [],"api_key": [{"current_key": "AIzaSyCI-placeholder"}],"services": {"appinvite_service": {"other_platform_oauth_client": []}}}],
-            "configuration_version": "1"
-          }
-          EOF
 
       - name: Build + unit tests
         run: ./gradlew assembleDebug testDebugUnitTest --stacktrace
