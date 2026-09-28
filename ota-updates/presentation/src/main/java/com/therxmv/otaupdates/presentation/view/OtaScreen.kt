@@ -30,7 +30,7 @@ fun OtaScreen(
     val context = LocalContext.current
 
     val writeStoragePermissionState = rememberPermissionState(
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
     )
 
     when (uiState) {
