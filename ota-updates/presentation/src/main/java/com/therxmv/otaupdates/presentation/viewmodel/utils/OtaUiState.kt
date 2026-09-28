@@ -7,6 +7,9 @@ sealed class OtaUiState(open val updateModel: LatestReleaseModel? = null) {
     data class DownloadUpdate(override val updateModel: LatestReleaseModel) : OtaUiState(updateModel)
     data class Downloading(override val updateModel: LatestReleaseModel) : OtaUiState(updateModel)
     data class Downloaded(override val updateModel: LatestReleaseModel) : OtaUiState(updateModel)
+
+    /** Release check or download enqueue failed — user can retry or skip. */
+    data class Error(override val updateModel: LatestReleaseModel? = null) : OtaUiState(updateModel)
 }
 
 fun Boolean.toDownloadState(updateModel: LatestReleaseModel): OtaUiState = if (this) {

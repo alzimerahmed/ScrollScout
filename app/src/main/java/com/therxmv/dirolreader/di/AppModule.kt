@@ -34,4 +34,9 @@ class AppModule {
     @Singleton
     @Named("VersionCode")
     fun providesVersionCode(): Int = BuildConfig.VERSION_CODE
+
+    @Provides
+    @Singleton
+    @Named("VersionName")
+    fun providesVersionName(): String = BuildConfig.VERSION_NAME
 }

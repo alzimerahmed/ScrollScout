@@ -15,13 +15,15 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class LatestReleaseRemoteDataSourceTest {
 
     private val mockGithubApiService = mockk<GithubApiService> {
         coEvery { getLatestRelease(any(), any()) } returns LatestReleaseJson(
-            version = "v1.0.0",
+            tagName = "v1.0.0",
+            name = "v1.0.0",
             changeLog = "changeLog",
             assets = emptyList(),
         )
@@ -52,8 +54,8 @@ class LatestReleaseRemoteDataSourceTest {
     }
 
     @Test
-    fun `returns null when exception was thrown`() = runTest {
-        coEvery { mockGithubApiService.getLatestRelease(any(), any()) } throws Exception()
+    fun `returns null when network request fails`() = runTest {
+        coEvery { mockGithubApiService.getLatestRelease(any(), any()) } throws IOException()
 
         val result = systemUnderTest.getLatestRelease()
 

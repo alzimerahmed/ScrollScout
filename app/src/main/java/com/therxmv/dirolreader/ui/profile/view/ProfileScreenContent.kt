@@ -36,7 +36,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.therxmv.common.R
 import com.therxmv.dirolreader.BuildConfig
 import com.therxmv.dirolreader.ui.profile.viewmodel.utils.ProfileUiSection
@@ -59,7 +58,7 @@ fun ProfileScreenContent(
             },
             onDismiss = {
                 isDialogOpened = false
-            }
+            },
         )
     }
 
@@ -82,7 +81,7 @@ fun ProfileScreenContent(
         Footer(
             openSignOutDialog = {
                 isDialogOpened = true
-            }
+            },
         )
     }
 }
@@ -98,7 +97,7 @@ private fun ProfileSection(
     ItemsTitle(
         text = stringResource(id = title),
     )
-    Spacer(modifier = Modifier.height(10.dp))
+    Spacer(modifier = Modifier.height(8.dp))
 
     items.forEach {
         Item(
@@ -127,7 +126,7 @@ private fun ItemsTitle(
     Text(
         text = text,
         style = MaterialTheme.typography.titleLarge,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
     )
 }
 
@@ -161,8 +160,7 @@ private fun Item(
                 .fillMaxHeight()
                 .padding(vertical = 8.dp),
             text = text,
-            style = MaterialTheme.typography.bodyLarge,
-            fontSize = 20.sp,
+            style = MaterialTheme.typography.titleLarge,
         )
     }
 }
@@ -194,7 +192,7 @@ private fun ClickableText(
 ) {
     Text(
         modifier = Modifier
-            .padding(bottom = 6.dp)
+            .padding(bottom = 8.dp)
             .clickable {
                 onClick()
             },
@@ -210,7 +208,7 @@ private fun ClickableText(
 private fun ClickableTextPreview() {
     ClickableText(
         text = "Clickable text",
-        onClick = {}
+        onClick = {},
     )
 }
 

@@ -9,5 +9,8 @@ class LatestReleaseRepositoryImpl @Inject constructor(
     private val latestReleaseRemoteDataSource: LatestReleaseRemoteDataSource,
 ) : LatestReleaseRepository {
     override suspend fun getLatestRelease() =
-        latestReleaseRemoteDataSource.getLatestRelease()?.toDomain()
+        latestReleaseRemoteDataSource.getLatestRelease()?.let { json ->
+            // Incomplete/malformed payloads must not crash the caller.
+            runCatching { json.toDomain() }.getOrNull()
+        }
 }

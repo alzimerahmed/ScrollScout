@@ -29,8 +29,8 @@ fun CenteredTopBar(
         modifier = Modifier
             .padding(
                 end = 8.dp,
-                bottom = 10.dp,
-                top = 10.dp,
+                bottom = 8.dp,
+                top = 8.dp,
             ),
         navigationIcon = {
             if (navController.previousBackStackEntry != null) {

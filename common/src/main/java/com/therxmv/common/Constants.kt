@@ -21,17 +21,19 @@ object SharedPrefs {
     const val SHARED_PREFS_IS_DYNAMIC = "sharedPrefsIsDynamic"
     const val SHARED_PREFS_IS_AUTO_DELETE_ENABLED = "sharedPrefsIsAutoDeleteEnabled"
     const val SHARED_PREFS_IS_UPDATE_DOWNLOADED = "sharedPrefsIsUpdateDownloaded"
+    const val SHARED_PREFS_UPDATE_DOWNLOAD_ID = "sharedPrefsUpdateDownloadId"
+    const val SHARED_PREFS_UPDATE_FILE = "sharedPrefsUpdateFile"
 }
 
 object GithubRepo {
     const val BASE_URL = "https://api.github.com/"
-    const val GITHUB_USERNAME = "therxmv"
-    const val GITHUB_REPO = "Dirol-Reader"
+    const val GITHUB_USERNAME = "alzimerahmed"
+    const val GITHUB_REPO = "ScrollScout"
 }
 
 object Links {
     const val TELEGRAM_CHANNEL = "https://t.me/therxmv_channel"
-    const val GITHUB_REPO = "https://github.com/therxmv/Dirol-Reader"
+    const val GITHUB_REPO = "https://github.com/alzimerahmed/ScrollScout"
 }
 
 object Rating {

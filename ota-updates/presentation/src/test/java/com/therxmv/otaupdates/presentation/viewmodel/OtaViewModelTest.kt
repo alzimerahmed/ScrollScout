@@ -1,9 +1,9 @@
 package com.therxmv.otaupdates.presentation.viewmodel
 
-import android.os.Environment
 import com.therxmv.otaupdates.domain.models.LatestReleaseModel
 import com.therxmv.otaupdates.domain.usecase.DownloadUpdateUseCase
 import com.therxmv.otaupdates.domain.usecase.GetLatestReleaseUseCase
+import com.therxmv.otaupdates.presentation.viewmodel.utils.OtaUiEvent
 import com.therxmv.otaupdates.presentation.viewmodel.utils.OtaUiState
 import com.therxmv.sharedpreferences.repository.AppSharedPrefsRepository
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -11,7 +11,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -21,9 +20,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class OtaViewModelTest {
@@ -46,10 +43,6 @@ class OtaViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
 
-    @JvmField
-    @Rule
-    var rootFolder: TemporaryFolder = TemporaryFolder()
-
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
@@ -67,8 +60,9 @@ class OtaViewModelTest {
     }
 
     @Test
-    fun `set DownloadUpdate when release version is higher then installed`() = runTest {
+    fun `set DownloadUpdate when latest release is not downloaded yet`() = runTest {
         coEvery { mockGetLatestReleaseUseCase.invoke() } returns releaseModel.copy(version = "v5.0.0")
+        every { mockDownloadUpdateUseCase.isDownloaded(any()) } returns false
 
         advanceUntilIdle()
 
@@ -77,13 +71,9 @@ class OtaViewModelTest {
     }
 
     @Test
-    fun `set Downloaded when update apk file exists`() = runTest {
-        mockkStatic(Environment::getExternalStoragePublicDirectory)
-
-        rootFolder.newFile("Dirol-Reader-5.0.0.apk")
-        every { Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) } returns rootFolder.root
-        every { mockAppSharedPrefsRepository.isUpdateDownloaded } returns true
-        coEvery { mockGetLatestReleaseUseCase.invoke() } returns releaseModel.copy(version = "v5.0.0", fileName = "Dirol-Reader-5.0.0.apk")
+    fun `set Downloaded when latest release apk is already downloaded`() = runTest {
+        coEvery { mockGetLatestReleaseUseCase.invoke() } returns releaseModel.copy(version = "v5.0.0")
+        every { mockDownloadUpdateUseCase.isDownloaded(any()) } returns true
 
         advanceUntilIdle()
 
@@ -92,18 +82,47 @@ class OtaViewModelTest {
     }
 
     @Test
-    fun `set DownloadUpdate when different update apk file exists`() = runTest {
-        mockkStatic(Environment::getExternalStoragePublicDirectory)
+    fun `set Error when release fetch fails`() = runTest {
+        advanceUntilIdle()
 
-        rootFolder.newFile("Dirol-Reader-2.0.0.apk")
-        every { Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) } returns rootFolder.root
-        every { mockAppSharedPrefsRepository.isUpdateDownloaded } returns true
-        coEvery { mockGetLatestReleaseUseCase.invoke() } returns releaseModel.copy(version = "v5.0.0", fileName = "Dirol-Reader-5.0.0.apk")
+        systemUnderTest.uiState.value.shouldBeInstanceOf<OtaUiState.Error>()
+    }
+
+    @Test
+    fun `retries release check on Retry event`() = runTest {
+        advanceUntilIdle()
+        systemUnderTest.uiState.value.shouldBeInstanceOf<OtaUiState.Error>()
+
+        coEvery { mockGetLatestReleaseUseCase.invoke() } returns releaseModel.copy(version = "v5.0.0")
+        systemUnderTest.onEvent(OtaUiEvent.Retry)
+        advanceUntilIdle()
+
+        systemUnderTest.uiState.value.shouldBeInstanceOf<OtaUiState.DownloadUpdate>()
+    }
+
+    @Test
+    fun `set Error when update download cannot be enqueued`() = runTest {
+        coEvery { mockGetLatestReleaseUseCase.invoke() } returns releaseModel
+        every { mockDownloadUpdateUseCase.invoke(any()) } returns -1L
 
         advanceUntilIdle()
 
-        coVerify { mockGetLatestReleaseUseCase.invoke() }
-        systemUnderTest.uiState.value.shouldBeInstanceOf<OtaUiState.DownloadUpdate>()
+        systemUnderTest.onEvent(OtaUiEvent.DownloadUpdate(releaseModel))
+
+        systemUnderTest.uiState.value.shouldBeInstanceOf<OtaUiState.Error>()
+    }
+
+    @Test
+    fun `set Downloading when update download is enqueued`() = runTest {
+        coEvery { mockGetLatestReleaseUseCase.invoke() } returns releaseModel
+        every { mockDownloadUpdateUseCase.invoke(any()) } returns 42L
+        every { mockAppSharedPrefsRepository.isUpdateDownloadedChangeListener(any()) } returns mockk()
+
+        advanceUntilIdle()
+
+        systemUnderTest.onEvent(OtaUiEvent.DownloadUpdate(releaseModel))
+
+        systemUnderTest.uiState.value.shouldBeInstanceOf<OtaUiState.Downloading>()
     }
 
     private fun assumeViewModelCreated() {

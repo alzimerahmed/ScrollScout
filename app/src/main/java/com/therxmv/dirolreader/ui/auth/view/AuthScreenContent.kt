@@ -61,7 +61,7 @@ fun AuthScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .padding(screenPadding)
-            .padding(30.dp),
+            .padding(32.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

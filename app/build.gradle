@@ -29,6 +29,28 @@ android {
         buildConfigField "Integer", "API_ID", "${properties.getProperty("API_ID")}"
     }
 
+    // Real release signing requires ALL four SCROLLSCOUT_* env vars (CI injects
+    // them from repository secrets). Partial config falls back to an unsigned
+    // build with a warning instead of failing mid-build in AGP.
+    def signingEnvVars = [
+            "SCROLLSCOUT_KEYSTORE_PATH",
+            "SCROLLSCOUT_KEYSTORE_PASSWORD",
+            "SCROLLSCOUT_KEY_ALIAS",
+            "SCROLLSCOUT_KEY_PASSWORD",
+    ]
+    def canSignRelease = signingEnvVars.every { System.getenv(it) }
+
+    signingConfigs {
+        release {
+            if (canSignRelease) {
+                storeFile file(System.getenv("SCROLLSCOUT_KEYSTORE_PATH"))
+                storePassword System.getenv("SCROLLSCOUT_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("SCROLLSCOUT_KEY_ALIAS")
+                keyPassword System.getenv("SCROLLSCOUT_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         debug {
             debuggable true
@@ -39,7 +61,12 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
+
+            if (canSignRelease) {
+                signingConfig signingConfigs.release
+            } else {
+                logger.warn("SCROLLSCOUT_* signing env vars missing or incomplete — release APKs will be unsigned")
+            }
         }
     }
 

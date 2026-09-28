@@ -1,0 +1,92 @@
+name: Release
+
+# Tag push (v*) → build ABI-split release APKs → sign when the signing
+# secrets are configured → publish a GitHub Release with the APKs attached.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Accept Android SDK licenses
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+
+      - name: Write local.properties from secrets
+        env:
+          API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+        run: |
+          {
+            echo "sdk.dir=${ANDROID_HOME}"
+            echo "API_ID=${API_ID}"
+            echo "API_HASH=${API_HASH}"
+          } > local.properties
+
+      # Decode the release keystore only when the secret exists; lands outside
+      # the repo dir so it can never be committed. Missing secrets → unsigned.
+      - name: Decode release keystore
+        env:
+          RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+        run: |
+          if [ -n "$RELEASE_KEYSTORE" ]; then
+            echo "$RELEASE_KEYSTORE" | base64 -d > "$RUNNER_TEMP/scrollscout-release.jks"
+            echo "KEYSTORE_PATH=$RUNNER_TEMP/scrollscout-release.jks" >> "$GITHUB_ENV"
+          else
+            echo "::warning::RELEASE_KEYSTORE secret not set — release APKs will be unsigned"
+          fi
+
+      - name: Assemble release APKs
+        env:
+          SCROLLSCOUT_KEYSTORE_PATH: ${{ env.KEYSTORE_PATH }}
+          SCROLLSCOUT_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          SCROLLSCOUT_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          SCROLLSCOUT_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        run: ./gradlew assembleRelease --stacktrace
+
+      # Version-stamp asset names (scrollscout-<tag>-<abi>.apk) so the in-app
+      # updater can tell a downloaded apk of one release from another.
+      - name: Collect APKs
+        run: |
+          mkdir release-out
+          for apk in app/build/outputs/apk/release/*.apk; do
+            name=$(basename "$apk")
+            # app-<abi>-release[-unsigned].apk -> scrollscout-<tag>-<abi>[-unsigned].apk
+            abi=$(echo "$name" | sed -E 's/^app-(.*)-release(-unsigned)?\.apk/\1/')
+            new_name="scrollscout-${GITHUB_REF_NAME}-${abi}.apk"
+            if [ ! -f "$RUNNER_TEMP/scrollscout-release.jks" ] && [[ "$new_name" != *unsigned* ]]; then
+              new_name="${new_name%.apk}-unsigned.apk"
+            fi
+            cp "$apk" "release-out/$new_name"
+          done
+          ls -la release-out/
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          notes="ScrollScout ${GITHUB_REF_NAME}"
+          if [ ! -f "$RUNNER_TEMP/scrollscout-release.jks" ]; then
+            notes="$notes"$'\n\n'"Unsigned build (no signing secrets configured)."
+          fi
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" --clobber release-out/*.apk
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              --title "ScrollScout $GITHUB_REF_NAME" \
+              --notes "$notes" \
+              release-out/*.apk
+          fi

@@ -2,9 +2,14 @@ package com.therxmv.otaupdates.presentation.view
 
 import android.Manifest
 import android.os.Build
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -25,11 +30,27 @@ fun OtaScreen(
     val context = LocalContext.current
 
     val writeStoragePermissionState = rememberPermissionState(
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
     )
 
     when (uiState) {
-        is OtaUiState.InitialState -> {}
+        is OtaUiState.InitialState -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+
+        is OtaUiState.Error -> {
+            OtaErrorContent(
+                onRetry = {
+                    viewModel.onEvent(OtaUiEvent.Retry)
+                },
+                onUpdateLater = onNavigateToNextScreen,
+            )
+        }
 
         else -> {
             val update = uiState.updateModel
