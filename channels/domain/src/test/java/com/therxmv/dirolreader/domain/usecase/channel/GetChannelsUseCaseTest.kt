@@ -24,7 +24,7 @@ class GetChannelsUseCaseTest {
 
         val result = useCase.observe().first()
 
-        assertEquals(listOf(expected), result)
+        assertEquals(expected, result)
     }
 
     @Test
