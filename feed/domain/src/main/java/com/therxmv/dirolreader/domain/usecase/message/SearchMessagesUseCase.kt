@@ -1,5 +1,6 @@
 package com.therxmv.dirolreader.domain.usecase.message
 
+import com.therxmv.dirolreader.domain.models.MessageModel
 import com.therxmv.dirolreader.domain.repository.MessageRepository
 import javax.inject.Inject
 
