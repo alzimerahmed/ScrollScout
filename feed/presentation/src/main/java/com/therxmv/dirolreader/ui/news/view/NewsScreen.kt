@@ -207,7 +207,7 @@ private fun NewsTopBar(
             Avatar(
                 state = state,
                 onAvatarClick = onAvatarClick,
-            ),
+            )
         },
     )
 }
