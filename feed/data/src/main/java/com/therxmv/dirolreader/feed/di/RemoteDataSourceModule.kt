@@ -4,6 +4,8 @@ import com.therxmv.dirolreader.data.source.remote.media.MediaRemoteDataSource
 import com.therxmv.dirolreader.data.source.remote.media.MediaSource
 import com.therxmv.dirolreader.data.source.remote.message.MessageRemoteDataSource
 import com.therxmv.dirolreader.data.source.remote.message.MessageSource
+import com.therxmv.dirolreader.data.source.remote.translation.TranslationRemoteSource
+import com.therxmv.dirolreader.data.source.remote.translation.TranslationSource
 import com.therxmv.dirolreader.data.source.remote.user.UserRemoteDataSource
 import com.therxmv.dirolreader.data.source.remote.user.UserSource
 import dagger.Binds
@@ -27,4 +29,8 @@ abstract class RemoteDataSourceModule {
     @Binds
     @Singleton
     abstract fun bindsMediaRemoteDataSource(source: MediaRemoteDataSource): MediaSource
+
+    @Binds
+    @Singleton
+    abstract fun bindsTranslationRemoteDataSource(source: TranslationRemoteSource): TranslationSource
 }

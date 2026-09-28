@@ -2,13 +2,35 @@ package com.therxmv.dirolreader.data.source.local.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.therxmv.common.Room.CHANNEL_TABLE
+import com.therxmv.common.Room.SAVED_MESSAGE_TABLE
 import com.therxmv.dirolreader.data.entity.ChannelEntity
+import com.therxmv.dirolreader.data.entity.SavedMessageEntity
 
 @Database(
-    entities = [ChannelEntity::class],
-    version = 1,
+    entities = [ChannelEntity::class, SavedMessageEntity::class],
+    version = 2,
     exportSchema = false
 )
 abstract class DirolDatabase : RoomDatabase() {
     abstract fun dirolDao(): DirolDao
+
+    companion object {
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `$SAVED_MESSAGE_TABLE` (" +
+                        "`messageId` INTEGER NOT NULL, " +
+                        "`channelId` INTEGER NOT NULL, " +
+                        "`channelName` TEXT NOT NULL, " +
+                        "`text` TEXT NOT NULL, " +
+                        "`timestamp` INTEGER NOT NULL, " +
+                        "`savedAt` INTEGER NOT NULL, " +
+                        "PRIMARY KEY(`messageId`))"
+                )
+            }
+        }
+    }
 }

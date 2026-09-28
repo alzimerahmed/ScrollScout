@@ -21,7 +21,9 @@ class LocalDataSourceModule {
             context,
             DirolDatabase::class.java,
             "Dirol.db"
-        ).build()
+        )
+            .addMigrations(DirolDatabase.MIGRATION_1_2)
+            .build()
 
     @Provides
     @Singleton

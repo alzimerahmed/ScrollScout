@@ -12,6 +12,7 @@ dependencies {
     implementation project(":common")
 
     implementation 'com.github.tdlibx:td:1.8.56'
+    implementation libs.bundles.retrofit
 
     implementation libs.core.ktx
     implementation libs.kotlinx.coroutines.core
