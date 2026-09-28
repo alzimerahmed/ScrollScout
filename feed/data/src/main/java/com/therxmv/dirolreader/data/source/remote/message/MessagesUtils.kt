@@ -28,8 +28,11 @@ fun List<MessageModel>.groupMediaMessagesInOne(): List<MessageModel> { // TODO 2
             id++
         }
 
+        val prevMedia = prevItem.mediaList
+        val currentMedia = currentItem.mediaList
+
         when {
-            prevItem.mediaList == null || currentItem.mediaList == null -> addCurrentItem()
+            prevMedia == null || currentMedia == null -> addCurrentItem()
 
             currentItem.timestamp - prevItem.timestamp <= 10 && currentItem.channelData.id == prevItem.channelData.id -> {
                 val text = currentItem.text.takeIf { it.isNotEmpty() } ?: prevItem.text
@@ -37,7 +40,7 @@ fun List<MessageModel>.groupMediaMessagesInOne(): List<MessageModel> { // TODO 2
                 temp[id] = prevItem.copy(
                     id = currentItem.id,
                     text = text,
-                    mediaList = prevItem.mediaList + currentItem.mediaList,
+                    mediaList = prevMedia + currentMedia,
                 )
             }
 
