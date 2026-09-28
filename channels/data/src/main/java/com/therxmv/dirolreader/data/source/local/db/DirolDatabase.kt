@@ -25,6 +25,7 @@ import com.therxmv.dirolreader.data.entity.SavedMessageEntity
 )
 abstract class DirolDatabase : RoomDatabase() {
     abstract fun dirolDao(): DirolDao
+    abstract fun cachedMessageDao(): CachedMessageDao
 
     companion object {
         private const val SCHEMA_VERSION_2 = 2

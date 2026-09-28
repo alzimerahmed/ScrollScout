@@ -32,4 +32,8 @@ class LocalDataSourceModule {
     @Provides
     @Singleton
     fun provideDirolDao(database: DirolDatabase) = database.dirolDao()
+
+    @Provides
+    @Singleton
+    fun provideCachedMessageDao(database: DirolDatabase) = database.cachedMessageDao()
 }

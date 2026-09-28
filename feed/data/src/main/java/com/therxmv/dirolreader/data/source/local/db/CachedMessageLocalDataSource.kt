@@ -14,12 +14,12 @@ import javax.inject.Named
  * that have already been loaded at least once.
  */
 class CachedMessageLocalDataSource @Inject constructor(
-    private val dirolDao: DirolDao,
+    private val cachedMessageDao: CachedMessageDao,
     @Named("IO") private val ioDispatcher: CoroutineDispatcher,
 ) {
 
     suspend fun saveMessages(messages: List<MessageModel>) = withContext(ioDispatcher) {
-        messages.forEach { dirolDao.insertCachedMessage(it.toCachedEntity()) }
+        messages.forEach { cachedMessageDao.insertCachedMessage(it.toCachedEntity()) }
     }
 
     suspend fun searchMessages(query: String): List<MessageModel> = withContext(ioDispatcher) {
@@ -27,12 +27,12 @@ class CachedMessageLocalDataSource @Inject constructor(
         if (ftsQuery == null) {
             emptyList()
         } else {
-            dirolDao.searchCachedMessages(ftsQuery).map { it.toDomain() }
+            cachedMessageDao.searchCachedMessages(ftsQuery).map { it.toDomain() }
         }
     }
 
     suspend fun getCachedMessages(limit: Int): List<MessageModel> = withContext(ioDispatcher) {
-        dirolDao.getCachedMessages(limit).map { it.toDomain() }
+        cachedMessageDao.getCachedMessages(limit).map { it.toDomain() }
     }
 
     /**
