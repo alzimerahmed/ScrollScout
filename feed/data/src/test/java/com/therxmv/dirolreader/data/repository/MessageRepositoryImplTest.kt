@@ -19,6 +19,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MessageRepositoryImplTest {
@@ -65,7 +66,7 @@ class MessageRepositoryImplTest {
         val cached = listOf(message(3L))
         coEvery {
             messageRemoteDataSource.getUnreadMessagesByPage(STARTING_PAGE_INDEX)
-        } throws RuntimeException("offline")
+        } throws IOException("offline")
         coEvery { cachedMessageLocalDataSource.getCachedMessages(any()) } returns cached
 
         assertEquals(cached, repository.getUnreadMessagesByPage(STARTING_PAGE_INDEX))
@@ -73,7 +74,7 @@ class MessageRepositoryImplTest {
 
     @Test
     fun `remote failure on later page returns empty list`() = runTest {
-        coEvery { messageRemoteDataSource.getUnreadMessagesByPage(1) } throws RuntimeException("offline")
+        coEvery { messageRemoteDataSource.getUnreadMessagesByPage(1) } throws ClassCastException("tdlib error")
 
         assertEquals(emptyList<MessageModel>(), repository.getUnreadMessagesByPage(1))
         coVerify(exactly = 0) { cachedMessageLocalDataSource.getCachedMessages(any()) }
