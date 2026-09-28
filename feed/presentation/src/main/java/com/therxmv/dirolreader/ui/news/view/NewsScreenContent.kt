@@ -123,7 +123,7 @@ fun NewsScreenContent(
                         confirmStateChange = { value ->
                             when (value) {
                                 DismissValue.DismissedToEnd -> {
-                                    onEvent(MarkAsRead(messageId = post.id, channelId = channelId))
+                                    onEvent(NewsUiEvent.Dismiss(messageId = post.id))
                                     true
                                 }
                                 DismissValue.DismissedToStart -> {
@@ -133,6 +133,7 @@ fun NewsScreenContent(
                                             channelId = channelId,
                                             channelName = post.channelData.name,
                                             text = post.text,
+                                            timestamp = post.timestamp,
                                         ),
                                     )
                                     true
@@ -274,6 +275,7 @@ fun SavedNewsContent(
 private fun MessageModel.toPresentation() = NewsPostUiData(
     id = id,
     text = text,
+    timestamp = timestamp,
     mediaList = null,
     channelData = ChannelUiData(
         id = channelData.id,

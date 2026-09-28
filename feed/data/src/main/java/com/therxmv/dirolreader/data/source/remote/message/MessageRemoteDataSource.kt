@@ -128,14 +128,19 @@ class MessageRemoteDataSource @Inject constructor(
             val history = getChannelHistory(channel)
             if (history.isEmpty()) return@forEach
 
-            client.send(
-                TdApi.ViewMessages(
-                    channel.id, // chatId
-                    history.map { it.id }.toLongArray(), // messageIds
-                    null, // source
-                    true, // forceRead
-                ),
-            ) {}
+            val viewResult = suspendCoroutine { continuation ->
+                client.send(
+                    TdApi.ViewMessages(
+                        channel.id, // chatId
+                        history.map { it.id }.toLongArray(), // messageIds
+                        null, // source
+                        true, // forceRead
+                    ),
+                ) { result ->
+                    continuation.resume(result)
+                }
+            }
+            if (viewResult is TdApi.Error) return@forEach
 
             val lastReadId = history.last().id
             dirolDao.markChannelAsRead(channel.id, lastReadId)

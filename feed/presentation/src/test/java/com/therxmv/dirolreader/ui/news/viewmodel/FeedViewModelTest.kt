@@ -143,6 +143,7 @@ class FeedViewModelTest {
                 channelId = 5L,
                 channelName = "Channel",
                 text = "Post text",
+                timestamp = 0,
             ),
         )
 
@@ -157,6 +158,13 @@ class FeedViewModelTest {
                 ),
             )
         }
+    }
+
+    @Test
+    fun `dismiss event does not touch telegram read state`() {
+        viewModel.onEvent(NewsUiEvent.Dismiss(messageId = 10L))
+
+        coVerify(exactly = 0) { markMessageAsRead(any(), any()) }
     }
 
     @Test

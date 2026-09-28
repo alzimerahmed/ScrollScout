@@ -39,6 +39,7 @@ import kotlinx.collections.immutable.PersistentList
 data class NewsPostUiData(
     val id: Long,
     val text: String,
+    val timestamp: Int = 0,
     val mediaList: PersistentList<MediaModel>?,
     val channelData: ChannelUiData,
 )

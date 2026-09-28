@@ -193,12 +193,14 @@ private fun NewsTopBar(
         },
         navController = navController,
         actions = {
-            IconButton(onClick = actions.onMarkAllAsRead) {
-                Icon(
-                    painter = painterResource(id = R.drawable.mark_all_read_icon),
-                    contentDescription = stringResource(id = R.string.news_mark_all_read),
-                    tint = MaterialTheme.colorScheme.onSurface,
-                )
+            if (!isSavedView) {
+                IconButton(onClick = actions.onMarkAllAsRead) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.mark_all_read_icon),
+                        contentDescription = stringResource(id = R.string.news_mark_all_read),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
             }
             IconButton(onClick = actions.onToggleSavedView) {
                 Icon(

@@ -23,7 +23,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -56,15 +56,14 @@ class FeedViewModel @Inject constructor(
     private val readMessages = mutableListOf<Long>()
     private val dismissedIds = MutableStateFlow<Set<Long>>(emptySet())
 
-    val news = dismissedIds.flatMapLatest { dismissed ->
-        useCases.getNewsPaging()
-            .map { paging: PagingData<MessageModel> ->
-                paging.map { message -> message.toPresentation() }
-            }
-            .map { paging: PagingData<NewsPostUiData> ->
-                paging.filter { post -> post.id !in dismissed }
-            }
-    }.cachedIn(viewModelScope)
+    val news = useCases.getNewsPaging()
+        .map { paging: PagingData<MessageModel> ->
+            paging.map { message -> message.toPresentation() }
+        }
+        .combine(dismissedIds) { paging: PagingData<NewsPostUiData>, dismissed ->
+            paging.filter { post -> post.id !in dismissed }
+        }
+        .cachedIn(viewModelScope)
 
     init {
         toolbarDataObserver()
@@ -116,6 +115,7 @@ class FeedViewModel @Inject constructor(
             is NewsUiEvent.Dislike -> updateChannelRating(event.channelId, dislikeDelta(event.isLiked))
             is NewsUiEvent.StarChannel -> toggleStar(event)
             is NewsUiEvent.MarkAsRead -> markMessageAsRead(event)
+            is NewsUiEvent.Dismiss -> dismissedIds.update { it + event.messageId }
             is NewsUiEvent.SaveMessage -> saveMessage(event)
             is NewsUiEvent.MarkAllAsRead -> markAllAsRead(event)
             is NewsUiEvent.Translate -> translate(event)
@@ -169,7 +169,7 @@ class FeedViewModel @Inject constructor(
                         rating = 0,
                         name = event.channelName,
                     ),
-                    timestamp = 0,
+                    timestamp = event.timestamp,
                     text = event.text,
                     mediaList = null,
                 ),
@@ -209,6 +209,7 @@ class FeedViewModel @Inject constructor(
     private fun MessageModel.toPresentation() = NewsPostUiData(
         id = this.id,
         text = this.text,
+        timestamp = this.timestamp,
         mediaList = this.mediaList?.toPersistentList(),
         channelData = ChannelUiData(
             id = this.channelData.id,
