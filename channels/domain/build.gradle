@@ -1,0 +1,15 @@
+apply from: "$rootDir/gradle/snippets/module-config.gradle"
+apply plugin: 'kotlin-kapt'
+
+android {
+    namespace 'com.therxmv.dirolreader.channels.domain'
+}
+
+dependencies {
+    implementation project(":common")
+
+    implementation libs.core.ktx
+
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
+}

@@ -8,7 +8,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_compiler_version
+        kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
     }
 }
 
@@ -17,17 +17,17 @@ dependencies {
     implementation project(":shared-preferences")
     implementation project(":ota-updates:domain")
 
-    implementation appDependencies.coreKtx
-    implementation appDependencies.lifecycleRuntimeKtx
-    implementation appDependencies.lifecycleRuntimeCompose
-    implementation appDependencies.accompanistPermission
+    implementation libs.core.ktx
+    implementation libs.lifecycle.runtime.ktx
+    implementation libs.lifecycle.runtime.compose
+    implementation libs.accompanist.permissions
 
-    implementation platform(appDependencies.composeBom)
-    implementation libraries.composeUi
+    implementation platform(libs.compose.bom)
+    implementation libs.bundles.compose.ui
 
-    implementation appDependencies.hilt
-    kapt appDependencies.hiltCompiler
-    implementation appDependencies.hiltNavigation
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
+    implementation libs.hilt.navigation.compose
 
-    testImplementation libraries.testingUnit
+    testImplementation libs.bundles.testing.unit
 }

@@ -9,13 +9,13 @@ dependencies {
     implementation project(":ota-updates:domain")
     implementation project(":common")
 
-    implementation appDependencies.coreKtx
+    implementation libs.core.ktx
 
-    implementation appDependencies.hilt
-    kapt appDependencies.hiltCompiler
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
 
-    implementation libraries.retrofit
-    implementation appDependencies.gson
+    implementation libs.bundles.retrofit
+    implementation libs.gson
 
-    testImplementation libraries.testingUnit
+    testImplementation libs.bundles.testing.unit
 }

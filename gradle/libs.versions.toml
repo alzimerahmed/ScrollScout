@@ -1,0 +1,115 @@
+# Version catalog — single source of truth for dependency versions.
+# Migrated from global.gradle ext maps (Phase 4). appConfig (applicationId, SDK
+# versions) stays in global.gradle because it feeds module-config.gradle.
+[versions]
+agp = "7.4.2"
+kotlin = "1.9.0"
+composeCompiler = "1.5.2"
+composeBom = "2022.10.00"
+composeMaterial = "1.5.0-beta02"
+composeActivity = "1.7.2"
+composeNavigation = "2.6.0"
+accompanistPermission = "0.30.1"
+accompanistUiController = "0.30.0"
+coreKtx = "1.10.1"
+lifecycleRuntime = "2.6.1"
+mkkv = "1.3.1"
+gson = "2.10.1"
+exoplayer = "1.1.1"
+room = "2.5.2"
+hilt = "2.51.1"
+hiltNavigation = "1.2.0"
+collapsingToolbar = "2.3.5"
+composeMarkdown = "0.5.3"
+pagingCompose = "3.2.0"
+workManager = "2.8.1"
+retrofit = "2.9.0"
+junit = "4.13.2"
+mockk = "1.13.3"
+kotlinxCoroutines = "1.6.4"
+kotest = "5.5.4"
+turbine = "1.0.0"
+coreSplash = "1.0.1"
+kotlinxCollections = "0.3.7"
+activity = "1.9.1"
+detekt = "1.23.7"
+ktlintPlugin = "11.6.1"
+
+[libraries]
+activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-graphics = { module = "androidx.compose.ui:ui-graphics" }
+compose-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-material = { module = "androidx.compose.material:material", version.ref = "composeMaterial" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-activity = { module = "androidx.activity:activity-compose", version.ref = "composeActivity" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermission" }
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistUiController" }
+core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollections" }
+lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntime" }
+lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntime" }
+mkkv = { module = "com.tencent:mmkv", version.ref = "mkkv" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "exoplayer" }
+exoplayer-ui = { module = "androidx.media3:media3-ui", version.ref = "exoplayer" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigation" }
+toolbar-compose = { module = "me.onebone:toolbar-compose", version.ref = "collapsingToolbar" }
+compose-markdown = { module = "com.github.jeziellago:compose-markdown", version.ref = "composeMarkdown" }
+paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
+work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workManager" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplash" }
+
+junit = { module = "junit:junit", version.ref = "junit" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
+mockk-agent-jvm = { module = "io.mockk:mockk-agent-jvm", version.ref = "mockk" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+
+[bundles]
+compose-ui = [
+    "compose-ui",
+    "compose-graphics",
+    "compose-tooling",
+    "compose-tooling-preview",
+    "compose-material",
+    "compose-material3",
+    "compose-activity",
+    "compose-navigation",
+]
+exoplayer = [
+    "exoplayer",
+    "exoplayer-ui",
+]
+retrofit = [
+    "retrofit",
+    "retrofit-converter-gson",
+]
+testing-unit = [
+    "junit",
+    "mockk",
+    "mockk-android",
+    "mockk-agent-jvm",
+    "kotlinx-coroutines-test",
+    "kotest-assertions-core",
+    "turbine",
+]
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintPlugin" }

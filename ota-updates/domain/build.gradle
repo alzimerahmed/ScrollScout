@@ -8,8 +8,8 @@ android {
 dependencies {
     implementation project(":common")
 
-    implementation appDependencies.coreKtx
+    implementation libs.core.ktx
 
-    implementation appDependencies.hilt
-    kapt appDependencies.hiltCompiler
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
 }

@@ -12,8 +12,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.therxmv.common.R
-import com.therxmv.dirolreader.ui.commonview.CenteredBoxLoader
-import com.therxmv.dirolreader.ui.commonview.FillOptions
+import com.therxmv.common.commonview.CenteredBoxLoader
+import com.therxmv.common.commonview.FillOptions
 
 @Composable
 fun SignOutDialog(

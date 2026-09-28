@@ -1,8 +1,8 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
     id 'kotlin-kapt'
-    id 'com.google.dagger.hilt.android'
+    alias(libs.plugins.hilt)
     id 'org.jetbrains.kotlin.plugin.parcelize'
 }
 
@@ -40,12 +40,6 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
-
-//            android.applicationVariants.all { variant -> // TODO 3 doesn't work with abi versions
-//                variant.outputs.all {
-//                    outputFileName = "Dirol-Reader-${variant.versionName}.apk"
-//                }
-//            }
         }
     }
 
@@ -69,7 +63,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_compiler_version
+        kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
     }
     packagingOptions {
         resources {
@@ -85,33 +79,31 @@ dependencies {
     implementation project(':ota-updates:presentation')
     implementation project(':ota-updates:domain')
     implementation project(':ota-updates:data')
+    implementation project(':channels:domain')
+    implementation project(':channels:data')
+    implementation project(':feed:domain')
+    implementation project(':feed:data')
+    implementation project(':feed:presentation')
+    implementation project(':settings')
 
-    implementation appDependencies.activityKtx
-    implementation appDependencies.coreKtx
-    implementation appDependencies.kotlinCollections
-    implementation appDependencies.lifecycleRuntimeKtx
-    implementation appDependencies.lifecycleRuntimeCompose
+    implementation libs.activity.ktx
+    implementation libs.core.ktx
+    implementation libs.kotlinx.collections.immutable
+    implementation libs.lifecycle.runtime.ktx
+    implementation libs.lifecycle.runtime.compose
 
-    implementation appDependencies.hilt
-    kapt appDependencies.hiltCompiler
-    implementation appDependencies.hiltNavigation
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
+    implementation libs.hilt.navigation.compose
 
-    implementation platform(appDependencies.composeBom)
-    implementation libraries.composeUi
+    implementation platform(libs.compose.bom)
+    implementation libs.bundles.compose.ui
 
+    implementation libs.exoplayer
+    implementation libs.toolbar.compose
+    implementation libs.paging.compose
+    implementation libs.compose.markdown
+    implementation libs.core.splashscreen
 
-    implementation appDependencies.room
-    kapt appDependencies.roomCompiler
-
-    implementation appDependencies.accompanistPermission
-    implementation appDependencies.accompanistUiController
-    implementation appDependencies.mkkv
-    implementation appDependencies.gson
-    implementation libraries.exoplayer
-    implementation appDependencies.collapsingToolbar
-    implementation appDependencies.pagingCompose
-    implementation appDependencies.composeMarkdown
-    implementation appDependencies.coreSplashScreen
-
-    testImplementation libraries.testingUnit
+    testImplementation libs.bundles.testing.unit
 }
