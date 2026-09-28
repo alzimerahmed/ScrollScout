@@ -1,7 +1,7 @@
 package com.therxmv.dirolreader.channels.di
 
-import com.therxmv.dirolreader.channels.data.source.remote.channel.ChannelRemoteDataSource
-import com.therxmv.dirolreader.channels.data.source.remote.channel.ChannelRemoteSource
+import com.therxmv.dirolreader.data.source.remote.channel.ChannelRemoteDataSource
+import com.therxmv.dirolreader.data.source.remote.channel.ChannelRemoteSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
