@@ -10,6 +10,6 @@ sealed class Destination(val route: String) {
     data object SettingsScreen: Destination("settingsScreen/{${NavArguments.SettingsDestination.name}}") {
         fun createRoute(destination: String) = "settingsScreen/$destination"
     }
-    data object ChannelsScreen: Destination("channelsScreen")
-    data object RelevanceScreen: Destination("relevanceScreen")
+    data object ChannelsScreen : Destination("channelsScreen")
+    data object RelevanceScreen : Destination("relevanceScreen")
 }

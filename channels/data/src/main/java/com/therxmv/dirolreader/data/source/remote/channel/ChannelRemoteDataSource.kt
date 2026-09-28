@@ -34,7 +34,7 @@ class ChannelRemoteDataSource @Inject constructor(
                         chatId = id,
                         getRating = { id ->
                             localChannels.firstOrNull { it.id == id }?.rating ?: 0
-                        }
+                        },
                     )
                 }
             }.awaitAll()
@@ -60,7 +60,7 @@ class ChannelRemoteDataSource @Inject constructor(
                         chatId = id,
                         getRating = { id ->
                             localChannels.firstOrNull { it.id == id }?.rating ?: 0
-                        }
+                        },
                     )
                 }
             }.awaitAll()
@@ -122,5 +122,4 @@ class ChannelRemoteDataSource @Inject constructor(
 
     private fun isMuted(settings: TdApi.ChatNotificationSettings): Boolean =
         !settings.useDefaultMuteFor && settings.muteFor > 0
-
 }

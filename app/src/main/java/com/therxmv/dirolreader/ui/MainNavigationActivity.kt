@@ -51,7 +51,7 @@ class MainNavigationActivity : ComponentActivity() {
             var isDynamic by rememberSaveable { mutableStateOf(appSharedPrefsRepository.isDynamic) }
 
             AppTheme(
-                dynamicColor = isDynamic
+                dynamicColor = isDynamic,
             ) {
                 NavHost(navController = navController, startDestination = route) {
                     composable(route = Destination.OtaScreen.route) {
@@ -63,7 +63,7 @@ class MainNavigationActivity : ComponentActivity() {
                                     popUpTo(Destination.OtaScreen.route) { inclusive = true }
                                     launchSingleTop = true
                                 }
-                            }
+                            },
                         )
                         BackHandler {
                             finishAffinity()
@@ -76,7 +76,7 @@ class MainNavigationActivity : ComponentActivity() {
                                     popUpTo(Destination.AuthScreen.route) { inclusive = true }
                                     launchSingleTop = true
                                 }
-                            }
+                            },
                         )
                         BackHandler {
                             finishAffinity()
@@ -106,7 +106,7 @@ class MainNavigationActivity : ComponentActivity() {
                             eraseApplication = {
                                 val activityManager = getSystemService(ActivityManager::class.java)
                                 activityManager.clearApplicationUserData()
-                            }
+                            },
                         )
                     }
                     composable(route = Destination.SettingsScreen.route) {
@@ -117,9 +117,9 @@ class MainNavigationActivity : ComponentActivity() {
                                     destination = destination,
                                     toggleDynamicTheme = {
                                         isDynamic = it
-                                    }
+                                    },
                                 )
-                            }
+                            },
                         )
 
                         SettingsScreen(

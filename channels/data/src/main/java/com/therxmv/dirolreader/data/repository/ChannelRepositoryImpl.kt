@@ -1,10 +1,10 @@
 package com.therxmv.dirolreader.data.repository
 
+import com.therxmv.dirolreader.data.entity.toDomain
 import com.therxmv.dirolreader.data.source.local.db.ChannelLocalDataSource
 import com.therxmv.dirolreader.data.source.remote.channel.ChannelRemoteSource
 import com.therxmv.dirolreader.domain.models.ChannelModel
 import com.therxmv.dirolreader.domain.repository.ChannelRepository
-import com.therxmv.dirolreader.data.entity.toDomain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
