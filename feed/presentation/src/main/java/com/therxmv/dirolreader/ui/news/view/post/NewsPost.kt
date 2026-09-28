@@ -31,8 +31,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.therxmv.common.R
 import com.therxmv.dirolreader.domain.models.MediaModel
+import com.therxmv.dirolreader.domain.models.MessageAttachment
+import com.therxmv.dirolreader.ui.news.view.post.attachment.PollVoterType
+import com.therxmv.dirolreader.ui.news.view.post.attachment.PostAttachmentContent
 import com.therxmv.dirolreader.ui.news.view.post.media.MediaLoaderType
 import com.therxmv.dirolreader.ui.news.view.post.media.PostMediaContent
+import com.therxmv.dirolreader.ui.news.viewmodel.utils.NewsUiEvent
 import dev.jeziellago.compose.markdowntext.MarkdownText
 import kotlinx.collections.immutable.PersistentList
 
@@ -42,13 +46,25 @@ data class NewsPostUiData(
     val timestamp: Int = 0,
     val mediaList: PersistentList<MediaModel>?,
     val channelData: ChannelUiData,
+    val attachment: MessageAttachment? = null,
+)
+
+/**
+ * Screen-level callbacks a post needs, grouped like [NewsPostActions]:
+ * [onEvent] for UI events, [loadMedia] to download media, [votePoll] to vote
+ * in a poll.
+ */
+data class NewsPostHandlers(
+    val onEvent: (NewsUiEvent) -> Unit,
+    val loadMedia: MediaLoaderType,
+    val votePoll: PollVoterType,
 )
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NewsPost(
     data: NewsPostUiData,
-    loadMedia: MediaLoaderType,
+    handlers: NewsPostHandlers,
     isStarred: Boolean,
     actions: NewsPostActions,
 ) {
@@ -68,7 +84,7 @@ fun NewsPost(
             data.mediaList?.let {
                 PostMediaContent(
                     mediaList = it,
-                    loadMedia = loadMedia,
+                    loadMedia = handlers.loadMedia,
                 )
             }
 
@@ -82,9 +98,18 @@ fun NewsPost(
                     onStarChannel = actions.onStarChannel,
                 )
 
-                if (data.text.isNotEmpty()) {
+                if (data.text.isNotEmpty() && data.attachment == null) {
                     Spacer(modifier = Modifier.height(12.dp))
                     PostText(text = data.text)
+                }
+                data.attachment?.let { attachment ->
+                    Spacer(modifier = Modifier.height(12.dp))
+                    PostAttachmentContent(
+                        attachment = attachment,
+                        channelId = data.channelData.id,
+                        messageId = data.id,
+                        votePoll = handlers.votePoll,
+                    )
                 }
                 Spacer(modifier = Modifier.height(12.dp))
 

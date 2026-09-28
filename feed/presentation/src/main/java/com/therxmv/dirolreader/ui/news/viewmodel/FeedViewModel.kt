@@ -9,6 +9,7 @@ import androidx.paging.map
 import com.therxmv.common.Rating.STAR_RATING
 import com.therxmv.dirolreader.domain.models.ChannelData
 import com.therxmv.dirolreader.domain.models.MessageModel
+import com.therxmv.dirolreader.domain.models.PollModel
 import com.therxmv.dirolreader.domain.usecase.NewsViewModelUseCases
 import com.therxmv.dirolreader.ui.news.view.post.ChannelUiData
 import com.therxmv.dirolreader.ui.news.view.post.NewsPostUiData
@@ -206,11 +207,21 @@ class FeedViewModel @Inject constructor(
         useCases.downloadMediaAndGetPath(mediaId)
     }
 
+    /**
+     * Returns the refreshed poll on success so the card can swap its state,
+     * or null when Telegram rejected the vote.
+     */
+    suspend fun votePoll(chatId: Long, messageId: Long, optionIds: IntArray): PollModel? =
+        withContext(ioDispatcher) {
+            runCatching { useCases.setPollAnswer(chatId, messageId, optionIds) }.getOrNull()
+        }
+
     private fun MessageModel.toPresentation() = NewsPostUiData(
         id = this.id,
         text = this.text,
         timestamp = this.timestamp,
         mediaList = this.mediaList?.toPersistentList(),
+        attachment = this.attachment,
         channelData = ChannelUiData(
             id = this.channelData.id,
             name = this.channelData.name,

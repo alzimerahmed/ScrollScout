@@ -13,6 +13,7 @@ import com.therxmv.dirolreader.domain.usecase.message.MarkAllAsReadUseCase
 import com.therxmv.dirolreader.domain.usecase.message.MarkMessageAsReadUseCase
 import com.therxmv.dirolreader.domain.usecase.message.SaveMessageUseCase
 import com.therxmv.dirolreader.domain.usecase.message.SearchMessagesUseCase
+import com.therxmv.dirolreader.domain.usecase.message.SetPollAnswerUseCase
 import com.therxmv.dirolreader.domain.usecase.message.TranslateTextUseCase
 import com.therxmv.dirolreader.domain.usecase.user.GetCurrentUserUseCase
 import com.therxmv.dirolreader.ui.news.viewmodel.MainDispatcherRule
@@ -69,6 +70,7 @@ class SearchViewModelTest {
             markAllAsRead = mockk<MarkAllAsReadUseCase>(relaxed = true),
             translateText = mockk<TranslateTextUseCase>(),
             searchMessages = searchMessages,
+            setPollAnswer = mockk<SetPollAnswerUseCase>(),
         ),
     )
 
