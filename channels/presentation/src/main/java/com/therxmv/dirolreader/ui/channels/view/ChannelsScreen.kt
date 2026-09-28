@@ -174,7 +174,7 @@ private fun ChannelRow(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(
-                onClick = { onMove(channel.id, up = true) },
+                onClick = { onMove(channel.id, true) },
                 modifier = Modifier.heightIn(min = 48.dp),
             ) {
                 Icon(
@@ -184,7 +184,7 @@ private fun ChannelRow(
                 )
             }
             IconButton(
-                onClick = { onMove(channel.id, up = false) },
+                onClick = { onMove(channel.id, false) },
                 modifier = Modifier.heightIn(min = 48.dp),
             ) {
                 Icon(
@@ -215,6 +215,7 @@ private fun ChannelRow(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun GroupDialog(
     initial: String,

@@ -116,6 +116,8 @@ private fun WeightRow(
     onAdjust: (Long, Int) -> Unit,
 ) {
     val weightLabel = stringResource(id = R.string.relevance_weight, item.rating)
+    val decreaseLabel = stringResource(id = R.string.relevance_decrease)
+    val increaseLabel = stringResource(id = R.string.relevance_increase)
 
     Column(
         modifier = Modifier
@@ -134,7 +136,7 @@ private fun WeightRow(
             TextButton(
                 onClick = { onAdjust(item.id, -WEIGHT_STEP) },
                 modifier = Modifier.semantics {
-                    contentDescription = stringResource(id = R.string.relevance_decrease)
+                    contentDescription = decreaseLabel
                 },
             ) {
                 Text(text = "−")
@@ -147,7 +149,7 @@ private fun WeightRow(
             TextButton(
                 onClick = { onAdjust(item.id, WEIGHT_STEP) },
                 modifier = Modifier.semantics {
-                    contentDescription = stringResource(id = R.string.relevance_increase)
+                    contentDescription = increaseLabel
                 },
             ) {
                 Text(text = "+")
