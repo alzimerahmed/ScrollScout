@@ -1,0 +1,23 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
+rootProject.name = "DirolReader"
+include ':app', ':libtd'
+include ':common'
+include ':ota-updates'
+include ':ota-updates:presentation'
+include ':ota-updates:data'
+include ':ota-updates:domain'
+include ':shared-preferences'

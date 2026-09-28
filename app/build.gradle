@@ -1,0 +1,121 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+    id "com.google.gms.google-services"
+    id "com.google.firebase.crashlytics"
+    id 'org.jetbrains.kotlin.plugin.parcelize'
+}
+
+android {
+    namespace 'com.therxmv.dirolreader'
+    compileSdk appConfig.compileSdkVersion
+
+    defaultConfig {
+        applicationId appConfig.applicationId
+        minSdk appConfig.minSdkVersion
+        targetSdk appConfig.targetSdkVersion
+        versionCode 201
+        versionName "2.0.1"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+        buildConfigField "String", "API_HASH", "\"${properties.getProperty("API_HASH")}\""
+        buildConfigField "Integer", "API_ID", "${properties.getProperty("API_ID")}"
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+        }
+
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+
+//            android.applicationVariants.all { variant -> // TODO 3 doesn't work with abi versions
+//                variant.outputs.all {
+//                    outputFileName = "Dirol-Reader-${variant.versionName}.apk"
+//                }
+//            }
+        }
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include "armeabi-v7a", "arm64-v8a"
+            universalApk true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_compiler_version
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+    implementation project(':libtd')
+    implementation project(':common')
+    implementation project(':shared-preferences')
+    implementation project(':ota-updates:presentation')
+    implementation project(':ota-updates:domain')
+    implementation project(':ota-updates:data')
+
+    implementation appDependencies.activityKtx
+    implementation appDependencies.coreKtx
+    implementation appDependencies.kotlinCollections
+    implementation appDependencies.lifecycleRuntimeKtx
+    implementation appDependencies.lifecycleRuntimeCompose
+
+    implementation appDependencies.hilt
+    kapt appDependencies.hiltCompiler
+    implementation appDependencies.hiltNavigation
+
+    implementation platform(appDependencies.composeBom)
+    implementation libraries.composeUi
+
+    implementation platform(appDependencies.firebaseBom)
+    implementation libraries.firebase
+
+    implementation appDependencies.room
+    kapt appDependencies.roomCompiler
+
+    implementation appDependencies.accompanistPermission
+    implementation appDependencies.accompanistUiController
+    implementation appDependencies.mkkv
+    implementation appDependencies.gson
+    implementation libraries.exoplayer
+    implementation appDependencies.collapsingToolbar
+    implementation appDependencies.pagingCompose
+    implementation appDependencies.composeMarkdown
+    implementation appDependencies.coreSplashScreen
+
+    testImplementation libraries.testingUnit
+}

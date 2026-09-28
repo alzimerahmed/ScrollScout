@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">Dirol Reader</string>
+
+    <!-- OTA -->
+    <string name="ota_new_update">New version available!</string>
+    <string name="ota_update_later">Update later</string>
+    <string name="ota_download_now">Download Now</string>
+    <string name="ota_downloading">Downloading…</string>
+    <string name="ota_install_update">Install Update</string>
+
+    <!-- Auth -->
+    <string name="auth_title_phone">Enter your phone number</string>
+    <string name="auth_title_code">Enter verification code</string>
+    <string name="auth_title_password">Enter 2-step verification password</string>
+    <string name="auth_title_error">Oops… Something went wrong</string>
+    <string name="auth_continue_btn">Continue</string>
+    <string name="auth_incorrect_input">Incorrect input</string>
+    <string name="auth_dialog_confirm">Confirm</string>
+    <string name="auth_dialog_title">Are you sure?</string>
+    <string name="auth_dialog_text">Before proceeding, please double-check that the phone number you entered is correct:</string>
+
+    <!-- News -->
+    <string name="news_unread_channels">unread channels</string>
+    <string name="news_counter_divider">of</string>
+    <string name="news_just_now">Just now</string>
+    <string name="news_all_read">You have read all news</string>
+
+    <!-- Profile -->
+    <string name="profile_settings">Settings</string>
+    <string name="profile_theme">Theming</string>
+    <string name="profile_storage">Storage Usage</string>
+
+    <string name="profile_about">About</string>
+    <string name="profile_telegram">Telegram Channel</string>
+    <string name="profile_github">Source Code</string>
+
+    <string name="profile_sign_out">Sign Out</string>
+
+    <string name="sign_out_dialog_title">Sign out?</string>
+    <string name="sign_out_dialog_title_in_progress">App will be closed shortly</string>
+    <string name="sign_out_dialog_text">Are you sure you want to sign out? You will only be signed out from this device.</string>
+
+    <!-- Settings -->
+    <string name="settings_dynamic_theme">Dynamic Theme</string>
+    <string name="settings_clear_cache">Auto-Clear Cache</string>
+</resources>
