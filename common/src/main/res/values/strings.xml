@@ -24,6 +24,15 @@
     <string name="news_counter_divider">of</string>
     <string name="news_just_now">Just now</string>
     <string name="news_all_read">You have read all news</string>
+    <string name="news_saved">Saved</string>
+    <string name="news_saved_empty">No saved posts yet.\nSwipe a post left to save it for later.</string>
+    <string name="news_mark_all_read">Mark all as read</string>
+    <string name="news_mark_read">Mark as read</string>
+    <string name="news_bookmark_add">Save post</string>
+    <string name="news_bookmark_remove">Back to feed</string>
+    <string name="news_translate">Translate post</string>
+    <string name="news_translation_title">Translation</string>
+    <string name="news_translation_error">Translation failed. Check your connection.</string>
 
     <!-- Profile -->
     <string name="profile_settings">Settings</string>

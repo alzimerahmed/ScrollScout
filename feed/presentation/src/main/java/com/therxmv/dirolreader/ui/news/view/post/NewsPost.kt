@@ -1,5 +1,7 @@
 package com.therxmv.dirolreader.ui.news.view.post
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +43,7 @@ data class NewsPostUiData(
     val channelData: ChannelUiData,
 )
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NewsPost(
     data: NewsPostUiData,
@@ -50,6 +53,7 @@ fun NewsPost(
     onLike: (Boolean?) -> Unit,
     onDislike: (Boolean?) -> Unit,
     markAsRead: () -> Unit,
+    onTranslate: (String) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -58,7 +62,11 @@ fun NewsPost(
         Card(
             modifier = Modifier
                 .wrapContentHeight()
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .combinedClickable(
+                    onClick = {},
+                    onLongClick = { onTranslate(data.text) },
+                ),
         ) {
             data.mediaList?.let {
                 PostMediaContent(

@@ -3,8 +3,10 @@ package com.therxmv.dirolreader.ui.news.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import androidx.paging.map
 import com.therxmv.common.Rating.STAR_RATING
+import com.therxmv.dirolreader.domain.models.ChannelData
 import com.therxmv.dirolreader.domain.models.MessageModel
 import com.therxmv.dirolreader.domain.usecase.NewsViewModelUseCases
 import com.therxmv.dirolreader.ui.news.view.post.ChannelUiData
@@ -12,19 +14,22 @@ import com.therxmv.dirolreader.ui.news.view.post.NewsPostUiData
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.FeedUiState
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.NewsUiEvent
 import com.therxmv.dirolreader.ui.news.viewmodel.utils.ToolbarState
+import com.therxmv.dirolreader.ui.news.viewmodel.utils.TranslationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Named
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class FeedViewModel @Inject constructor(
     private val useCases: NewsViewModelUseCases,
@@ -37,16 +42,31 @@ class FeedViewModel @Inject constructor(
     private val _starredChannels = MutableStateFlow<List<Long>>(emptyList())
     val starredChannels = _starredChannels.asStateFlow()
 
-    private val readMessages = mutableListOf<Long>()
+    private val _savedMessages = MutableStateFlow<List<MessageModel>>(emptyList())
+    val savedMessages = _savedMessages.asStateFlow()
 
-    val news = useCases.getNewsPaging()
-        .map { paging ->
-            paging.map { it.toPresentation() }
-        }
-        .cachedIn(viewModelScope)
+    private val _isSavedView = MutableStateFlow(false)
+    val isSavedView = _isSavedView.asStateFlow()
+
+    private val _translationState = MutableStateFlow<TranslationState>(TranslationState.Idle)
+    val translationState = _translationState.asStateFlow()
+
+    private val readMessages = mutableListOf<Long>()
+    private val dismissedIds = MutableStateFlow<Set<Long>>(emptySet())
+
+    val news = dismissedIds.flatMapLatest { dismissed ->
+        useCases.getNewsPaging()
+            .map { paging ->
+                paging.map { it.toPresentation() }
+            }
+            .map { paging ->
+                paging.filter { it.id !in dismissed }
+            }
+    }.cachedIn(viewModelScope)
 
     init {
         toolbarDataObserver()
+        savedMessagesObserver()
     }
 
     private fun toolbarDataObserver() {
@@ -66,6 +86,14 @@ class FeedViewModel @Inject constructor(
                         toolbarState = toolbarData,
                     )
                 }
+            }
+        }
+    }
+
+    private fun savedMessagesObserver() {
+        viewModelScope.launch(ioDispatcher) {
+            useCases.getSavedMessages().collect { messages ->
+                _savedMessages.update { messages }
             }
         }
     }
@@ -121,6 +149,56 @@ class FeedViewModel @Inject constructor(
                     useCases.markMessageAsRead(event.messageId, event.channelId)
                 }
             }
+
+            is NewsUiEvent.SaveMessage -> saveMessage(event)
+
+            is NewsUiEvent.MarkAllAsRead -> markAllAsRead(event)
+
+            is NewsUiEvent.Translate -> translate(event)
+
+            is NewsUiEvent.ToggleSavedView -> _isSavedView.update { it.not() }
+
+            is NewsUiEvent.DismissTranslation -> _translationState.update { TranslationState.Idle }
+        }
+    }
+
+    private fun saveMessage(event: NewsUiEvent.SaveMessage) {
+        dismissedIds.update { it + event.messageId }
+        viewModelScope.launch(ioDispatcher) {
+            useCases.saveMessage(
+                MessageModel(
+                    id = event.messageId,
+                    channelData = ChannelData(
+                        id = event.channelId,
+                        rating = 0,
+                        name = event.channelName,
+                    ),
+                    timestamp = 0,
+                    text = event.text,
+                    mediaList = null,
+                )
+            )
+        }
+    }
+
+    private fun markAllAsRead(event: NewsUiEvent.MarkAllAsRead) {
+        dismissedIds.update { it + event.messageIds }
+        viewModelScope.launch(ioDispatcher) {
+            useCases.markAllAsRead()
+        }
+    }
+
+    private fun translate(event: NewsUiEvent.Translate) {
+        if (event.text.isBlank()) return
+
+        _translationState.update { TranslationState.Loading }
+        viewModelScope.launch(ioDispatcher) {
+            val state = try {
+                TranslationState.Ready(useCases.translateText(event.text))
+            } catch (e: Exception) {
+                TranslationState.Error
+            }
+            _translationState.update { state }
         }
     }
 
