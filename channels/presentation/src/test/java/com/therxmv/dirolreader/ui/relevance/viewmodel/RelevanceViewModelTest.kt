@@ -1,5 +1,6 @@
 package com.therxmv.dirolreader.ui.relevance.viewmodel
 
+import app.cash.turbine.test
 import com.therxmv.dirolreader.domain.models.ChannelModel
 import com.therxmv.dirolreader.domain.usecase.channel.AdjustChannelWeightUseCase
 import com.therxmv.dirolreader.domain.usecase.channel.GetChannelsUseCase
@@ -47,15 +48,13 @@ class RelevanceViewModelTest {
             ),
         )
 
-        val state = viewModel.uiState.test {
+        viewModel.uiState.test {
             val ready = awaitItem() as RelevanceUiState.Ready
+            assertEquals(listOf(2L, 1L, 3L), ready.items.map { it.id })
+            assertEquals(10, ready.items.first().maxRating)
+            assertTrue(ready.canReset)
             cancelAndIgnoreRemainingEvents()
-            ready
         }
-
-        assertEquals(listOf(2L, 1L, 3L), state.items.map { it.id })
-        assertEquals(10, state.items.first().maxRating)
-        assertTrue(state.canReset)
     }
 
     @Test
@@ -66,27 +65,22 @@ class RelevanceViewModelTest {
             ),
         )
 
-        val state = viewModel.uiState.test {
+        viewModel.uiState.test {
             val ready = awaitItem() as RelevanceUiState.Ready
+            assertFalse(ready.canReset)
+            assertEquals(1, ready.items.first().maxRating)
             cancelAndIgnoreRemainingEvents()
-            ready
         }
-
-        assertFalse(state.canReset)
-        assertEquals(1, state.items.first().maxRating)
     }
 
     @Test
     fun `empty state after refresh with no channels`() = runTest {
         val viewModel = createViewModel(channels = emptyList())
 
-        val state = viewModel.uiState.test {
-            val empty = awaitItem()
+        viewModel.uiState.test {
+            assertTrue(awaitItem() is RelevanceUiState.Empty)
             cancelAndIgnoreRemainingEvents()
-            empty
         }
-
-        assertTrue(state is RelevanceUiState.Empty)
     }
 
     @Test

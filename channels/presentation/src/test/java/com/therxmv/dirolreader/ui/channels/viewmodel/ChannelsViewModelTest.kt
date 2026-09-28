@@ -52,27 +52,22 @@ class ChannelsViewModelTest {
             ),
         )
 
-        val state = viewModel.uiState.test {
+        viewModel.uiState.test {
             val ready = awaitItem() as ChannelsUiState.Ready
+            assertEquals(listOf(2L, 1L), ready.channels.map { it.id })
+            assertEquals(3, ready.channels.first().unreadCount)
             cancelAndIgnoreRemainingEvents()
-            ready
         }
-
-        assertEquals(listOf(2L, 1L), state.channels.map { it.id })
-        assertEquals(3, state.channels.first().unreadCount)
     }
 
     @Test
     fun `empty state after refresh with no channels`() = runTest {
         val viewModel = createViewModel(channels = emptyList())
 
-        val state = viewModel.uiState.test {
-            val empty = awaitItem()
+        viewModel.uiState.test {
+            assertTrue(awaitItem() is ChannelsUiState.Empty)
             cancelAndIgnoreRemainingEvents()
-            empty
         }
-
-        assertTrue(state is ChannelsUiState.Empty)
     }
 
     @Test
