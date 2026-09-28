@@ -17,6 +17,8 @@ object TranslationParser {
         val root = JsonParser().parse(body)
         val segments = root.asJsonArray
             .takeIf { it.size() > 0 }
+            ?.get(0)
+            ?.asJsonArray
             ?: throw IllegalArgumentException("Unexpected translation response")
 
         return buildString {
