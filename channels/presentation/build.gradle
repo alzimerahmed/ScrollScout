@@ -14,7 +14,7 @@ android {
     testOptions {
         unitTests {
             // android.util.Log etc. become no-ops in local unit tests
-            isReturnDefaultValues = true
+            returnDefaultValues = true
         }
     }
 }
