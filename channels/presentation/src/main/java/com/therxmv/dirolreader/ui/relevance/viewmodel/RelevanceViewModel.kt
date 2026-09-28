@@ -52,6 +52,7 @@ class RelevanceViewModel @Inject constructor(
     }
 
     private fun updateState(list: List<ChannelModel>) {
+        channels = list
         _uiState.value = when {
             list.isNotEmpty() -> {
                 val maxRating = maxOf(list.maxOf { it.rating }, 1)
