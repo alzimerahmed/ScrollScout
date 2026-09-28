@@ -36,7 +36,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.therxmv.common.R
 import com.therxmv.dirolreader.BuildConfig
 import com.therxmv.dirolreader.ui.profile.viewmodel.utils.ProfileUiSection
@@ -98,7 +97,7 @@ private fun ProfileSection(
     ItemsTitle(
         text = stringResource(id = title),
     )
-    Spacer(modifier = Modifier.height(10.dp))
+    Spacer(modifier = Modifier.height(8.dp))
 
     items.forEach {
         Item(
@@ -161,8 +160,7 @@ private fun Item(
                 .fillMaxHeight()
                 .padding(vertical = 8.dp),
             text = text,
-            style = MaterialTheme.typography.bodyLarge,
-            fontSize = 20.sp,
+            style = MaterialTheme.typography.titleLarge,
         )
     }
 }
@@ -194,7 +192,7 @@ private fun ClickableText(
 ) {
     Text(
         modifier = Modifier
-            .padding(bottom = 6.dp)
+            .padding(bottom = 8.dp)
             .clickable {
                 onClick()
             },

@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @Composable
 fun SwitchItem(
@@ -40,8 +39,7 @@ fun SwitchItem(
             modifier = Modifier
                 .padding(vertical = 8.dp),
             text = text,
-            style = MaterialTheme.typography.bodyLarge,
-            fontSize = 20.sp
+            style = MaterialTheme.typography.titleLarge
         )
         Switch(
             checked = state,
