@@ -18,10 +18,13 @@ private fun PostWithTextPreview() {
         ),
         loadMedia = ::loadMessageMedia,
         isStarred = false,
-        onStarChannel = {},
-        onLike = {},
-        onDislike = {},
-        markAsRead = {},
+        actions = NewsPostActions(
+            onStarChannel = {},
+            onLike = {},
+            onDislike = {},
+            markAsRead = {},
+            onTranslate = {},
+        ),
     )
 }
 
@@ -39,10 +42,13 @@ private fun PostWithTextAndOnePhotoPreview() {
         ),
         loadMedia = ::loadMessageMedia,
         isStarred = false,
-        onStarChannel = {},
-        onLike = {},
-        onDislike = {},
-        markAsRead = {},
+        actions = NewsPostActions(
+            onStarChannel = {},
+            onLike = {},
+            onDislike = {},
+            markAsRead = {},
+            onTranslate = {},
+        ),
     )
 }
 
@@ -60,10 +66,13 @@ private fun PostWithoutTextAndOnePhotoPreview() {
         ),
         loadMedia = ::loadMessageMedia,
         isStarred = true,
-        onStarChannel = {},
-        onLike = {},
-        onDislike = {},
-        markAsRead = {},
+        actions = NewsPostActions(
+            onStarChannel = {},
+            onLike = {},
+            onDislike = {},
+            markAsRead = {},
+            onTranslate = {},
+        ),
     )
 }
 
@@ -83,10 +92,13 @@ private fun PostWithTextAndThreeMediaPreview() {
         ),
         loadMedia = ::loadMessageMedia,
         isStarred = true,
-        onStarChannel = {},
-        onLike = {},
-        onDislike = {},
-        markAsRead = {},
+        actions = NewsPostActions(
+            onStarChannel = {},
+            onLike = {},
+            onDislike = {},
+            markAsRead = {},
+            onTranslate = {},
+        ),
     )
 }
 

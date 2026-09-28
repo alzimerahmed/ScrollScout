@@ -2,6 +2,7 @@ package com.therxmv.dirolreader.ui.news.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
 import androidx.paging.map
@@ -56,11 +57,11 @@ class FeedViewModel @Inject constructor(
 
     val news = dismissedIds.flatMapLatest { dismissed ->
         useCases.getNewsPaging()
-            .map { paging ->
-                paging.map { it.toPresentation() }
+            .map { paging: PagingData<MessageModel> ->
+                paging.map { message -> message.toPresentation() }
             }
-            .map { paging ->
-                paging.filter { it.id !in dismissed }
+            .map { paging: PagingData<NewsPostUiData> ->
+                paging.filter { post -> post.id !in dismissed }
             }
     }.cachedIn(viewModelScope)
 

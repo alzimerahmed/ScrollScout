@@ -82,7 +82,7 @@ fun NewsScreen(
                         onMarkAllAsRead = {
                             viewModel.onEvent(
                                 NewsUiEvent.MarkAllAsRead(
-                                    messageIds = news.itemSnapshotList.mapNotNull { it?.id },
+                                    messageIds = news.itemSnapshotList.mapNotNull { item -> item?.id },
                                 ),
                             )
                         },
@@ -210,7 +210,7 @@ private fun NewsTopBar(
             }
             Avatar(
                 state = state,
-                onAvatarClick = onAvatarClick,
+                onAvatarClick = actions.onAvatarClick,
             )
         },
     )
@@ -231,12 +231,12 @@ private fun Avatar(
                 .clip(
                     MaterialTheme.shapes.small,
                 )
-                .clickable(onClick = actions.onAvatarClick),
+                .clickable(onClick = onAvatarClick),
         )
     } else {
         EmptyAvatar(
             modifier = Modifier
-                .clickable(onClick = actions.onAvatarClick),
+                .clickable(onClick = onAvatarClick),
             name = state.userName,
         )
     }
