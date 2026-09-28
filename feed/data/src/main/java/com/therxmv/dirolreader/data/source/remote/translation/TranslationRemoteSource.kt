@@ -14,12 +14,21 @@ import javax.inject.Inject
 object TranslationParser {
 
     fun parse(body: String): String {
-        val root = JsonParser.parseString(body)
-        val segments = root.asJsonArray.getOrNull(0)?.asJsonArray
+        val root = JsonParser().parse(body)
+        val segments = root.asJsonArray
+            .takeIf { it.size() > 0 }
             ?: throw IllegalArgumentException("Unexpected translation response")
 
-        return segments.joinToString(separator = "") { segment ->
-            segment.asJsonArray.getOrNull(0)?.asString ?: ""
+        return buildString {
+            for (segment in segments) {
+                val chunk = segment.asJsonArray
+                    .takeIf { it.size() > 0 && !it[0].isJsonNull }
+                    ?.get(0)
+                    ?.asString
+                if (chunk != null) {
+                    append(chunk)
+                }
+            }
         }
     }
 }

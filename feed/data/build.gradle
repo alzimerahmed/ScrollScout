@@ -13,6 +13,7 @@ dependencies {
 
     implementation 'com.github.tdlibx:td:1.8.56'
     implementation libs.bundles.retrofit
+    implementation libs.gson
 
     implementation libs.core.ktx
     implementation libs.kotlinx.coroutines.core
