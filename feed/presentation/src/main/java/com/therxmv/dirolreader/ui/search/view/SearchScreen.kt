@@ -122,7 +122,7 @@ private fun SearchResults(results: PersistentList<SearchResultItem>) {
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(vertical = 8.dp),
     ) {
-        items(results, key = { it.id }) { result ->
+        items(results, key = { "${it.channelId}-${it.id}" }) { result ->
             SearchResultRow(result = result)
         }
     }

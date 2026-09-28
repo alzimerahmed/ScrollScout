@@ -64,6 +64,8 @@ abstract class DirolDatabase : RoomDatabase() {
         }
         val MIGRATION_3_4 = object : Migration(SCHEMA_VERSION_3, SCHEMA_VERSION_4) {
             override fun migrate(database: SupportSQLiteDatabase) {
+                // TdLib message ids are unique per chat, not globally —
+                // the cache is keyed on (channelId, messageId).
                 database.execSQL(
                     "CREATE TABLE IF NOT EXISTS `$CACHED_MESSAGE_TABLE` (" +
                         "`messageId` INTEGER NOT NULL, " +
@@ -72,11 +74,12 @@ abstract class DirolDatabase : RoomDatabase() {
                         "`text` TEXT NOT NULL, " +
                         "`timestamp` INTEGER NOT NULL, " +
                         "`cachedAt` INTEGER NOT NULL, " +
-                        "PRIMARY KEY(`messageId`))",
+                        "PRIMARY KEY(`channelId`, `messageId`))",
                 )
                 database.execSQL(
                     "CREATE VIRTUAL TABLE IF NOT EXISTS `$CACHED_MESSAGE_FTS_TABLE` " +
-                        "USING FTS4(`text` TEXT NOT NULL)",
+                        "USING FTS4(`channelId` INTEGER NOT NULL, " +
+                        "`messageId` INTEGER NOT NULL, `text` TEXT NOT NULL)",
                 )
             }
         }

@@ -6,22 +6,14 @@ import com.therxmv.dirolreader.domain.repository.MessageRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class SearchMessagesUseCaseTest {
 
     private val repository: MessageRepository = mockk()
-    private lateinit var useCase: SearchMessagesUseCase
+    private val useCase = SearchMessagesUseCase(repository)
 
     private fun message(id: Long) = MessageModel(
         id = id,
@@ -30,20 +22,6 @@ class SearchMessagesUseCaseTest {
         text = "text",
         mediaList = null,
     )
-
-    @Before
-    fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
-        useCase = SearchMessagesUseCase(
-            messageRepository = repository,
-            ioDispatcher = UnconfinedTestDispatcher(),
-        )
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
 
     @Test
     fun `blank query returns empty list without hitting repository`() = runTest {

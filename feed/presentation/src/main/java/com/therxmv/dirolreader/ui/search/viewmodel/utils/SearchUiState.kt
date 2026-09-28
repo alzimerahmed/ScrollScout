@@ -12,6 +12,7 @@ sealed interface SearchUiState {
 
 data class SearchResultItem(
     val id: Long,
+    val channelId: Long,
     val channelName: String,
     val time: String,
     val text: String,

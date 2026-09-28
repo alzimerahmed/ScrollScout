@@ -1,5 +1,6 @@
 package com.therxmv.dirolreader.data.repository
 
+import android.database.sqlite.SQLiteException
 import android.util.Log
 import com.therxmv.common.Paging
 import com.therxmv.dirolreader.data.entity.toDomain
@@ -28,7 +29,7 @@ class MessageRepositoryImpl @Inject constructor(
     override suspend fun getUnreadMessagesByPage(page: Int): List<MessageModel> =
         try {
             messageRemoteDataSource.getUnreadMessagesByPage(page)
-                .also { cachedMessageLocalDataSource.saveMessages(it) }
+                .also { messages -> cacheMessages(messages) }
         } catch (e: IOException) {
             fallbackMessages(page, e)
         } catch (e: ClassCastException) {
@@ -50,6 +51,20 @@ class MessageRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Caching is best-effort: a cache write failure must not discard an
+     * otherwise successful remote fetch.
+     */
+    private suspend fun cacheMessages(messages: List<MessageModel>) {
+        try {
+            cachedMessageLocalDataSource.saveMessages(messages)
+        } catch (e: SQLiteException) {
+            Log.w(TAG, "Failed to cache feed page", e)
+        } catch (e: IOException) {
+            Log.w(TAG, "Failed to cache feed page", e)
+        }
+    }
+
     override suspend fun downloadMediaAndGetPath(mediaId: Int) =
         mediaRemoteDataSource.downloadMediaAndGetPath(mediaId)
 
@@ -62,7 +77,4 @@ class MessageRepositoryImpl @Inject constructor(
 
     override suspend fun searchMessages(query: String): List<MessageModel> =
         cachedMessageLocalDataSource.searchMessages(query)
-
-    override suspend fun getCachedMessages(limit: Int): List<MessageModel> =
-        cachedMessageLocalDataSource.getCachedMessages(limit)
 }

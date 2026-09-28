@@ -1,6 +1,5 @@
 package com.therxmv.dirolreader.ui.search.viewmodel
 
-import android.database.sqlite.SQLiteException
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,13 +14,13 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.io.IOException
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -47,6 +46,12 @@ class SearchViewModel @Inject constructor(
                 .debounce(SEARCH_DEBOUNCE_MILLIS)
                 .distinctUntilChanged()
                 .flatMapLatest { query -> search(query) }
+                // Any search failure must degrade to the Error state, never
+                // kill the collector (search would be dead for the session).
+                .catch { e ->
+                    Log.w(TAG, "Search failed", e)
+                    emit(SearchUiState.Error)
+                }
                 .collect { state -> _uiState.update { state } }
         }
     }
@@ -63,17 +68,7 @@ class SearchViewModel @Inject constructor(
 
         emit(SearchUiState.Loading)
 
-        val results = try {
-            useCases.searchMessages(query)
-        } catch (e: IOException) {
-            Log.w(TAG, "Search failed for query: $query", e)
-            emit(SearchUiState.Error)
-            return@flow
-        } catch (e: SQLiteException) {
-            Log.w(TAG, "Search failed for query: $query", e)
-            emit(SearchUiState.Error)
-            return@flow
-        }
+        val results = useCases.searchMessages(query)
 
         emit(
             if (results.isEmpty()) {
@@ -88,6 +83,7 @@ class SearchViewModel @Inject constructor(
         map { message ->
             SearchResultItem(
                 id = message.id,
+                channelId = message.channelData.id,
                 channelName = message.channelData.name,
                 time = useCases.getReadablePostTime(message.timestamp),
                 text = message.text,

@@ -11,5 +11,4 @@ interface MessageRepository {
     fun getUnreadChannelsFlow(): Flow<List<ChannelModel>>
     suspend fun markAllAsRead()
     suspend fun searchMessages(query: String): List<MessageModel>
-    suspend fun getCachedMessages(limit: Int): List<MessageModel>
 }
