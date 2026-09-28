@@ -1,5 +1,7 @@
 package com.therxmv.dirolreader.ui.search.viewmodel
 
+import android.database.sqlite.SQLiteException
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.therxmv.dirolreader.domain.models.MessageModel
@@ -19,6 +21,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -28,6 +31,7 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
 
     private companion object {
+        const val TAG = "SearchViewModel"
         const val SEARCH_DEBOUNCE_MILLIS = 300L
     }
 
@@ -61,7 +65,12 @@ class SearchViewModel @Inject constructor(
 
         val results = try {
             useCases.searchMessages(query)
-        } catch (e: Exception) {
+        } catch (e: IOException) {
+            Log.w(TAG, "Search failed for query: $query", e)
+            emit(SearchUiState.Error)
+            return@flow
+        } catch (e: SQLiteException) {
+            Log.w(TAG, "Search failed for query: $query", e)
             emit(SearchUiState.Error)
             return@flow
         }

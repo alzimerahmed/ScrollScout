@@ -65,10 +65,19 @@ fun SearchScreen(
 
             Crossfade(targetState = uiState, label = "content") { state ->
                 when (state) {
-                    is SearchUiState.Initial -> Hint(modifier = Modifier.fillMaxSize(), text = R.string.search_hint)
+                    is SearchUiState.Initial -> Hint(
+                        modifier = Modifier.fillMaxSize(),
+                        text = R.string.search_hint,
+                    )
                     is SearchUiState.Loading -> CenteredBoxLoader()
-                    is SearchUiState.NoResults -> Hint(modifier = Modifier.fillMaxSize(), text = R.string.search_no_results)
-                    is SearchUiState.Error -> Hint(modifier = Modifier.fillMaxSize(), text = R.string.search_error)
+                    is SearchUiState.NoResults -> Hint(
+                        modifier = Modifier.fillMaxSize(),
+                        text = R.string.search_no_results,
+                    )
+                    is SearchUiState.Error -> Hint(
+                        modifier = Modifier.fillMaxSize(),
+                        text = R.string.search_error,
+                    )
                     is SearchUiState.Ready -> SearchResults(results = state.results)
                 }
             }

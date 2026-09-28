@@ -63,7 +63,9 @@ class MessageRepositoryImplTest {
     @Test
     fun `remote failure on first page falls back to cached snapshot`() = runTest {
         val cached = listOf(message(3L))
-        coEvery { messageRemoteDataSource.getUnreadMessagesByPage(STARTING_PAGE_INDEX) } throws RuntimeException("offline")
+        coEvery {
+            messageRemoteDataSource.getUnreadMessagesByPage(STARTING_PAGE_INDEX)
+        } throws RuntimeException("offline")
         coEvery { cachedMessageLocalDataSource.getCachedMessages(any()) } returns cached
 
         assertEquals(cached, repository.getUnreadMessagesByPage(STARTING_PAGE_INDEX))
