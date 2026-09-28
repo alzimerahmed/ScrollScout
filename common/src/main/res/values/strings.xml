@@ -7,6 +7,8 @@
     <string name="ota_download_now">Download Now</string>
     <string name="ota_downloading">Downloading…</string>
     <string name="ota_install_update">Install Update</string>
+    <string name="ota_check_error">Could not check for updates. Check your connection and try again.</string>
+    <string name="ota_retry">Retry</string>
 
     <!-- Auth -->
     <string name="auth_title_phone">Enter your phone number</string>

@@ -5,6 +5,7 @@ import com.therxmv.otaupdates.data.models.LatestReleaseJson
 import com.therxmv.otaupdates.data.repository.LatestReleaseRepositoryImpl
 import com.therxmv.otaupdates.data.source.remote.LatestReleaseRemoteDataSource
 import com.therxmv.otaupdates.domain.models.LatestReleaseModel
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -16,11 +17,12 @@ import org.junit.Test
 class LatestReleaseRepositoryImplTest {
 
     private val releaseJson = LatestReleaseJson(
-        version = "v1.0.0",
+        tagName = "v1.0.0",
+        name = "Release 1.0.0",
         changeLog = "changeLog",
         assets = listOf(
             LatestReleaseAssetJson(
-                fileName = "name",
+                fileName = "app-universal-release.apk",
                 contentType = "type",
                 downloadUrl = "url",
             ),
@@ -37,7 +39,7 @@ class LatestReleaseRepositoryImplTest {
     @Test
     fun `returns converted release model`() = runTest {
         val expectedModel = LatestReleaseModel(
-            version = releaseJson.version,
+            version = releaseJson.tagName,
             changeLog = releaseJson.changeLog,
             fileName = releaseJson.assets.first().fileName,
             contentType = releaseJson.assets.first().contentType,
@@ -47,5 +49,30 @@ class LatestReleaseRepositoryImplTest {
         val result = systemUnderTest.getLatestRelease()
 
         result shouldBe expectedModel
+    }
+
+    @Test
+    fun `prefers universal apk over abi splits`() = runTest {
+        coEvery { mockLatestReleaseRemoteDataSource.getLatestRelease() } returns releaseJson.copy(
+            assets = listOf(
+                LatestReleaseAssetJson("app-arm64-v8a-release.apk", "type", "url-arm64"),
+                LatestReleaseAssetJson("app-universal-release.apk", "type", "url-universal"),
+            ),
+        )
+
+        val result = systemUnderTest.getLatestRelease()
+
+        result?.downloadUrl shouldBe "url-universal"
+    }
+
+    @Test
+    fun `returns null when release has no apk asset`() = runTest {
+        coEvery { mockLatestReleaseRemoteDataSource.getLatestRelease() } returns releaseJson.copy(
+            assets = listOf(
+                LatestReleaseAssetJson("source.zip", "type", "url"),
+            ),
+        )
+
+        systemUnderTest.getLatestRelease().shouldBeNull()
     }
 }

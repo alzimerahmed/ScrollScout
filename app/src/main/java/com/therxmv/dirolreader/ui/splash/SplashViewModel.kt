@@ -4,10 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.therxmv.common.Path
-import com.therxmv.common.extractVersion
 import com.therxmv.dirolreader.domain.usecase.GetTdLibParametersUseCase
 import com.therxmv.dirolreader.ui.navigation.Destination
 import com.therxmv.otaupdates.domain.usecase.GetLatestReleaseUseCase
+import com.therxmv.otaupdates.domain.utils.VersionComparator
 import com.therxmv.sharedpreferences.repository.AppSharedPrefsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -27,7 +27,7 @@ class SplashViewModel @Inject constructor(
     private val appSharedPrefsRepository: AppSharedPrefsRepository,
     private val getLatestRelease: GetLatestReleaseUseCase,
     private val getTdLibParameters: GetTdLibParametersUseCase,
-    @Named("VersionCode") private val versionCode: Int,
+    @Named("VersionName") private val versionName: String,
     @Named("IO") private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
@@ -61,8 +61,7 @@ class SplashViewModel @Inject constructor(
 
     private suspend fun isUpdateAvailable(): Boolean =
         getLatestRelease()?.let { release ->
-            val version = release.version.extractVersion()
-            version > versionCode
+            VersionComparator.isNewer(release.version, versionName)
         } == true
 
     private fun authorizeClient(needToUpdate: Boolean) {

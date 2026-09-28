@@ -31,6 +31,15 @@ fun OtaScreen(
     when (uiState) {
         is OtaUiState.InitialState -> {}
 
+        is OtaUiState.Error -> {
+            OtaErrorContent(
+                onRetry = {
+                    viewModel.onEvent(OtaUiEvent.Retry)
+                },
+                onUpdateLater = onNavigateToNextScreen,
+            )
+        }
+
         else -> {
             val update = uiState.updateModel
 

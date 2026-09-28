@@ -4,6 +4,7 @@ import android.os.Environment
 import com.therxmv.otaupdates.domain.models.LatestReleaseModel
 import com.therxmv.otaupdates.domain.usecase.DownloadUpdateUseCase
 import com.therxmv.otaupdates.domain.usecase.GetLatestReleaseUseCase
+import com.therxmv.otaupdates.presentation.viewmodel.utils.OtaUiEvent
 import com.therxmv.otaupdates.presentation.viewmodel.utils.OtaUiState
 import com.therxmv.sharedpreferences.repository.AppSharedPrefsRepository
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -89,6 +90,50 @@ class OtaViewModelTest {
 
         coVerify { mockGetLatestReleaseUseCase.invoke() }
         systemUnderTest.uiState.value.shouldBeInstanceOf<OtaUiState.Downloaded>()
+    }
+
+    @Test
+    fun `set Error when release fetch fails`() = runTest {
+        advanceUntilIdle()
+
+        systemUnderTest.uiState.value.shouldBeInstanceOf<OtaUiState.Error>()
+    }
+
+    @Test
+    fun `retries release check on Retry event`() = runTest {
+        advanceUntilIdle()
+        systemUnderTest.uiState.value.shouldBeInstanceOf<OtaUiState.Error>()
+
+        coEvery { mockGetLatestReleaseUseCase.invoke() } returns releaseModel.copy(version = "v5.0.0")
+        systemUnderTest.onEvent(OtaUiEvent.Retry)
+        advanceUntilIdle()
+
+        systemUnderTest.uiState.value.shouldBeInstanceOf<OtaUiState.DownloadUpdate>()
+    }
+
+    @Test
+    fun `set Error when update download cannot be enqueued`() = runTest {
+        coEvery { mockGetLatestReleaseUseCase.invoke() } returns releaseModel
+        every { mockDownloadUpdateUseCase.invoke(any()) } returns -1L
+
+        advanceUntilIdle()
+
+        systemUnderTest.onEvent(OtaUiEvent.DownloadUpdate(releaseModel))
+
+        systemUnderTest.uiState.value.shouldBeInstanceOf<OtaUiState.Error>()
+    }
+
+    @Test
+    fun `set Downloading when update download is enqueued`() = runTest {
+        coEvery { mockGetLatestReleaseUseCase.invoke() } returns releaseModel
+        every { mockDownloadUpdateUseCase.invoke(any()) } returns 42L
+        every { mockAppSharedPrefsRepository.isUpdateDownloadedChangeListener(any()) } returns mockk()
+
+        advanceUntilIdle()
+
+        systemUnderTest.onEvent(OtaUiEvent.DownloadUpdate(releaseModel))
+
+        systemUnderTest.uiState.value.shouldBeInstanceOf<OtaUiState.Downloading>()
     }
 
     @Test

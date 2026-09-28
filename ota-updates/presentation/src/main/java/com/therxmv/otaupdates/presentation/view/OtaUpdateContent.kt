@@ -42,7 +42,7 @@ fun OtaUpdateContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(10.dp),
+                .padding(16.dp),
             contentAlignment = Alignment.Center,
         ) {
             UpdateLaterButton(
@@ -55,7 +55,7 @@ fun OtaUpdateContent(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 42.dp),
+                    .padding(horizontal = 40.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
@@ -66,7 +66,7 @@ fun OtaUpdateContent(
                 NewVersionTitle()
                 Spacer(modifier = Modifier.height(24.dp))
                 NewVersionSubtitle(updateVersion = updateVersion)
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 ChangeLogText(changeLog)
                 Spacer(modifier = Modifier.height(24.dp))

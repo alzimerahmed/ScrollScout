@@ -3,6 +3,11 @@ apply plugin: 'kotlin-kapt'
 
 android {
     namespace 'com.therxmv.otaupdates.data'
+
+    testOptions {
+        // android.util.Log stub throws "not mocked" in JVM tests otherwise
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {

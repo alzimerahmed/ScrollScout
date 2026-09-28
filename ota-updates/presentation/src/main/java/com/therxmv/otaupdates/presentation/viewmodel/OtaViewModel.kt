@@ -1,11 +1,12 @@
 package com.therxmv.otaupdates.presentation.viewmodel
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
+import android.util.Log
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -41,11 +42,12 @@ class OtaViewModel @Inject constructor(
     private lateinit var updatePrefsListener: SharedPreferences.OnSharedPreferenceChangeListener
 
     init {
-        checkIfApkExists()
+        loadLatestRelease()
     }
 
     fun onEvent(event: OtaUiEvent) {
         when (event) {
+            is OtaUiEvent.Retry -> loadLatestRelease()
             is OtaUiEvent.DownloadUpdate -> downloadUpdate(event.updateModel)
             is OtaUiEvent.InstallUpdate -> installUpdate(event.context, event.updateModel)
         }
@@ -66,53 +68,80 @@ class OtaViewModel @Inject constructor(
 
     private fun setIsUpdateDownloadedListener(updateModel: LatestReleaseModel) {
         updatePrefsListener = appSharedPrefsRepository.isUpdateDownloadedChangeListener { isDownloaded ->
-            isUpdateDownloaded(isDownloaded = isDownloaded, updateModel= updateModel)
+            isUpdateDownloaded(isDownloaded = isDownloaded, updateModel = updateModel)
             appSharedPrefsRepository.unregisterChangeListener(updatePrefsListener)
         }
 
         appSharedPrefsRepository.registerChangeListener(updatePrefsListener)
     }
 
-    private fun checkIfApkExists() {
+    private fun loadLatestRelease() {
+        _uiState.update { OtaUiState.InitialState }
+
         viewModelScope.launch(ioDispatcher) {
-            getLatestReleaseUseCase()?.let { release ->
-                isUpdateDownloaded(isDownloaded = appSharedPrefsRepository.isUpdateDownloaded, updateModel = release)
+            val release = getLatestReleaseUseCase()
+
+            if (release == null) {
+                _uiState.update { OtaUiState.Error() }
+            } else {
+                isUpdateDownloaded(
+                    isDownloaded = appSharedPrefsRepository.isUpdateDownloaded,
+                    updateModel = release,
+                )
             }
         }
     }
 
     private fun downloadUpdate(updateModel: LatestReleaseModel?) {
         updateModel?.let { model ->
-            downloadUpdateUseCase(model)
+            val downloadId = downloadUpdateUseCase(model)
 
-            _uiState.update { OtaUiState.Downloading(model) }
-
-            setIsUpdateDownloadedListener(model)
+            if (downloadId == INVALID_DOWNLOAD_ID) {
+                _uiState.update { OtaUiState.Error(model) }
+            } else {
+                _uiState.update { OtaUiState.Downloading(model) }
+                setIsUpdateDownloadedListener(model)
+            }
         }
     }
 
     private fun installUpdate(context: Context, update: LatestReleaseModel?) {
         val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val file = File(path, update?.fileName.orEmpty())
+        val uri = resolveApkUri(context, file)
 
-        if (file.exists()) {
-            val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                FileProvider.getUriForFile(context, "${context.applicationContext.packageName}.provider", file)
-            } else {
-                Uri.fromFile(file)
-            }
-
+        if (uri != null) {
             val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(uri, update?.contentType)
+                setDataAndType(uri, update?.contentType ?: APK_MIME_TYPE)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
 
             try {
                 context.startActivity(intent)
-            } catch (e: Exception) {
-                e.printStackTrace()
+            } catch (e: ActivityNotFoundException) {
+                Log.e(TAG, "No activity can handle the apk install intent", e)
             }
         }
+    }
+
+    // FileProvider is required on every supported API level: with targetSdk 34 a
+    // file:// uri throws FileUriExposedException even on Android < 9.
+    private fun resolveApkUri(context: Context, file: File): Uri? =
+        if (file.exists()) {
+            try {
+                FileProvider.getUriForFile(context, "${context.applicationContext.packageName}.provider", file)
+            } catch (e: IllegalArgumentException) {
+                Log.e(TAG, "Cannot resolve FileProvider uri for $file", e)
+                null
+            }
+        } else {
+            null
+        }
+
+    private companion object {
+        const val TAG = "OtaViewModel"
+        const val INVALID_DOWNLOAD_ID = -1L
+        const val APK_MIME_TYPE = "application/vnd.android.package-archive"
     }
 }

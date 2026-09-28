@@ -7,7 +7,9 @@ import javax.inject.Inject
 class DownloadUpdateUseCase @Inject constructor(
     private val downloaderApi: DownloaderApi,
 ) {
-    operator fun invoke(latestReleaseModel: LatestReleaseModel) {
+    /**
+     * @return enqueued DownloadManager id, or -1 when the download could not be started.
+     */
+    operator fun invoke(latestReleaseModel: LatestReleaseModel): Long =
         downloaderApi.downloadFile(latestReleaseModel)
-    }
 }
