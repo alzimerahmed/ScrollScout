@@ -8,9 +8,11 @@ android {
 dependencies {
     implementation project(":channels:domain")
     implementation project(":common")
+    implementation libs.tdlib
+    implementation libs.kotlinx.coroutines.core
 
     implementation libs.core.ktx
-    implementation libs.paging.compose
+    implementation libs.paging.common
 
     implementation libs.hilt.android
     kapt libs.hilt.compiler

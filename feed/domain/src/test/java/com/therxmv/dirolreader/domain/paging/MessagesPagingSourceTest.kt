@@ -111,6 +111,6 @@ class MessagesPagingSourceTest {
 
         val refreshKey = pagingSource.getRefreshKey(state)
 
-        assertEquals(1, refreshKey)
+        assertEquals(STARTING_PAGE_INDEX, refreshKey)
     }
 }

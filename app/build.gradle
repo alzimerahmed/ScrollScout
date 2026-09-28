@@ -87,6 +87,7 @@ dependencies {
 
     implementation libs.activity.ktx
     implementation libs.core.ktx
+    implementation libs.mkkv
     implementation libs.kotlinx.collections.immutable
     implementation libs.lifecycle.runtime.ktx
     implementation libs.lifecycle.runtime.compose

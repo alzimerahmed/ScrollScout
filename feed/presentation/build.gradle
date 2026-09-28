@@ -22,7 +22,7 @@ dependencies {
     implementation libs.lifecycle.runtime.compose
     implementation libs.kotlinx.collections.immutable
     implementation libs.paging.compose
-    implementation libs.exoplayer
+    implementation libs.bundles.exoplayer
     implementation libs.compose.markdown
 
     implementation platform(libs.compose.bom)

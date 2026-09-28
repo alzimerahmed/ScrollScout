@@ -24,6 +24,7 @@ retrofit = "2.9.0"
 junit = "4.13.2"
 mockk = "1.13.3"
 kotlinxCoroutines = "1.6.4"
+tdlib = "1.8.56"
 kotest = "5.5.4"
 turbine = "1.0.0"
 coreSplash = "1.0.1"
@@ -59,6 +60,9 @@ hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hil
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigation" }
 compose-markdown = { module = "com.github.jeziellago:compose-markdown", version.ref = "composeMarkdown" }
 paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
+paging-common = { module = "androidx.paging:paging-common", version.ref = "pagingCompose" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+tdlib = { module = "com.github.tdlibx:td", version.ref = "tdlib" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplash" }

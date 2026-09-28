@@ -16,14 +16,10 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -49,13 +45,11 @@ class FeedViewModelTest {
         listOf(
             ChannelModel(id = 5L, unreadCount = 1, lastReadMessageId = 0L, rating = 100),
             ChannelModel(id = 6L, unreadCount = 1, lastReadMessageId = 0L, rating = 0),
-        )
+        ),
     )
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
-
         every { getNewsPaging() } returns flowOf(PagingData.empty())
         every { getUnreadChannelsFlow() } returns unreadChannels
         coEvery { getCurrentUser() } returns UserModel("First", "Last", "")
@@ -72,11 +66,6 @@ class FeedViewModelTest {
             ),
             ioDispatcher = UnconfinedTestDispatcher(),
         )
-    }
-
-    @After
-    fun tearDown() {
-        resetMain()
     }
 
     @Test
