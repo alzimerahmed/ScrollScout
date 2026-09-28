@@ -34,7 +34,7 @@ class ThemingViewModel @Inject constructor(
                         appSharedPrefsRepository.isDynamic = it
                     },
                 ),
-            ),
+            )
         } else {
             persistentListOf()
         }
