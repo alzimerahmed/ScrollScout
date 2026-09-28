@@ -79,7 +79,6 @@ dependencies {
     implementation project(':ota-updates:presentation')
     implementation project(':ota-updates:domain')
     implementation project(':ota-updates:data')
-    implementation project(':channels:domain')
     implementation project(':channels:data')
     implementation project(':feed:domain')
     implementation project(':feed:data')
@@ -99,10 +98,6 @@ dependencies {
     implementation platform(libs.compose.bom)
     implementation libs.bundles.compose.ui
 
-    implementation libs.exoplayer
-    implementation libs.toolbar.compose
-    implementation libs.paging.compose
-    implementation libs.compose.markdown
     implementation libs.core.splashscreen
 
     testImplementation libs.bundles.testing.unit

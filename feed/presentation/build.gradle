@@ -24,7 +24,6 @@ dependencies {
     implementation libs.paging.compose
     implementation libs.exoplayer
     implementation libs.compose.markdown
-    implementation libs.toolbar.compose
 
     implementation platform(libs.compose.bom)
     implementation libs.bundles.compose.ui
