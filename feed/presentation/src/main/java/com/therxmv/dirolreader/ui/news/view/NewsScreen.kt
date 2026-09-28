@@ -231,7 +231,7 @@ private fun Avatar(
                 .clip(
                     MaterialTheme.shapes.small,
                 )
-                .clickable(onClick = actions.onAvatarClick)
+                .clickable(onClick = actions.onAvatarClick,)
         )
     } else {
         EmptyAvatar(
