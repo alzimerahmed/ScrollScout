@@ -83,7 +83,7 @@ fun NewsScreen(
                             viewModel.onEvent(
                                 NewsUiEvent.MarkAllAsRead(
                                     messageIds = news.itemSnapshotList.mapNotNull { it?.id },
-                                )
+                                ),
                             )
                         },
                     ),
