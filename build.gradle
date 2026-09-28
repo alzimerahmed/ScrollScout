@@ -26,7 +26,8 @@ allprojects {
         version = "0.50.0"
         android = false
         ignoreFailures = false
-        baseline = file("$rootDir/config/ktlint/baseline.xml")
+        // Per-module baseline at <module>/config/ktlint/baseline.xml (plugin default).
+        // Regenerate with: cd <module> && ktlint --baseline=config/ktlint/baseline.xml "src/**/*.kt"
         filter {
             exclude { element -> element.file.path.contains("build/") }
         }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<baseline version="1.0">
+    <file name="src/main/java/com/therxmv/dirolreader/domain/models/MessageModel.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/domain/models/UserModel.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/domain/paging/MessagesPagingSource.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/domain/repository/MessageRepository.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/domain/repository/UserRepository.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/domain/usecase/message/DownloadMediaAndGetPathUseCase.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/domain/usecase/message/GetMessagePagingUseCase.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+        <error line="31" column="14" source="standard:trailing-comma-on-call-site" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/domain/usecase/message/GetReadablePostTimeUseCase.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/domain/usecase/message/GetUnreadChannelsFlowUseCase.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/domain/usecase/message/MarkMessageAsReadUseCase.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+        <error line="14" column="32" source="standard:comment-wrapping" />
+        <error line="15" column="36" source="standard:comment-wrapping" />
+        <error line="16" column="32" source="standard:comment-wrapping" />
+        <error line="16" column="37" source="standard:comma-spacing" />
+        <error line="16" column="37" source="standard:comment-spacing" />
+        <error line="16" column="37" source="standard:comment-spacing" />
+        <error line="17" column="35" source="standard:comment-wrapping" />
+        <error line="18" column="14" source="standard:trailing-comma-on-call-site" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/domain/usecase/user/GetCurrentUserUseCase.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/test/java/com/therxmv/dirolreader/domain/paging/MessagesPagingSourceTest.kt">
+        <error line="57" column="40" source="standard:wrapping" />
+        <error line="61" column="9" source="standard:wrapping" />
+        <error line="73" column="40" source="standard:wrapping" />
+        <error line="77" column="9" source="standard:wrapping" />
+        <error line="88" column="40" source="standard:wrapping" />
+        <error line="92" column="9" source="standard:wrapping" />
+    </file>
+</baseline>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<baseline version="1.0">
+    <file name="src/main/java/com/therxmv/dirolreader/channels/di/LocalDataSourceModule.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+        <error line="23" column="23" source="standard:trailing-comma-on-call-site" />
+        <error line="29" column="1" source="standard:no-blank-line-before-rbrace" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/data/entity/ChannelEntity.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/data/repository/ChannelRepositoryImpl.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/data/source/local/db/ChannelLocalDataSource.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/data/source/local/db/DirolDao.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+        <error line="33" column="48" source="standard:trailing-comma-on-call-site" />
+        <error line="35" column="16" source="standard:multiline-if-else" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/data/source/local/db/DirolDatabase.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+        <error line="10" column="25" source="standard:trailing-comma-on-call-site" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/data/source/remote/channel/ChannelRemoteDataSource.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+        <error line="37" column="26" source="standard:trailing-comma-on-call-site" />
+        <error line="77" column="1" source="standard:no-blank-line-before-rbrace" />
+    </file>
+    <file name="src/main/java/com/therxmv/dirolreader/data/source/remote/channel/ChannelRemoteSource.kt">
+        <error line="1" column="1" source="standard:final-newline" />
+    </file>
+</baseline>
