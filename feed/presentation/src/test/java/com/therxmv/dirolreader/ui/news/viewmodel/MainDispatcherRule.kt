@@ -23,6 +23,6 @@ class MainDispatcherRule(
     }
 
     override fun finished(description: Description) {
-        resetMain()
+        Dispatchers.resetMain()
     }
 }
